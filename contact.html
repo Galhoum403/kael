@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="ar">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>تواصل معنا - Kael</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/FontAwesome.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tajawal&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/kael-theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .contact-hero {
+            background: linear-gradient(135deg, #101512 0%, #1a231d 100%);
+            padding: 80px 0;
+            color: #fff;
+            position: relative;
+            border-bottom: 3px solid var(--kael-gold, #C5A059);
+        }
+        .contact-glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            margin-top: -60px;
+            position: relative;
+            z-index: 10;
+        }
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .contact-info-item i {
+            background: var(--kael-gold, #C5A059);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
+        }
+        .contact-info-item div h5 {
+            color: #e5e5e5;
+            margin: 0;
+            font-size: 16px;
+        }
+        .contact-info-item div p {
+            color: #a0a0a0;
+            margin: 0;
+            font-size: 14px;
+        }
+        .glass-input {
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: #fff !important;
+            border-radius: 10px;
+            padding: 12px 20px;
+            transition: 0.3s;
+        }
+        .glass-input:focus {
+            border-color: var(--kael-gold, #C5A059) !important;
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.2) !important;
+            background: rgba(255,255,255,0.1) !important;
+        }
+        .glass-input::placeholder {
+            color: #888;
+        }
+        .btn-gold {
+            background: var(--kael-gold, #C5A059);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .btn-gold:hover {
+            background: #a98341;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
+        }
+        .map-container {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            height: 100%;
+            min-height: 350px;
+        }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .social-links a {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        .social-links a:hover {
+            background: var(--kael-gold, #C5A059);
+            border-color: var(--kael-gold, #C5A059);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+
+<body style="background-color: #0b0e0c;">
+    <header>
+        <div id="top-header">
+            <div class="container">
+                <ul class="justify-content-center justify-content-md-start header-links">
+                    <li><i class="fas fa-phone"></i><bdi>+20 123 456 7890</bdi></li>
+                    <li><i class="fa fa-envelope-o"></i><a href="#"> info@kael.com</a></li>
+                    <li><i class="fas fa-map-marker"></i><a href="#"> مصر</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="header-ctn">
+                        <div class="d-block d-md-none"><a href="#mobileMenu" data-bs-toggle="offcanvas"><i class="fas fa-bars"></i><span>القائمة</span></a></div>
+                        <div><a href="#"><i class="fa fa-heart-o"></i><span>المفضلة</span>
+                                <div class="qty"><span>0</span></div>
+                            </a></div>
+                        <div><a href="cart.html"><i class="fa fa-shopping-cart"></i><span>عربتي</span></a></div>
+                    </div>
+                    <div class="d-none d-md-block header-search">
+                        <form><select class="input-select" dir="rtl">
+                                <option value="0">كل الأقسام</option>
+                                <option value="1">هدايا</option>
+                            </select><input class="input text-end" placeholder="ابحث عن منتج..." dir="rtl"><button class="search-btn">بحث</button></form>
+                    </div>
+                    <div class="header-logo"><a href="index.html" class="logo"><img src="assets/img/logo.png" alt="Kael Logo"></a></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav class="d-none d-md-block" id="navigation" dir="rtl">
+        <div class="container">
+            <ul class="main-nav">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="offers.html">عروض مميزة</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">أقسام🎁الهدايا <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
+                    <ul class="dropdown-menu shadow-sm" style="text-align: right; border: 1px solid var(--kael-gold, #C5A059); padding: 10px; border-radius: 8px;">
+                        <li><a class="dropdown-item" href="shop.html?category=gifts-men">هدايا رجالي</a></li>
+                        <li><a class="dropdown-item" href="shop.html?category=gifts-women">هدايا حريمي</a></li>
+                        <li><a class="dropdown-item" href="shop.html?category=gifts-custom">هدايا مخصصة</a></li>
+                    </ul>
+                </li>
+                <li><a href="shop.html?category=accessories">إكسسوارات</a></li>
+                <li><a href="shop.html?category=watches">ساعات</a></li>
+                <li class="active"><a href="contact.html">تواصل معنا</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="contact-hero text-center" dir="rtl">
+        <div class="container pb-5">
+            <h1 style="color: var(--kael-gold); font-weight: bold; margin-bottom: 20px;">نحن هنا لخدمتك</h1>
+            <p style="color: #a0a0a0; max-width: 600px; margin: auto;">لديك استفسار عن منتج؟ واجهت مشكلة في الطلب؟ أو ترغب في التعاون معنا؟ فريقنا مستعد للرد عليك في أسرع وقت ممكن.</p>
+        </div>
+    </div>
+
+    <!-- Contact Form & Info -->
+    <div class="container mb-5" dir="rtl">
+        <div class="contact-glass-card">
+            <div class="row g-5">
+                <!-- Contact Info -->
+                <div class="col-lg-5">
+                    <h3 style="color: #fff; font-weight: bold; margin-bottom: 30px;">معلومات التواصل</h3>
+                    
+                    <div class="contact-info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h5>العنوان</h5>
+                            <p>مدينة نصر، القاهرة، جمهورية مصر العربية</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h5>هاتف / واتساب</h5>
+                            <p dir="ltr">+20 123 456 7890</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h5>البريد الإلكتروني</h5>
+                            <p>support@kael.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="col-lg-7">
+                    <h3 style="color: #fff; font-weight: bold; margin-bottom: 30px;">أرسل لنا رسالة</h3>
+                    <form action="https://formspree.io/f/your_form_id" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; margin-bottom: 8px;">الاسم بالكامل</label>
+                                <input type="text" name="name" class="form-control glass-input" placeholder="اكتب اسمك هنا..." required>
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: #a0a0a0; margin-bottom: 8px;">رقم الهاتف</label>
+                                <input type="tel" name="phone" class="form-control glass-input" placeholder="رقم الموبايل..." required>
+                            </div>
+                            <div class="col-12">
+                                <label style="color: #a0a0a0; margin-bottom: 8px;">البريد الإلكتروني</label>
+                                <input type="email" name="email" class="form-control glass-input" placeholder="example@mail.com" required>
+                            </div>
+                            <div class="col-12">
+                                <label style="color: #a0a0a0; margin-bottom: 8px;">الرسالة أو الاستفسار</label>
+                                <textarea name="message" class="form-control glass-input" rows="5" placeholder="اكتب رسالتك أو استفسارك هنا..." required></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn-gold"><i class="fas fa-paper-plane me-2"></i> إرسال الرسالة الآن</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="container mb-5 pb-5">
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110502.61185038936!2d31.32849980894086!3d30.05961134336041!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583e1c6670e28f%3A0xc0784af235540306!2sNasr%20City%2C%20Cairo%20Governorate!5e0!3m2!1sen!2seg!4v1714488390886!5m2!1sen!2seg" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+
+    <!-- Premium Footer -->
+    <footer id="premium-footer" dir="rtl">
+        <div class="container">
+            <!-- Newsletter -->
+            <div class="row mb-5">
+                <div class="col-md-10 offset-md-1">
+                    <div class="newsletter-box text-center">
+                        <h4 class="text-white mb-3">اشترك في قائمتنا البريدية</h4>
+                        <p style="color: #999;" class="mb-4">احصل على أحدث العروض الحصرية وكوبونات الخصم مباشرة على بريدك</p>
+                        <form class="d-flex justify-content-center" style="max-width: 500px; margin: auto;">
+                            <input type="email" class="form-control text-end" placeholder="أدخل بريدك الإلكتروني..." required>
+                            <button type="submit" class="btn me-2">اشترك الآن</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-md-4 mb-4">
+                    <div class="footer-logo">
+                        <img src="assets/img/logo.png" alt="Kael Logo">
+                    </div>
+                    <p style="color:#a0a0a0; font-size:14px; line-height:1.8;">نقدم لك تشكيلة فاخرة من الهدايا، الساعات، والإكسسوارات التي تليق بأصحاب الذوق الرفيع. الجودة والأناقة هما عنواننا.</p>
+                    <ul class="list-unstyled footer-links mt-4">
+                        <li><i class="fas fa-map-marker-alt"></i><span>القاهرة، مصر</span></li>
+                        <li><i class="fas fa-phone"></i><bdi>+20 123 456 7890</bdi></li>
+                        <li><i class="fas fa-envelope"></i><span>info@kael.com</span></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 mb-4">
+                    <h3 class="footer-title">روابط هامة</h3>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="offers.html">عروض مميزة</a></li>
+                        <li><a href="shop.html">تسوق الآن</a></li>
+                        <li><a href="contact.html">تواصل معنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-12 col-md-4 mb-4">
+                    <h3 class="footer-title">خدمة العملاء</h3>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#">حسابي الشخصي</a></li>
+                        <li><a href="cart.html">عربة التسوق</a></li>
+                        <li><a href="return-policy.html">سياسة الاسترجاع والاستبدال</a></li>
+                        <li><a href="terms.html">الشروط والأحكام</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="bottom-premium-footer">
+            <div class="container">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <p class="copyright mb-3 mb-md-0">© 2026 Kael Store. جميع الحقوق محفوظة.</p>
+                    <ul class="list-unstyled footer-payments m-0">
+                        <li><i class="fa fa-cc-visa"></i></li>
+                        <li><i class="fa fa-cc-mastercard"></i></li>
+                        <li><i class="fas fa-credit-card"></i></li>
+                        <li><i class="fa fa-money-bill-wave"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

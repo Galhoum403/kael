@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kael - لوحة التحكم</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tajawal&amp;display=swap">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            height: 100vh;
+            background: #101512;
+            color: #fff;
+            padding-top: 20px;
+            position: fixed;
+            width: 250px;
+        }
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .sidebar .logo img {
+            max-width: 120px;
+        }
+        .sidebar a {
+            color: #a0a0a0;
+            text-decoration: none;
+            display: block;
+            padding: 15px 25px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background: rgba(197, 160, 89, 0.2);
+            color: #C5A059;
+            border-right: 4px solid #C5A059;
+        }
+        .sidebar a i {
+            width: 25px;
+        }
+        .main-content {
+            margin-right: 250px;
+            padding: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .card-header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+            font-weight: bold;
+            color: #101512;
+            border-radius: 10px 10px 0 0 !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-gold {
+            background: #C5A059;
+            color: #fff;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-gold:hover {
+            background: #a98341;
+            color: #fff;
+        }
+        .form-control:focus {
+            border-color: #C5A059;
+            box-shadow: 0 0 5px rgba(197, 160, 89, 0.3);
+        }
+        .slide-item {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .delete-slide {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #dc3545;
+            cursor: pointer;
+        }
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #101512;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-box">
+            <img src="assets/img/logo.png" alt="Logo" style="filter: invert(1); max-width: 150px; margin-bottom: 20px;">
+            <h4 class="mb-4">تسجيل الدخول للإدارة</h4>
+            <input type="password" id="admin-pass" class="form-control text-center mb-3" placeholder="كلمة المرور...">
+            <button class="btn btn-gold w-100" onclick="checkLogin()">دخول</button>
+            <p id="login-error" class="text-danger mt-2" style="display:none; font-size: 14px;">كلمة المرور غير صحيحة</p>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="assets/img/logo.png" alt="Kael Logo">
+        </div>
+        <a href="#" class="active"><i class="fas fa-images"></i> سلايدر العروض</a>
+        <a href="#"><i class="fas fa-box"></i> المنتجات (قريباً)</a>
+        <a href="#"><i class="fas fa-shopping-cart"></i> الطلبات (قريباً)</a>
+        <a href="#"><i class="fas fa-cog"></i> الإعدادات</a>
+        <a href="index.html" style="margin-top: auto; border-top: 1px solid #333;"><i class="fas fa-store"></i> العودة للمتجر</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>لوحة التحكم - العروض المميزة</h2>
+            <div>
+                <span class="badge bg-success" id="db-status">متصل محلياً (جاهز لـ Firebase)</span>
+            </div>
+        </div>
+
+        <!-- Slider Config -->
+        <div class="card">
+            <div class="card-header">
+                إدارة شرائح السلايدر (Hero Section)
+                <button class="btn btn-sm btn-gold" onclick="addSlide()"><i class="fas fa-plus"></i> إضافة عرض جديد</button>
+            </div>
+            <div class="card-body">
+                <form id="slider-form">
+                    <div id="slides-container">
+                        <!-- Slides will be injected here via JS -->
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-gold px-4 py-2" onclick="saveData()">
+                        <i class="fas fa-save me-2"></i> حفظ التعديلات ونشرها
+                    </button>
+                    <span id="save-msg" class="text-success ms-3 fw-bold" style="display: none;">تم الحفظ بنجاح!</span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Firebase SDK (Modular) will be loaded here later. Using LocalStorage fallback for now -->
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
+            authDomain: "kael-85f70.firebaseapp.com",
+            databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
+            projectId: "kael-85f70",
+            storageBucket: "kael-85f70.firebasestorage.app",
+            messagingSenderId: "446946602490",
+            appId: "1:446946602490:web:bf875962bb4e6bb03f8843"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const sliderRef = ref(db, 'offers_slider');
+
+        window.sliderData = [];
+
+        // --- 1. Login Logic (Demo) ---
+        window.checkLogin = function() {
+            let pass = document.getElementById('admin-pass').value;
+            if(pass === '123456') {
+                document.getElementById('login-screen').style.display = 'none';
+                window.loadData();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        };
+
+        // --- 2. Data Management (Firebase) ---
+        window.loadData = function() {
+            onValue(sliderRef, (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    window.sliderData = data;
+                } else {
+                    // Default data if empty
+                    window.sliderData = [
+                        {
+                            title: "تخفيضات تصل إلى 50%",
+                            desc: "استمتع بأقوى العروض الحصرية على تشكيلة فاخرة من الساعات.",
+                            img: "assets/img/product01.png",
+                            endDate: new Date(new Date().getTime() + 72*60*60*1000).toISOString().slice(0,16)
+                        }
+                    ];
+                }
+                window.renderSlides();
+                document.getElementById('db-status').innerText = 'متصل سحابياً (Firebase)';
+                document.getElementById('db-status').classList.replace('bg-success', 'bg-primary');
+            });
+        };
+
+        window.saveData = function() {
+            window.sliderData = [];
+            let slides = document.querySelectorAll('.slide-item');
+            slides.forEach((slide) => {
+                window.sliderData.push({
+                    title: slide.querySelector('.s-title').value,
+                    desc: slide.querySelector('.s-desc').value,
+                    img: slide.querySelector('.s-img').value,
+                    endDate: slide.querySelector('.s-date').value
+                });
+            });
+
+            // Save to Firebase
+            set(sliderRef, window.sliderData).then(() => {
+                let msg = document.getElementById('save-msg');
+                msg.style.display = 'inline';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }).catch((error) => {
+                alert("حدث خطأ في الحفظ: " + error.message);
+            });
+        };
+
+        // --- 3. UI Rendering ---
+        window.renderSlides = function() {
+            let container = document.getElementById('slides-container');
+            container.innerHTML = '';
+            window.sliderData.forEach((slide, index) => {
+                let html = `
+                <div class="slide-item" id="slide-${index}">
+                    <i class="fas fa-trash delete-slide" onclick="removeSlide(${index})" title="حذف العرض"></i>
+                    <h5 class="mb-3">العرض رقم ${index + 1}</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">عنوان العرض</label>
+                            <input type="text" class="form-control s-title" value="${slide.title}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">رابط أو مسار الصورة</label>
+                            <input type="text" class="form-control s-img" value="${slide.img}" placeholder="assets/img/product.png" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">الوصف القصير</label>
+                            <input type="text" class="form-control s-desc" value="${slide.desc}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">تاريخ ووقت انتهاء العرض</label>
+                            <input type="datetime-local" class="form-control s-date" value="${slide.endDate}" required>
+                        </div>
+                    </div>
+                </div>`;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        };
+
+        window.addSlide = function() {
+            window.sliderData.push({
+                title: "عرض جديد",
+                desc: "وصف العرض الجديد...",
+                img: "assets/img/product02.png",
+                endDate: ""
+            });
+            window.renderSlides();
+        };
+
+        window.removeSlide = function(index) {
+            if(confirm('هل أنت متأكد من حذف هذا العرض؟')) {
+                window.sliderData.splice(index, 1);
+                window.renderSlides();
+            }
+        };
+    </script>
+</body>
+</html>
