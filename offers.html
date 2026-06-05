@@ -97,6 +97,55 @@
             box-shadow: 0 10px 25px rgba(197, 160, 89, 0.2) !important;
             transform: translateY(-5px);
             transition: 0.3s;
+        } /* THIS WAS MISSING */
+
+        /* Slider Navigation Arrows - Override Slick Defaults */
+        button.slider-arrow.slick-prev,
+        button.slider-arrow.slick-next {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 20 !important;
+            background: rgba(197, 160, 89, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(197, 160, 89, 0.5) !important;
+            color: #fff !important;
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 20px !important;
+            padding: 0 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+        button.slider-arrow.slick-prev { right: 15px !important; left: auto !important; }
+        button.slider-arrow.slick-next { left: 15px !important; right: auto !important; }
+        
+        button.slider-arrow.slick-prev:hover,
+        button.slider-arrow.slick-next:hover {
+            background: var(--kael-gold, #C5A059) !important;
+            transform: translateY(-50%) scale(1.1) !important;
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.5) !important;
+        }
+
+        /* Hide default slick icons */
+        button.slider-arrow.slick-prev::before,
+        button.slider-arrow.slick-next::before {
+            display: none !important;
+        }
+        /* Slick Dots Styling */
+        .offers-hero .slick-dots {
+            bottom: 20px;
+        }
+        .offers-hero .slick-dots li button:before {
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+        }
+        .offers-hero .slick-dots li.slick-active button:before {
+            color: var(--kael-gold, #C5A059);
         }
     </style>
 </head>
@@ -244,9 +293,6 @@
                         <li><a href="terms.html">الشروط والأحكام</a></li>
                     </ul>
                 </div>
-            </div>
-        </div>
-        
         <div id="bottom-premium-footer">
             <div class="container">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
@@ -261,6 +307,7 @@
             </div>
         </div>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.reflowhq.com/v2/toolkit.min.js" data-reflow-project="1911270116" data-reflow-locale="assets/js/ar.json"></script>
     <script src="assets/js/bs-init.js"></script>
@@ -268,6 +315,54 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/nouislider.min.js"></script>
     <script src="assets/js/slick.min.js"></script>
+
+    <!-- Responsive Fixes -->
+    <style>
+        @media (max-width: 768px) {
+            .offers-hero { padding: 30px 0 !important; }
+            .offers-hero h1 { font-size: 1.6rem !important; }
+            .offers-hero p { font-size: 0.95rem !important; }
+            .offers-countdown { gap: 8px !important; }
+            .offers-countdown .time-box { padding: 10px 8px !important; min-width: 60px !important; }
+            .offers-countdown .time-box span { font-size: 18px !important; }
+            .offers-countdown .time-box small { font-size: 10px !important; }
+            .offers-banner-img { max-height: 200px !important; margin-top: 20px; }
+            .slider-arrow { width: 38px !important; height: 38px !important; font-size: 16px !important; }
+            .slider-nav-arrows { padding: 0 5px !important; }
+            .hero-slide-item .row { min-height: 350px !important; }
+        }
+        @media (max-width: 480px) {
+            .offers-hero h1 { font-size: 1.3rem !important; }
+            .offers-countdown .time-box { min-width: 50px !important; padding: 8px 5px !important; }
+            .offers-countdown .time-box span { font-size: 16px !important; }
+        }
+    </style>
+
+    <script>
+        // === Countdown Timer (runs independently) ===
+        setInterval(function() {
+            $('.offers-countdown').each(function() {
+                var endTime = new Date($(this).data('end')).getTime();
+                var now = new Date().getTime();
+                var distance = endTime - now;
+
+                if (distance > 0) {
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    $(this).find('.c-days').text(days < 10 ? '0'+days : days);
+                    $(this).find('.c-hours').text(hours < 10 ? '0'+hours : hours);
+                    $(this).find('.c-minutes').text(minutes < 10 ? '0'+minutes : minutes);
+                    $(this).find('.c-seconds').text(seconds < 10 ? '0'+seconds : seconds);
+                } else {
+                    $(this).html('<h4 style="color:#C5A059; font-weight:bold;">انتهى العرض</h4>');
+                }
+            });
+        }, 1000);
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -286,88 +381,80 @@
         const db = getDatabase(app);
         const sliderRef = ref(db, 'offers_slider');
 
-        $(document).ready(function() {
-            // Fetch data from Firebase
-            onValue(sliderRef, (snapshot) => {
-                const data = snapshot.val();
-                let sliderData = data;
-                
-                if (!sliderData || sliderData.length === 0) {
-                    sliderData = [
-                        {
-                            title: "تخفيضات تصل إلى 50%",
-                            desc: "استمتع بأقوى العروض الحصرية على تشكيلة فاخرة من الساعات.",
-                            img: "assets/img/product01.png",
-                            endDate: new Date(new Date().getTime() + 72*60*60*1000).toISOString() 
-                        }
-                    ];
-                }
+        function buildSlider(sliderData) {
+            // Destroy slick if it exists
+            if ($('#dynamic-slider').hasClass('slick-initialized')) {
+                $('#dynamic-slider').slick('unslick');
+            }
 
-                // Destroy slick if it exists (for real-time updates)
-                if ($('#dynamic-slider').hasClass('slick-initialized')) {
-                    $('#dynamic-slider').slick('unslick');
-                }
-
-                // Inject slides into DOM
-                let sliderHtml = '';
-                sliderData.forEach((slide) => {
-                    sliderHtml += `
-                    <div class="hero-slide-item">
-                        <div class="container position-relative" style="z-index: 2;">
-                            <div class="row align-items-center" style="min-height: 450px;">
-                                <div class="col-lg-6 mb-4 mb-lg-0 text-lg-end text-center">
-                                    <h1 class="slide-title">${slide.title}</h1>
-                                    <p class="slide-desc">${slide.desc}</p>
-                                    <div class="offers-countdown justify-content-center justify-content-lg-start" data-end="${slide.endDate}">
-                                        <div class="time-box"><span class="c-days">00</span><small>أيام</small></div>
-                                        <div class="time-box"><span class="c-hours">00</span><small>ساعات</small></div>
-                                        <div class="time-box"><span class="c-minutes">00</span><small>دقيقة</small></div>
-                                        <div class="time-box"><span class="c-seconds">00</span><small>ثانية</small></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 text-center">
-                                    <img src="${slide.img}" alt="${slide.title}" class="offers-banner-img img-fluid" style="max-height: 350px;">
+            // Inject slides
+            let html = '';
+            sliderData.forEach(function(slide) {
+                html += `
+                <div class="hero-slide-item">
+                    <div class="container position-relative" style="z-index: 2;">
+                        <div class="row align-items-center" style="min-height: 450px;">
+                            <div class="col-lg-6 mb-4 mb-lg-0 text-lg-end text-center">
+                                <h1 class="slide-title">${slide.title}</h1>
+                                <p class="slide-desc">${slide.desc}</p>
+                                <div class="offers-countdown justify-content-center justify-content-lg-start" data-end="${slide.endDate}">
+                                    <div class="time-box"><span class="c-days">00</span><small>أيام</small></div>
+                                    <div class="time-box"><span class="c-hours">00</span><small>ساعات</small></div>
+                                    <div class="time-box"><span class="c-minutes">00</span><small>دقيقة</small></div>
+                                    <div class="time-box"><span class="c-seconds">00</span><small>ثانية</small></div>
                                 </div>
                             </div>
+                            <div class="col-lg-6 text-center">
+                                <img src="${slide.img}" alt="${slide.title}" class="offers-banner-img img-fluid" style="max-height: 350px;">
+                            </div>
                         </div>
-                    </div>`;
-                });
-                $('#dynamic-slider').html(sliderHtml);
-
-                // Initialize Slick Slider
-                $('#dynamic-slider').slick({
-                    rtl: true,
-                    autoplay: true,
-                    autoplaySpeed: 5000,
-                    arrows: false,
-                    dots: true,
-                    fade: true,
-                    cssEase: 'linear'
-                });
+                    </div>
+                </div>`;
             });
+            $('#dynamic-slider').html(html);
 
-            // Dynamic Countdowns Logic
-            setInterval(function() {
-                $('.offers-countdown').each(function() {
-                    let endTime = new Date($(this).data('end')).getTime();
-                    let now = new Date().getTime();
-                    let distance = endTime - now;
+            // Init Slick
+            $('#dynamic-slider').slick({
+                rtl: true,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                arrows: true,
+                prevArrow: '<button class="slider-arrow slick-prev"><i class="fas fa-chevron-right"></i></button>',
+                nextArrow: '<button class="slider-arrow slick-next"><i class="fas fa-chevron-left"></i></button>',
+                dots: true,
+                fade: true,
+                cssEase: 'linear',
+                pauseOnHover: true
+            });
+        }
 
-                    if (distance > 0) {
-                        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        // Default slides (shown until Firebase loads)
+        var defaultSlides = [
+            {
+                title: "تخفيضات تصل إلى 50%",
+                desc: "استمتع بأقوى العروض الحصرية على تشكيلة فاخرة من الساعات والإكسسوارات.",
+                img: "assets/img/product01.png",
+                endDate: new Date(new Date().getTime() + 72*60*60*1000).toISOString()
+            },
+            {
+                title: "عرض اشتري 2 واحصل على خصم",
+                desc: "اشتري قطعتين واحصل على خصم 25% على الثانية. لفترة محدودة!",
+                img: "assets/img/product02.png",
+                endDate: new Date(new Date().getTime() + 48*60*60*1000).toISOString()
+            }
+        ];
 
-                        $(this).find('.c-days').text(days < 10 ? '0'+days : days);
-                        $(this).find('.c-hours').text(hours < 10 ? '0'+hours : hours);
-                        $(this).find('.c-minutes').text(minutes < 10 ? '0'+minutes : minutes);
-                        $(this).find('.c-seconds').text(seconds < 10 ? '0'+seconds : seconds);
-                    } else {
-                        $(this).html('<h4 style="color:red; font-weight:bold;">انتهى العرض</h4>');
-                    }
-                });
-            }, 1000);
+        $(document).ready(function() {
+            // Build with defaults first (instant display)
+            buildSlider(defaultSlides);
+
+            // Then listen to Firebase for real data
+            onValue(sliderRef, function(snapshot) {
+                var data = snapshot.val();
+                if (data && data.length > 0) {
+                    buildSlider(data);
+                }
+            });
         });
     </script>
 </body>

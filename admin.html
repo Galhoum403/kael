@@ -110,6 +110,17 @@
             max-width: 400px;
             text-align: center;
         }
+        /* Responsive Admin */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-right: 0 !important; padding: 15px; }
+            .main-content h2 { font-size: 1.2rem; }
+            .card-header { flex-direction: column; gap: 10px; text-align: center; }
+            .login-box { padding: 25px; margin: 0 15px; }
+            .slide-item .row .col-md-6,
+            .slide-item .row .col-md-8,
+            .slide-item .row .col-md-4 { margin-bottom: 10px; }
+        }
     </style>
 </head>
 <body>

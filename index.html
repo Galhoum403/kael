@@ -58,7 +58,7 @@
         <div class="container">
             <ul class="main-nav">
                 <li class="active"><a href="index.html">الرئيسية</a></li>
-                <li><a href="shop.html?category=offers" style="color:var(--kael-gold, #C5A059);font-weight:bold;">عروض مميزة</a></li>
+                <li><a href="offers.html" style="color:var(--kael-gold, #C5A059);font-weight:bold;">عروض مميزة</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">أقسام🎁الهدايا <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
                     <ul class="dropdown-menu shadow-sm" style="text-align: right; border: 1px solid var(--kael-gold, #C5A059); padding: 10px; border-radius: 8px;">
@@ -78,8 +78,8 @@
         <div class="offcanvas-body">
             <div class="input-group mb-4" style="border:2px solid var(--kael-gold);border-radius:5px;overflow:hidden;"><input class="border-0 shadow-none form-control form-control text-end" type="text" dir="rtl" placeholder="ابحث عن منتج..." style="background:var(--kael-white);"><button class="btn border-0 px-3" type="button" style="background-color:var(--kael-gold);color:#fff;"><i class="fas fa-search"></i></button></div>
             <ul class="list-unstyled text-end mobile-nav">
-                <li><a href="#">الرئيسية</a></li>
-                <li><a href="#">عروض مميزة</a></li>
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="offers.html">عروض مميزة</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">أقسام الهدايا <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
                     <ul class="dropdown-menu text-end border-0 bg-transparent pe-3" style="box-shadow: none;">
@@ -88,9 +88,9 @@
                         <li><a class="dropdown-item" href="shop.html?category=gifts-custom">هدايا مخصصة</a></li>
                     </ul>
                 </li>
-                <li><a href="#">إكسسوارات</a></li>
-                <li><a href="#">ساعات</a></li>
-                <li><a href="#">تواصل معنا</a></li>
+                <li><a href="shop.html?category=accessories">إكسسوارات</a></li>
+                <li><a href="shop.html?category=watches">ساعات</a></li>
+                <li><a href="contact.html">تواصل معنا</a></li>
             </ul>
         </div>
     </div>
@@ -276,40 +276,8 @@
           });
       });
   });
-</script><script>
-$(document).ready(function() {
-    // 1. استدعاء المنتجات + (تنضيف الذاكرة من أي داتا بايظة من التجارب اللي فاتت)
-    let kaelWishlist = JSON.parse(localStorage.getItem('kael_wishlist')) || [];
-    kaelWishlist = kaelWishlist.filter(item => item && item !== '#' && item.length > 2);
-    localStorage.setItem('kael_wishlist', JSON.stringify(kaelWishlist)); // حفظ النضافة
-
-    // 2. تحديث العداد اللي في الهيدر
-    function updateWishlistBadge() {
-        $('.header-ctn a:contains("المفضلة") .qty span').text(kaelWishlist.length);
-    }
-    updateWishlistBadge();
-
-    // 3. مراقب قوي بيزرع القلوب (بيعتمد على اسم المنتج مش الرابط)
-    setInterval(function() {
-        $('.ref-product').each(function() {
-            let $product = $(this);
-            
-            // لو مفيش قلب، نركب واحد
-            if ($product.find('.kael-wishlist-btn').length === 0) {
-                
-                // هنجيب اسم المنتج عشان ده أدق حاجة مستحيل تتكرر
-                let productName = $product.find('.ref-name').text().trim();
-                
-                // لو لسه الاسم مظهرش، استنى متركبش القلب دلوقتي
-                if (!productName) return; 
-
-                // نحدد هو فاضي ولا مليان (باستخدام كلاسات FontAwesome 5 الأصلية)
-                let isFav = kaelWishlist.includes(productName) ? 'fas fa-heart active-heart' : 'far fa-heart';
-
-                let btnHtml = `<button class="kael-wishlist-btn" data-id="${productName}" style="z-index: 99 !important;"><i class="${isFav}"></i></button>`;
-                
-                $product.find('.ref-media').append(btnHtml);
-</script><script>
+</script>
+<script>
 $(document).ready(function() {
     // 1. استدعاء المنتجات + (تنضيف الذاكرة من أي داتا بايظة من التجارب اللي فاتت)
     let kaelWishlist = JSON.parse(localStorage.getItem('kael_wishlist')) || [];
@@ -425,18 +393,14 @@ $(document).ready(function() {
         
         <div id="bottom-premium-footer">
             <div class="container">
-                <div class="footer-bottom-flex">
-                    <div class="copyright-box">
-                        <p class="copyright"> © 2026 جميع الحقوق محفوظة M.Galhoum.</p>
-                    </div>
-                    <div class="payment-box">
-                        <ul class="footer-payments">
-                            <li><i class="fa fa-cc-visa"></i></li>
-                            <li><i class="fas fa-credit-card"></i></li>
-                            <li><i class="fa fa-cc-paypal"></i></li>
-                            <li><i class="fa fa-cc-mastercard"></i></li>
-                        </ul>
-                    </div>
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <p class="copyright mb-3 mb-md-0">© 2026 Kael Store. جميع الحقوق محفوظة.</p>
+                    <ul class="list-unstyled footer-payments m-0">
+                        <li><i class="fa fa-cc-visa"></i></li>
+                        <li><i class="fa fa-cc-mastercard"></i></li>
+                        <li><i class="fas fa-credit-card"></i></li>
+                        <li><i class="fa fa-money-bill-wave"></i></li>
+                    </ul>
                 </div>
             </div>
         </div>
