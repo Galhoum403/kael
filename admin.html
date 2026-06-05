@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kael 1- لوحة التحكم</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tajawal&amp;display=swap">
@@ -122,6 +123,12 @@
             .slide-item .row .col-md-4 { margin-bottom: 10px; }
         }
     </style>
+    <meta name="description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
+    <meta name="keywords" content="هدايا, ساعات, إكسسوارات, متجر هدايا, هدايا فاخرة, هدايا رجالي, هدايا نسائي, هدايا عيد ميلاد">
+    <meta property="og:title" content="Kael Store | متجر الهدايا الفاخرة">
+    <meta property="og:description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
+    <meta property="og:image" content="assets/img/logo.png">
+    <meta property="og:type" content="website">
 </head>
 <body>
 
@@ -158,7 +165,7 @@
         </div>
 
         <!-- Slider Config -->
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-header">
                 إدارة شرائح السلايدر (Hero Section)
                 <button class="btn btn-sm btn-gold" onclick="addSlide()"><i class="fas fa-plus"></i> إضافة عرض جديد</button>
@@ -174,6 +181,23 @@
                     </button>
                     <span id="save-msg" class="text-success ms-3 fw-bold" style="display: none;">تم الحفظ بنجاح!</span>
                 </form>
+            </div>
+        </div>
+
+        <!-- Custom Packaging Config -->
+        <div class="card mb-4" id="packaging-section">
+            <div class="card-header bg-dark text-white" style="border-radius: 10px 10px 0 0;">
+                <i class="fas fa-gift"></i> طلبات التغليف المخصص
+            </div>
+            <div class="card-body">
+                <p class="text-muted">ابحث برقم كود التغليف المرفق في طلبات العميل من Reflow لترى التفاصيل هنا.</p>
+                <div class="input-group mb-3" style="max-width: 400px;">
+                    <input type="text" id="search-pkg-input" class="form-control text-end" placeholder="مثال: PKG-ABCD">
+                    <button class="btn btn-gold" id="search-pkg-btn" type="button"><i class="fas fa-search"></i> بحث</button>
+                </div>
+                <div id="pkg-result" style="display:none;" class="p-3 border rounded bg-light">
+                    <!-- Results here -->
+                </div>
             </div>
         </div>
     </div>
@@ -247,17 +271,52 @@
                 });
             });
 
-            // Save to Firebase
             set(sliderRef, window.sliderData).then(() => {
                 let msg = document.getElementById('save-msg');
-                msg.style.display = 'inline';
+                msg.style.display = 'inline-block';
                 setTimeout(() => msg.style.display = 'none', 3000);
             }).catch((error) => {
-                alert("حدث خطأ في الحفظ: " + error.message);
+                alert("فشل الحفظ: " + error);
             });
         };
 
-        // --- 3. UI Rendering ---
+        window.searchPackaging = function() {
+            let code = document.getElementById('search-pkg-input').value.trim().toUpperCase();
+            if(!code) return;
+
+            let dbRef = ref(db, 'custom_packaging/' + code);
+            onValue(dbRef, (snapshot) => {
+                let data = snapshot.val();
+                let resDiv = document.getElementById('pkg-result');
+                if(data) {
+                    resDiv.style.display = 'block';
+                    resDiv.innerHTML = `
+                        <h5 class="text-success"><i class="fas fa-check-circle"></i> طلب تغليف موجود</h5>
+                        <ul class="list-unstyled mt-3 mb-0">
+                            <li class="mb-2"><b>كود التغليف:</b> <span class="badge bg-dark fs-6">${data.code}</span></li>
+                            <li class="mb-2"><b>نوع البوكس:</b> ${data.boxName}</li>
+                            <li class="mb-2"><b>الإضافات (الاسم/الكارت):</b> <span class="text-primary">${data.addons}</span></li>
+                            <li class="mb-2"><b>السعر الإجمالي للتغليف:</b> <span class="text-danger fw-bold">${data.totalPrice} ج.م</span></li>
+                            <li class="mb-2"><b>تاريخ الإنشاء:</b> ${new Date(data.date).toLocaleString('ar-EG')}</li>
+                        </ul>
+                    `;
+                } else {
+                    resDiv.style.display = 'block';
+                    resDiv.innerHTML = `<span class="text-danger fw-bold"><i class="fas fa-times-circle"></i> لم يتم العثور على تغليف بهذا الكود. تأكد من إدخال الكود بشكل صحيح بدون مسافات.</span>`;
+                }
+            }, { onlyOnce: true });
+        };
+
+        document.getElementById('search-pkg-btn').addEventListener('click', window.searchPackaging);
+
+        // Allow pressing Enter in search box
+        document.getElementById('search-pkg-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                window.searchPackaging();
+            }
+        });
+
+        // --- 3. UI Helpers ---
         window.renderSlides = function() {
             let container = document.getElementById('slides-container');
             container.innerHTML = '';
