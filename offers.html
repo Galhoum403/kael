@@ -284,6 +284,45 @@
         </div>
     </div>
 
+    <!-- You May Also Like -->
+    <div dir="rtl" style="background: linear-gradient(180deg, #faf8f4 0%, #fff 100%); padding: 60px 0; border-top: 2px solid #f0ece4;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 style="font-size: 1.6rem; font-weight: 800; color: #103C2B;"><i class="fas fa-gem" style="color:var(--kael-gold,#C5A059);margin-left:10px;"></i> منتجات قد تعجبك</h2>
+                <p class="text-muted">تشكيلة مختارة بعناية خصيصاً لك</p>
+            </div>
+            <div data-reflow-type="product-list" data-reflow-shoppingcart-url="cart.html" data-reflow-layout="cards" data-reflow-perpage="4" data-reflow-order="random" data-reflow-show="image,name,price,add-to-cart"></div>
+        </div>
+    </div>
+
+    <style>
+        .ref-product {
+            border-radius: 15px !important;
+            overflow: hidden !important;
+            border: 1px solid #f0ece4 !important;
+            transition: all 0.35s ease !important;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+        }
+        .ref-product:hover {
+            transform: translateY(-6px) !important;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.1) !important;
+            border-color: #C5A059 !important;
+        }
+        .ref-product .ref-image { transition: transform 0.4s ease !important; }
+        .ref-product:hover .ref-image { transform: scale(1.05) !important; }
+        .ref-name { font-weight: 700 !important; color: #103C2B !important; }
+        .ref-price { color: #C5A059 !important; font-weight: bold !important; font-size: 1.1em !important; }
+        .ref-button, .ref-addtocart {
+            background: linear-gradient(135deg, #103C2B, #1a5a3f) !important;
+            border: none !important; border-radius: 25px !important;
+            font-weight: bold !important; transition: all 0.3s ease !important;
+        }
+        .ref-button:hover, .ref-addtocart:hover {
+            background: linear-gradient(135deg, #C5A059, #d4af6e) !important;
+            transform: scale(1.03) !important;
+        }
+    </style>
+
     <!-- Premium Footer -->
     <footer id="premium-footer" dir="rtl">
         <div class="container">

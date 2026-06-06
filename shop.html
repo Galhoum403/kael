@@ -134,40 +134,175 @@
         </div>
     </div>
     
-    <!-- Clean Shop Section ready for Bootstrap Studio & Reflow -->
-    <div class="section" dir="rtl">
+    <!-- Premium Shop Hero -->
+    <div class="kael-shop-hero" dir="rtl">
         <div class="container">
-            <div class="row">
-                <!-- Sidebar (Optional for Bootstrap Studio) -->
-                <div class="col-md-3 mb-4">
-                    <div class="aside">
-                        <h3 class="aside-title">الأقسام</h3>
-                        <div class="checkbox-filter">
-                            <div class="input-checkbox">
-                                <label for="category-1">
-                                    <span></span>
-                                    ساعات رجالي
-                                    <small>(120)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <label for="category-2">
-                                    <span></span>
-                                    إكسسوارات
-                                    <small>(74)</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Products Grid -->
-                <div class="col-md-9">
-                    <div data-reflow-type="product-list" data-reflow-shoppingcart-url="cart.html" data-reflow-layout="cards" data-reflow-perpage="12" data-reflow-order="date_desc" data-reflow-show="image,name,excerpt,price,add-to-cart"></div>
-                </div>
-            </div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-3" style="background:none;">
+                    <li class="breadcrumb-item"><a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none;">الرئيسية</a></li>
+                    <li class="breadcrumb-item active" style="color:#C5A059;" id="kael-breadcrumb-current">جميع المنتجات</li>
+                </ol>
+            </nav>
+            <h1 class="kael-shop-hero-title" id="kael-shop-title">تسوق الآن</h1>
+            <p class="kael-shop-hero-desc">اكتشف تشكيلتنا الفاخرة من الهدايا والإكسسوارات لجميع المناسبات</p>
         </div>
     </div>
+
+    <!-- Products Section (Full Width) -->
+    <div class="section" dir="rtl" style="padding: 50px 0;">
+        <div class="container">
+            <div data-reflow-type="product-list" data-reflow-shoppingcart-url="cart.html" data-reflow-layout="cards" data-reflow-perpage="12" data-reflow-order="date_desc" data-reflow-show="image,name,excerpt,price,add-to-cart"></div>
+        </div>
+    </div>
+
+    <!-- You May Also Like / Recommendations -->
+    <div class="kael-recommendations" dir="rtl">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="kael-rec-title"><i class="fas fa-gem" style="color:var(--kael-gold,#C5A059);margin-left:10px;"></i> منتجات قد تعجبك</h2>
+                <p class="text-muted">تشكيلة مختارة بعناية خصيصاً لك</p>
+            </div>
+            <div data-reflow-type="product-list" data-reflow-shoppingcart-url="cart.html" data-reflow-layout="cards" data-reflow-perpage="4" data-reflow-order="random" data-reflow-show="image,name,price,add-to-cart"></div>
+        </div>
+    </div>
+
+    <style>
+        /* ===== Shop Hero Banner ===== */
+        .kael-shop-hero {
+            background: linear-gradient(135deg, #103C2B 0%, #0d2e21 50%, #1a5a3f 100%);
+            padding: 55px 0 45px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .kael-shop-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(197,160,89,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .kael-shop-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(197,160,89,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .kael-shop-hero .breadcrumb-item + .breadcrumb-item::before {
+            color: rgba(255,255,255,0.4);
+        }
+        .kael-shop-hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .kael-shop-hero-desc {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        /* ===== Product Cards Enhancements ===== */
+        .ref-product {
+            border-radius: 15px !important;
+            overflow: hidden !important;
+            border: 1px solid #f0ece4 !important;
+            transition: all 0.35s ease !important;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+        }
+        .ref-product:hover {
+            transform: translateY(-6px) !important;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.1) !important;
+            border-color: #C5A059 !important;
+        }
+        .ref-product .ref-image {
+            transition: transform 0.4s ease !important;
+        }
+        .ref-product:hover .ref-image {
+            transform: scale(1.05) !important;
+        }
+        .ref-name {
+            font-weight: 700 !important;
+            color: #103C2B !important;
+        }
+        .ref-price {
+            color: #C5A059 !important;
+            font-weight: bold !important;
+            font-size: 1.1em !important;
+        }
+        .ref-button, .ref-addtocart {
+            background: linear-gradient(135deg, #103C2B, #1a5a3f) !important;
+            border: none !important;
+            border-radius: 25px !important;
+            font-weight: bold !important;
+            transition: all 0.3s ease !important;
+        }
+        .ref-button:hover, .ref-addtocart:hover {
+            background: linear-gradient(135deg, #C5A059, #d4af6e) !important;
+            transform: scale(1.03) !important;
+        }
+
+        /* ===== Recommendations Section ===== */
+        .kael-recommendations {
+            background: linear-gradient(180deg, #faf8f4 0%, #fff 100%);
+            padding: 60px 0;
+            border-top: 2px solid #f0ece4;
+        }
+        .kael-rec-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #103C2B;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .kael-shop-hero { padding: 35px 0 30px; }
+            .kael-shop-hero-title { font-size: 1.5rem; }
+            .kael-shop-hero-desc { font-size: 0.9rem; }
+            .kael-rec-title { font-size: 1.3rem; }
+        }
+    </style>
+
+    <!-- Dynamic Title based on URL category -->
+    <script>
+        (function() {
+            var categoryMap = {
+                'birthday': 'هدايا أعياد الميلاد 🎂',
+                'wedding': 'هدايا زواج وخطوبة 💍',
+                'bridal': 'تجهيز عرائس 👰',
+                'baby': 'هدايا سبوع ومواليد 👶',
+                'graduation': 'هدايا التخرج 🎓',
+                'anniversary': 'هدايا ذكرى سنوية 💕',
+                'men': 'هدايا رجالي 🎁',
+                'women': 'هدايا نسائي 🎀',
+                'kids': 'هدايا أطفال 🧸',
+                'watches': 'ساعات فاخرة ⌚',
+                'accessories': 'إكسسوارات 💎',
+                'custom': 'هدايا مخصصة بالاسم ✨'
+            };
+            var params = new URLSearchParams(window.location.search);
+            var cat = params.get('category');
+            if (cat && categoryMap[cat]) {
+                var titleEl = document.getElementById('kael-shop-title');
+                var breadcrumbEl = document.getElementById('kael-breadcrumb-current');
+                if (titleEl) titleEl.textContent = categoryMap[cat];
+                if (breadcrumbEl) breadcrumbEl.textContent = categoryMap[cat];
+                document.title = 'Kael - ' + categoryMap[cat];
+            }
+        })();
+    </script>
+
 
     <!-- Premium Footer -->
     <footer id="premium-footer" dir="rtl">
