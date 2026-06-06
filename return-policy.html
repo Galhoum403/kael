@@ -444,7 +444,32 @@
     </script>
 
 
+    
     <!-- Smart WhatsApp Integration -->
+    <style>
+        .kael-wa-circle-btn {
+            position: absolute !important;
+            top: 55px !important; /* Below the wishlist heart which is at 10px */
+            right: 10px !important;
+            background: #25D366 !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 35px !important;
+            height: 35px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
+            color: #ffffff !important;
+            font-size: 18px !important;
+            cursor: pointer !important;
+            z-index: 10 !important;
+            transition: 0.3s !important;
+        }
+        .kael-wa-circle-btn:hover {
+            transform: scale(1.1) !important;
+        }
+    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const waNumber = "201234567890"; // Kael Store Number
@@ -453,7 +478,7 @@
             const mainWpBtn = document.getElementById('wp');
             if (mainWpBtn) {
                 const currentUrl = encodeURIComponent(window.location.href);
-                mainWpBtn.href = `https://wa.me/${waNumber}?text=مرحباً، أود الاستفسار عن متجركم. أنا أتصفح هذه الصفحة: ${currentUrl}`;
+                mainWpBtn.href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن متجركم. أنا أتصفح هذه الصفحة: ') + currentUrl;
             }
 
             // 2. Add WhatsApp Inquire Button to all Reflow Products dynamically
@@ -461,7 +486,7 @@
                 const products = document.querySelectorAll('.ref-product');
                 products.forEach(function(product) {
                     // Check if we already added the button
-                    if (!product.querySelector('.kael-wa-inquire')) {
+                    if (!product.querySelector('.kael-wa-circle-btn')) {
                         const nameEl = product.querySelector('.ref-name');
                         const priceEl = product.querySelector('.ref-price');
                         
@@ -472,21 +497,18 @@
                             const waMessage = encodeURIComponent('مرحباً Kael Store، أود الاستفسار عن هذا المنتج:\n📦 ' + productName + '\n💰 السعر: ' + productPrice + '\nهل هو متوفر حالياً؟');
                             const waLink = 'https://wa.me/' + waNumber + '?text=' + waMessage;
 
-                            // Create the WhatsApp button
+                            // Create the WhatsApp circle button
                             const waBtn = document.createElement('a');
-                            waBtn.className = 'kael-wa-inquire';
+                            waBtn.className = 'kael-wa-circle-btn';
                             waBtn.href = waLink;
                             waBtn.target = '_blank';
-                            waBtn.innerHTML = '<i class="fab fa-whatsapp"></i> استفسار';
-                            waBtn.style.cssText = 'display: inline-flex; align-items: center; justify-content: center; gap: 6px; background-color: #25D366; color: white; padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.9em; margin-top: 10px; transition: all 0.3s ease; width: 100%;';
+                            waBtn.innerHTML = '<i class="fab fa-whatsapp"></i>';
+                            waBtn.title = 'استفسار عبر واتساب';
 
-                            waBtn.onmouseover = () => waBtn.style.transform = 'scale(1.02)';
-                            waBtn.onmouseout = () => waBtn.style.transform = 'scale(1)';
-
-                            // Append it to the product body or actions area
-                            const bodyEl = product.querySelector('.ref-product-data');
-                            if (bodyEl) {
-                                bodyEl.appendChild(waBtn);
+                            // Append it to the media container so it sits over the image like the heart
+                            const mediaEl = product.querySelector('.ref-media');
+                            if (mediaEl) {
+                                mediaEl.appendChild(waBtn);
                             } else {
                                 product.appendChild(waBtn);
                             }
@@ -499,6 +521,7 @@
             observer.observe(document.body, { childList: true, subtree: true });
         });
     </script>
+
 \n</body>
 
 </html>
