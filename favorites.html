@@ -13,83 +13,13 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="assets/css/nouislider.min.css">
-    <link rel="stylesheet" href="assets/css/slick.css">
-    <link rel="stylesheet" href="assets/css/slick-theme.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/DA_Whatsapp.css">
     <link rel="stylesheet" href="assets/css/kael-theme.css">
-    <link rel="stylesheet" href="assets/css/Mega-Menu-Dropdown-100-Editable---Ambrodu.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<style>
-/* 1. إخفاء قسم "بيانات الفواتير" بالكامل لتنظيف الشاشة */
-.ref-billing-container {
-    display: none !important;
-}
-
-/* 2. تعريب عنوان "Shipping Address" */
-fieldset.ref-tab-content > .ref-heading-small:first-child { font-size: 0 !important; }
-fieldset.ref-tab-content > .ref-heading-small:first-child::after { 
-    content: "بيانات التوصيل" !important; 
-    font-size: 18px !important; 
-    color: #103C2B !important; 
-    font-weight: bold !important; 
-    margin-bottom: 15px; 
-    display: block;
-}
-
-/* 3. تعريب جملة "حفظ عنواني" */
-.ref-auth-save-address span { font-size: 0 !important; }
-.ref-auth-save-address span::after { 
-    content: "حفظ بياناتي للطلبات القادمة" !important; 
-    font-size: 14px !important; 
-    margin-right: 8px;
-}
-
-/* =========================================
-   4. تعريب أسماء الخانات (Labels)
-   ========================================= */
-
-/* الاسم بالكامل */
-label:has(.ref-field-details-name) span { font-size: 0 !important; }
-label:has(.ref-field-details-name) span::after { content: "الاسم بالكامل" !important; font-size: 14px !important; color: #103C2B !important; font-weight: bold !important; display: inline-block !important; }
-
-/* العنوان بالتفصيل */
-label:has(.ref-field-details-address-line) span { font-size: 0 !important; }
-label:has(.ref-field-details-address-line) span::after { content: "العنوان بالتفصيل" !important; font-size: 14px !important; color: #103C2B !important; font-weight: bold !important; display: inline-block !important; }
-
-/* المدينة */
-label:has(.ref-field-details-city) span { font-size: 0 !important; }
-label:has(.ref-field-details-city) span::after { content: "المدينة" !important; font-size: 14px !important; color: #103C2B !important; font-weight: bold !important; display: inline-block !important; }
-
-/* الدولة */
-label:has(.ref-field-details-country) span { font-size: 0 !important; }
-label:has(.ref-field-details-country) span::after { content: "الدولة" !important; font-size: 14px !important; color: #103C2B !important; font-weight: bold !important; display: inline-block !important; }
-
-/* المحافظة */
-label:has(.ref-field-details-region) span { font-size: 0 !important; }
-label:has(.ref-field-details-region) span::after { content: "المحافظة" !important; font-size: 14px !important; color: #103C2B !important; font-weight: bold !important; display: inline-block !important; }
-
-/* أقرب علامة مميزة (البوست كود) */
-label:has(.ref-field-details-postcode) span { font-size: 0 !important; }
-label:has(.ref-field-details-postcode) span::after { content: "أقرب علامة مميزة (ضروري)" !important; font-size: 14px !important; color: #103C2B !important; font-weight: bold !important; display: inline-block !important; }
-/* تغيير عنوان Note to Seller بناءً على الكود الحقيقي */
-.ref-note-to-seller .ref-field-toggle-title {
-    font-size: 0 !important;
-}
-
-.ref-note-to-seller .ref-field-toggle-title::after {
-    content: "رقم تليفون بديل / ملاحظات للمندوب" !important;
-    font-size: 16px !important;
-    color: #103C2B !important;
-    font-weight: bold !important;
-}
-
-</style>
-    <meta name="description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
-    <meta name="keywords" content="هدايا, ساعات, إكسسوارات, متجر هدايا, هدايا فاخرة, هدايا رجالي, هدايا نسائي, هدايا عيد ميلاد">
-    <meta property="og:title" content="Kael Store | متجر الهدايا الفاخرة">
-    <meta property="og:description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
+    <meta name="description" content="قائمة المفضلة الخاصة بك - متجر Kael للهدايا الفاخرة والإكسسوارات">
+    <meta name="keywords" content="هدايا, مفضلة, ساعات, إكسسوارات, متجر هدايا, هدايا فاخرة">
+    <meta property="og:title" content="المفضلة - Kael Store">
+    <meta property="og:description" content="قائمة المفضلة الخاصة بك - متجر Kael للهدايا الفاخرة والإكسسوارات">
     <meta property="og:image" content="assets/img/logo.png">
     <meta property="og:type" content="website">
 </head>
@@ -110,9 +40,7 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="header-ctn">
                         <div class="d-block d-md-none"><a href="#mobileMenu" data-bs-toggle="offcanvas"><i class="fas fa-bars"></i><span>القائمة</span></a></div>
-                        <div><a href="favorites.html"><i class="fa fa-heart-o"></i><span>المفضلة</span>
-                                <div class="qty"><span>0</span></div>
-                            </a></div>
+                        <div class="kael-header-wish"><a href="favorites.html"><i class="fa fa-heart-o"></i><span>المفضلة</span><div class="kael-wish-badge kael-wishlist-count">0</div></a></div>
                         <div><span data-reflow-type="view-cart" data-reflow-summary-type="dropdown" data-reflow-shoppingcart-url="cart.html"><span>عربتي</span></span></div>
                     </div>
                     <div class="d-none d-md-block header-search">
@@ -198,24 +126,28 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
                 </li>
                 <li><a href="contact.html">تواصل معنا</a></li>
             </ul>
-                </li>
-                <li><a href="shop.html?category=accessories">إكسسوارات</a></li>
-                <li><a href="shop.html?category=watches">ساعات</a></li>
-                <li><a href="contact.html">تواصل معنا</a></li>
-            </ul>
         </div>
     </div>
     
-    <div class="section" style="min-height: 50vh; display: flex; align-items: center;">
-        <div class="container text-center" dir="rtl">
-            <div class="card shadow-sm border-0" style="border-radius: 15px; padding: 50px 20px; background-color: var(--kael-cream, #F9F6F0);">
-                <i class="fas fa-heart-broken mb-4" style="font-size: 60px; color: #ccc;"></i>
+    <!-- Favorites Section -->
+    <div class="section" style="min-height: 60vh; padding-top: 50px; padding-bottom: 50px;" dir="rtl">
+        <div class="container">
+            <h2 class="text-center mb-5" style="color: var(--kael-green-dark, #103C2B); font-weight: bold;">
+                <i class="fas fa-heart" style="color: var(--kael-gold, #C5A059);"></i> قائمة مفضلاتي
+            </h2>
+
+            <!-- Empty State -->
+            <div id="kael-favorites-empty" class="kael-fav-empty-state" style="display: none;">
+                <div class="kael-fav-empty-icon"><i class="far fa-heart"></i></div>
                 <h3 style="color: var(--kael-green-dark, #103C2B); font-weight: bold; margin-bottom: 15px;">قائمة المفضلة فارغة</h3>
-                <p class="text-muted mb-4" style="font-size: 16px; max-width: 500px; margin: 0 auto;">لا توجد أي منتجات في قائمتك المفضلة حتى الآن. تصفح متجرنا الفاخر وأضف الهدايا التي تعجبك هنا لتتمكن من العودة إليها لاحقاً.</p>
+                <p class="text-muted mb-4" style="font-size: 16px; max-width: 500px; margin: 0 auto;">لا توجد أي منتجات في قائمتك المفضلة حتى الآن. تصفح متجرنا الفاخر واضغط على أيقونة القلب ❤️ على أي منتج لإضافته هنا.</p>
                 <a href="shop.html" class="btn" style="background: var(--kael-gold, #C5A059); color: white; padding: 12px 35px; font-weight: bold; border-radius: 30px; font-size: 16px;">
                     <i class="fas fa-shopping-bag me-2"></i> تصفح المنتجات الآن
                 </a>
             </div>
+
+            <!-- Favorites Grid -->
+            <div class="row" id="kael-favorites-grid"></div>
         </div>
     </div>
 
@@ -265,7 +197,7 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
                 <div class="col-sm-12 col-md-4 mb-4">
                     <h3 class="footer-title">خدمة العملاء</h3>
                     <ul class="list-unstyled footer-links">
-                        <li><a href="#">حسابي الشخصي</a></li>
+                        <li><a href="favorites.html">قائمة المفضلة</a></li>
                         <li><a href="cart.html">عربة التسوق</a></li>
                         <li><a href="return-policy.html">سياسة الاسترجاع والاستبدال</a></li>
                         <li><a href="terms.html">الشروط والأحكام</a></li>
@@ -288,117 +220,9 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
             </div>
         </div>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.reflowhq.com/v2/toolkit.min.js" data-reflow-project="1911270116" data-reflow-locale="assets/js/ar.json"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/jquery.zoom.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/nouislider.min.js"></script>
-    <script src="assets/js/slick.min.js"></script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
-            authDomain: "kael-85f70.firebaseapp.com",
-            databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
-            projectId: "kael-85f70",
-            storageBucket: "kael-85f70.firebasestorage.app",
-            messagingSenderId: "446946602490",
-            appId: "1:446946602490:web:bf875962bb4e6bb03f8843"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        let currentTotal = 0;
-
-        $(document).ready(function() {
-            $('input[name="boxType"]').change(function() {
-                $('.pkg-option').css('border-color', '#dee2e6').css('background', 'transparent');
-                $(this).closest('.pkg-option').css('border-color', '#C5A059').css('background', '#F9F6F0');
-                calcTotal();
-            });
-
-            $('.pkg-addon').change(function() {
-                calcTotal();
-            });
-
-            $('#print-name-chk').change(function() {
-                if($(this).is(':checked')) {
-                    $('#custom-name-input').slideDown();
-                } else {
-                    $('#custom-name-input').slideUp().val('');
-                }
-            });
-
-            function calcTotal() {
-                let total = 0;
-                let box = $('input[name="boxType"]:checked').val();
-                if(box) total += parseInt(box.split('|')[1]);
-                
-                $('.pkg-addon:checked').each(function() {
-                    total += parseInt($(this).val().split('|')[1]);
-                });
-                $('#pkg-total').text(total);
-                currentTotal = total;
-            }
-
-            $('#save-pkg-btn').click(function() {
-                let box = $('input[name="boxType"]:checked').val();
-                if(!box) {
-                    alert('الرجاء اختيار نوع البوكس أولاً!');
-                    return;
-                }
-
-                let boxName = box.split('|')[0] === 'classic' ? 'بوكس كلاسيك' : (box.split('|')[0] === 'velvet' ? 'بوكس قطيفة' : 'بوكس خشبي محفور');
-                
-                let addons = [];
-                $('.pkg-addon:checked').each(function() {
-                    let val = $(this).val().split('|')[0];
-                    if(val === 'bubbles') addons.push('بابلز حماية');
-                    if(val === 'card') addons.push('كارت إهداء');
-                    if(val === 'name') addons.push('حفر اسم: ' + $('#custom-name-input').val());
-                });
-
-                let code = 'PKG-' + Math.random().toString(36).substr(2, 4).toUpperCase();
-                let pkgText = "كود التغليف: " + code + "\\nالنوع: " + boxName + "\\nالإضافات: " + (addons.length > 0 ? addons.join(' + ') : 'بدون') + "\\nإجمالي التغليف: " + currentTotal + " ج.م";
-
-                set(ref(db, 'custom_packaging/' + code), {
-                    code: code,
-                    boxName: boxName,
-                    addons: addons.length > 0 ? addons.join(' + ') : 'بدون',
-                    totalPrice: currentTotal,
-                    date: new Date().toISOString()
-                }).then(() => {
-                    $('#customPackagingModal').modal('hide');
-                    $('#pkg-success-msg').html('✅ تم حفظ تفاصيل تغليفك الفاخر! (كود التغليف: <b style="color:#C5A059; font-size:1.2em;">' + code + '</b>)<br>انسخ هذا الكود والصقه في خانة <b>(ملاحظات للمندوب)</b> بالأسفل لضمان تنفيذه.').slideDown();
-                    
-                    // Attempt auto-fill Reflow Note if exists
-                    setTimeout(() => {
-                        let noteInput = document.querySelector('textarea[name="note"]');
-                        if(noteInput) {
-                            noteInput.value = pkgText + '\\n\\n' + noteInput.value;
-                            noteInput.dispatchEvent(new Event('input', { bubbles: true }));
-                        }
-                    }, 500);
-                }).catch((error) => {
-                    alert("حدث خطأ في السيرفر، تأكد من الاتصال.");
-                });
-            });
-
-            $('#pkg-normal-btn').click(function() {
-                $('#pkg-success-msg').slideUp();
-                let noteInput = document.querySelector('textarea[name="note"]');
-                if(noteInput && noteInput.value.includes('كود التغليف')) {
-                    noteInput.value = '';
-                    noteInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-                alert('تم اختيار التغليف العادي (بدون إضافات)');
-            });
-        });
-    </script>
+    <script src="assets/js/kael-wishlist.js"></script>
 </body>
 
 </html>
