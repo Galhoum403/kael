@@ -197,11 +197,6 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
                 </li>
                 <li><a href="contact.html">تواصل معنا</a></li>
             </ul>
-                </li>
-                <li><a href="shop.html?category=accessories">إكسسوارات</a></li>
-                <li><a href="shop.html?category=watches">ساعات</a></li>
-                <li><a href="contact.html">تواصل معنا</a></li>
-            </ul>
         </div>
     </div>
     
@@ -490,6 +485,41 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
             });
         });
     </script>
+
+    <!-- Fix Reflow Arabic Name Validation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // MutationObserver to watch for Reflow Checkout Form injection
+            const observer = new MutationObserver(function(mutations) {
+                const inputs = document.querySelectorAll('.ref-checkout input[name="name"], .ref-checkout input[name="city"], .ref-checkout input[name="address-line"], input');
+                inputs.forEach(function(input) {
+                    // Remove any strict regex patterns that might prevent Arabic
+                    if (input.hasAttribute('pattern')) {
+                        const pattern = input.getAttribute('pattern');
+                        if (!pattern.includes('\\p{Arabic}')) {
+                            input.removeAttribute('pattern');
+                            input.setAttribute('title', 'يرجى إدخال البيانات بشكل صحيح (يمكن استخدام اللغة العربية)');
+                        }
+                    }
+                    
+                    // Specific fix for "name" field if Reflow validates it via JS
+                    // We remove the default pattern and set a wide one
+                    if (input.name === 'name' || input.name === 'city' || input.name === 'region') {
+                        input.removeAttribute('pattern');
+                    }
+                });
+            });
+
+            // Start observing the cart container
+            const cartContainer = document.querySelector('[data-reflow-type="shopping-cart"]');
+            if (cartContainer) {
+                observer.observe(cartContainer, { childList: true, subtree: true });
+            } else {
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
+        });
+    </script>
+
 </body>
 
 </html>
