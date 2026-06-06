@@ -82,6 +82,45 @@
     <meta property="og:description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
     <meta property="og:image" content="assets/img/logo.png">
     <meta property="og:type" content="website">
+
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <style>
+        /* Preloader */
+        #kael-preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #103C2B; z-index: 999999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        #kael-preloader img { width: 120px; margin-bottom: 20px; animation: pulse 1.5s infinite; }
+        .kael-spinner {
+            width: 40px; height: 40px;
+            border: 3px solid rgba(197, 160, 89, 0.3);
+            border-radius: 50%;
+            border-top-color: #C5A059;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+        
+        /* Sticky Glass Header */
+        .sticky-glass {
+            position: fixed !important;
+            top: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            z-index: 9999 !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            animation: slideDown 0.4s ease forwards;
+        }
+        @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        body.header-is-sticky { padding-top: 150px; /* prevent layout jump */ }
+    </style>
+
 </head>
 
 <body>
@@ -105,10 +144,12 @@
                         <div><span data-reflow-type="view-cart" data-reflow-summary-type="dropdown" data-reflow-shoppingcart-url="cart.html"><span>عربتي</span></span></div>
                     </div>
                     <div class="d-none d-md-block header-search">
-                        <form><select class="input-select" dir="rtl">
-                                <option value="0">كل الأقسام</option>
-                                <option value="1">هدايا</option>
-                            </select><input class="input text-end" placeholder="ابحث عن منتج..." dir="rtl"><button class="search-btn">بحث</button></form>
+                        
+                        <form action="shop.html" method="GET" class="d-flex w-100">
+                            <input type="text" name="search" class="input text-end flex-grow-1" placeholder="ابحث عن منتج..." dir="rtl" required style="border-radius: 0 20px 20px 0;">
+                            <button type="submit" class="search-btn" style="border-radius: 20px 0 0 20px; padding: 0 20px;">بحث</button>
+                        </form>
+    
                     </div>
                     <div class="header-logo"><a href="index.html" class="logo"><img src="assets/img/logo.png" alt="Kael Logo"></a></div>
                 </div>
@@ -303,6 +344,96 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/main.js"></script>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Init AOS
+            AOS.init({ duration: 800, once: true, offset: 50 });
+
+            // Sticky Header
+            const header = document.getElementById('header');
+            const topHeader = document.getElementById('top-header');
+            const mainNav = document.getElementById('navigation');
+            if (header) {
+                const headerOffset = header.offsetTop;
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > headerOffset + 50) {
+                        header.classList.add('sticky-glass');
+                        if(mainNav) mainNav.style.display = 'none'; // Optional: simplify nav on scroll
+                    } else {
+                        header.classList.remove('sticky-glass');
+                        if(mainNav && window.innerWidth >= 768) mainNav.style.display = 'block';
+                    }
+                });
+            }
+
+            // Web3Forms AJAX Override
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                const isWeb3 = form.querySelector('input[name="access_key"]');
+                if (isWeb3) {
+                    // Remove standard redirect to stop page reload
+                    const redirectInput = form.querySelector('input[name="redirect"]');
+                    if(redirectInput) redirectInput.remove();
+
+                    form.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const btn = form.querySelector('button[type="submit"]');
+                        const originalText = btn.innerHTML;
+                        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+                        btn.disabled = true;
+
+                        const formData = new FormData(form);
+                        try {
+                            const response = await fetch('https://api.web3forms.com/submit', {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const data = await response.json();
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'تم بنجاح!',
+                                    text: 'تم استلام طلبك وسنتواصل معك قريباً.',
+                                    confirmButtonColor: '#C5A059',
+                                    confirmButtonText: 'حسناً'
+                                });
+                                form.reset();
+                            } else {
+                                throw new Error('فشل الإرسال');
+                            }
+                        } catch (error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'عذراً!',
+                                text: 'حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.',
+                                confirmButtonColor: '#103C2B',
+                                confirmButtonText: 'حسناً'
+                            });
+                        } finally {
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                        }
+                    });
+                }
+            });
+        });
+
+        // Hide preloader on load
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('kael-preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
+        });
+    </script>
+
 </body>
 
 </html>
