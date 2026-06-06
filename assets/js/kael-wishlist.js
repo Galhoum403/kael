@@ -1,5 +1,5 @@
 /**
- * Kael Wishlist System
+ * Kael Wishlist System v2
  * نظام مفضلة مستقل بالكامل - يعمل مع منتجات Reflow عبر localStorage
  */
 
@@ -23,12 +23,12 @@
     }
 
     function isInWishlist(productId) {
-        return getWishlist().some(item => item.id === productId);
+        return getWishlist().some(function(item) { return item.id === productId; });
     }
 
     function addToWishlist(product) {
-        let list = getWishlist();
-        if (!list.some(item => item.id === product.id)) {
+        var list = getWishlist();
+        if (!list.some(function(item) { return item.id === product.id; })) {
             list.push(product);
             saveWishlist(list);
         }
@@ -36,7 +36,7 @@
     }
 
     function removeFromWishlist(productId) {
-        let list = getWishlist().filter(item => item.id !== productId);
+        var list = getWishlist().filter(function(item) { return item.id !== productId; });
         saveWishlist(list);
         updateHeaderCount();
     }
@@ -44,78 +44,133 @@
     function toggleWishlist(product) {
         if (isInWishlist(product.id)) {
             removeFromWishlist(product.id);
-            return false; // removed
+            return false;
         } else {
             addToWishlist(product);
-            return true; // added
+            return true;
         }
     }
 
     // ==================== Header Badge ====================
 
     function updateHeaderCount() {
-        const count = getWishlist().length;
-        document.querySelectorAll('.kael-wishlist-count').forEach(el => {
-            el.textContent = count;
-        });
+        var count = getWishlist().length;
+        var els = document.querySelectorAll('.kael-wishlist-count');
+        for (var i = 0; i < els.length; i++) {
+            els[i].textContent = count;
+        }
+    }
+
+    // ==================== Extract Product Data from Reflow Card ====================
+
+    function extractProductData(card) {
+        // Reflow v2: card is usually <a class="ref-product" href="...">
+        // Inside it: <img class="ref-image">, <div class="ref-product-data"> > <h5 class="ref-name">, <span class="ref-price">
+
+        var productId = '';
+        var productUrl = '';
+        var productName = 'منتج';
+        var productPrice = '';
+        var productImage = '';
+
+        // 1. URL & ID
+        // The card itself might be an <a> tag
+        if (card.tagName === 'A' && card.href) {
+            productUrl = card.getAttribute('href') || '';
+        } else {
+            var linkEl = card.querySelector('a[href]');
+            if (linkEl) productUrl = linkEl.getAttribute('href') || '';
+        }
+
+        // Extract product ID from URL
+        if (productUrl) {
+            var match = productUrl.match(/product=([^&]+)/);
+            if (match) {
+                productId = match[1];
+            } else {
+                var match2 = productUrl.match(/id=([^&]+)/);
+                if (match2) productId = match2[1];
+            }
+        }
+
+        // 2. Name - try multiple selectors
+        var nameEl = card.querySelector('.ref-name') ||
+                     card.querySelector('.ref-product-name') ||
+                     card.querySelector('h5') ||
+                     card.querySelector('h4') ||
+                     card.querySelector('h3');
+        if (nameEl && nameEl.textContent) {
+            productName = nameEl.textContent.trim();
+        }
+
+        // Fallback ID from name
+        if (!productId && productName !== 'منتج') {
+            productId = productName.replace(/\s+/g, '_').substring(0, 30);
+        }
+        if (!productId) {
+            productId = 'prod_' + Math.random().toString(36).substr(2, 8);
+        }
+
+        // 3. Price
+        var priceEl = card.querySelector('.ref-price') ||
+                      card.querySelector('.ref-product-price') ||
+                      card.querySelector('[class*="price"]');
+        if (priceEl && priceEl.textContent) {
+            productPrice = priceEl.textContent.trim();
+        }
+
+        // 4. Image
+        var imgEl = card.querySelector('.ref-image') ||
+                    card.querySelector('img');
+        if (imgEl && imgEl.src) {
+            productImage = imgEl.src;
+        }
+
+        return {
+            id: productId,
+            name: productName,
+            price: productPrice,
+            image: productImage,
+            url: productUrl
+        };
     }
 
     // ==================== Inject Hearts onto Reflow Cards ====================
 
     function injectHeartButtons() {
-        // Reflow product cards use .ref-product as their container
-        const cards = document.querySelectorAll('.ref-product');
+        var cards = document.querySelectorAll('.ref-product');
         if (!cards.length) return;
 
-        cards.forEach(card => {
+        for (var i = 0; i < cards.length; i++) {
+            var card = cards[i];
+
             // Don't inject twice
-            if (card.querySelector('.kael-heart-btn')) return;
+            if (card.querySelector('.kael-heart-btn')) continue;
 
-            // Extract product data from the card
-            const linkEl = card.querySelector('a[href]');
-            const imgEl = card.querySelector('img');
-            const nameEl = card.querySelector('.ref-name') || card.querySelector('.ref-product-name');
-            const priceEl = card.querySelector('.ref-price') || card.querySelector('.ref-product-price');
-
-            let productId = '';
-            let productUrl = '';
-            if (linkEl) {
-                productUrl = linkEl.getAttribute('href') || '';
-                // Extract product ID from URL (product.html?product=XXXXX)
-                const match = productUrl.match(/product=([^&]+)/);
-                productId = match ? match[1] : productUrl;
-            }
-
-            if (!productId) {
-                // Fallback: use name as ID
-                productId = nameEl ? nameEl.textContent.trim() : Math.random().toString(36).substr(2, 8);
-            }
-
-            const product = {
-                id: productId,
-                name: nameEl ? nameEl.textContent.trim() : 'منتج',
-                price: priceEl ? priceEl.textContent.trim() : '',
-                image: imgEl ? imgEl.src : '',
-                url: productUrl
-            };
+            var product = extractProductData(card);
 
             // Create heart button
-            const heartBtn = document.createElement('button');
+            var heartBtn = document.createElement('button');
             heartBtn.className = 'kael-heart-btn';
             heartBtn.setAttribute('aria-label', 'إضافة للمفضلة');
-            heartBtn.innerHTML = isInWishlist(productId)
-                ? '<i class="fas fa-heart"></i>'
-                : '<i class="far fa-heart"></i>';
 
-            if (isInWishlist(productId)) {
+            if (isInWishlist(product.id)) {
+                heartBtn.innerHTML = '<i class="fas fa-heart"></i>';
                 heartBtn.classList.add('active');
+            } else {
+                heartBtn.innerHTML = '<i class="far fa-heart"></i>';
             }
+
+            // Store product data on the button
+            heartBtn.setAttribute('data-product', JSON.stringify(product));
 
             heartBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const added = toggleWishlist(product);
+                var prod = JSON.parse(this.getAttribute('data-product'));
+                var added = toggleWishlist(prod);
+
                 if (added) {
                     this.innerHTML = '<i class="fas fa-heart"></i>';
                     this.classList.add('active');
@@ -127,46 +182,43 @@
                 }
             });
 
-            // Position the card relatively so the heart is absolute inside it
-            const imageContainer = card.querySelector('.ref-media') || card.querySelector('.ref-image') || card;
-            imageContainer.style.position = 'relative';
-            imageContainer.appendChild(heartBtn);
-        });
+            // Position the card container
+            card.style.position = 'relative';
+            card.appendChild(heartBtn);
+        }
     }
 
     // ==================== Toast Notification ====================
 
     function showToast(message) {
-        // Remove existing toast
-        const existing = document.getElementById('kael-toast');
+        var existing = document.getElementById('kael-toast');
         if (existing) existing.remove();
 
-        const toast = document.createElement('div');
+        var toast = document.createElement('div');
         toast.id = 'kael-toast';
         toast.textContent = message;
         document.body.appendChild(toast);
 
-        // Trigger animation
-        requestAnimationFrame(() => {
+        requestAnimationFrame(function() {
             toast.classList.add('show');
         });
 
-        setTimeout(() => {
+        setTimeout(function() {
             toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 400);
+            setTimeout(function() { toast.remove(); }, 400);
         }, 2000);
     }
 
     // ==================== Favorites Page Renderer ====================
 
     function renderFavoritesPage() {
-        const container = document.getElementById('kael-favorites-grid');
+        var container = document.getElementById('kael-favorites-grid');
         if (!container) return;
 
-        const list = getWishlist();
-        const emptyState = document.getElementById('kael-favorites-empty');
+        var list = getWishlist();
+        var emptyState = document.getElementById('kael-favorites-empty');
 
-        if (list.length === 0) {
+        if (!list.length) {
             container.innerHTML = '';
             if (emptyState) emptyState.style.display = 'block';
             return;
@@ -174,45 +226,57 @@
 
         if (emptyState) emptyState.style.display = 'none';
 
-        container.innerHTML = list.map(item => `
-            <div class="col-6 col-md-4 col-lg-3 mb-4 kael-fav-item" data-id="${item.id}">
-                <div class="kael-fav-card">
-                    <div class="kael-fav-img-wrap">
-                        <a href="${item.url || '#'}">
-                            <img src="${item.image}" alt="${item.name}" onerror="this.src='assets/img/logo.png'">
-                        </a>
-                        <button class="kael-fav-remove" data-id="${item.id}" aria-label="إزالة من المفضلة">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                    <div class="kael-fav-info">
-                        <a href="${item.url || '#'}" class="kael-fav-name">${item.name}</a>
-                        <span class="kael-fav-price">${item.price}</span>
-                    </div>
-                </div>
-            </div>
-        `).join('');
+        var html = '';
+        for (var i = 0; i < list.length; i++) {
+            var item = list[i];
+            var name = item.name || 'منتج';
+            var price = item.price || '';
+            var image = item.image || 'assets/img/logo.png';
+            var url = item.url || 'shop.html';
+            var id = item.id || '';
+
+            html += '<div class="col-6 col-md-4 col-lg-3 mb-4 kael-fav-item" data-id="' + id + '">';
+            html += '  <div class="kael-fav-card">';
+            html += '    <div class="kael-fav-img-wrap">';
+            html += '      <a href="' + url + '">';
+            html += '        <img src="' + image + '" alt="' + name + '" onerror="this.src=\'assets/img/logo.png\'">';
+            html += '      </a>';
+            html += '      <button class="kael-fav-remove" data-id="' + id + '" aria-label="إزالة من المفضلة">';
+            html += '        <i class="fas fa-trash-alt"></i>';
+            html += '      </button>';
+            html += '    </div>';
+            html += '    <div class="kael-fav-info">';
+            html += '      <a href="' + url + '" class="kael-fav-name">' + name + '</a>';
+            if (price) {
+                html += '      <span class="kael-fav-price">' + price + '</span>';
+            }
+            html += '    </div>';
+            html += '  </div>';
+            html += '</div>';
+        }
+
+        container.innerHTML = html;
 
         // Attach remove listeners
-        container.querySelectorAll('.kael-fav-remove').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+        var removeBtns = container.querySelectorAll('.kael-fav-remove');
+        for (var j = 0; j < removeBtns.length; j++) {
+            removeBtns[j].addEventListener('click', function (e) {
                 e.preventDefault();
-                const id = this.getAttribute('data-id');
+                var id = this.getAttribute('data-id');
                 removeFromWishlist(id);
-                const card = this.closest('.kael-fav-item');
+                var card = this.closest('.kael-fav-item');
                 card.style.transition = 'all 0.4s ease';
                 card.style.opacity = '0';
                 card.style.transform = 'scale(0.8)';
-                setTimeout(() => {
+                setTimeout(function() {
                     card.remove();
-                    // Check if empty
                     if (getWishlist().length === 0 && emptyState) {
                         emptyState.style.display = 'block';
                     }
                 }, 400);
                 showToast('تمت الإزالة من المفضلة');
             });
-        });
+        }
     }
 
     // ==================== CSS Injection ====================
@@ -220,237 +284,241 @@
     function injectStyles() {
         if (document.getElementById('kael-wishlist-css')) return;
 
-        const css = document.createElement('style');
+        var css = document.createElement('style');
         css.id = 'kael-wishlist-css';
-        css.textContent = `
-            /* ===== Heart Button on Product Cards ===== */
-            .kael-heart-btn {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                z-index: 10;
-                background: rgba(255,255,255,0.9);
-                border: none;
-                border-radius: 50%;
-                width: 36px;
-                height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                font-size: 16px;
-                color: #ccc;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-                transition: all 0.3s ease;
-            }
-            .kael-heart-btn:hover {
-                transform: scale(1.15);
-                box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-            }
-            .kael-heart-btn.active,
-            .kael-heart-btn.active i {
-                color: #e74c3c;
-            }
-            .kael-heart-btn i {
-                transition: color 0.3s, transform 0.3s;
-            }
-            .kael-heart-btn.active i {
-                animation: kael-heart-pop 0.4s ease;
-            }
-            @keyframes kael-heart-pop {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.35); }
-                100% { transform: scale(1); }
-            }
-
-            /* ===== Toast Notification ===== */
-            #kael-toast {
-                position: fixed;
-                bottom: 30px;
-                left: 50%;
-                transform: translateX(-50%) translateY(80px);
-                background: linear-gradient(135deg, #103C2B 0%, #1a5a3f 100%);
-                color: #fff;
-                padding: 14px 30px;
-                border-radius: 30px;
-                font-size: 15px;
-                font-weight: bold;
-                z-index: 99999;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-                opacity: 0;
-                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                pointer-events: none;
-                border: 1px solid rgba(197,160,89,0.3);
-            }
-            #kael-toast.show {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-
-            /* ===== Favorites Page Cards ===== */
-            .kael-fav-card {
-                background: #fff;
-                border-radius: 15px;
-                overflow: hidden;
-                border: 1px solid #eee;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-            }
-            .kael-fav-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-                border-color: #C5A059;
-            }
-            .kael-fav-img-wrap {
-                position: relative;
-                overflow: hidden;
-                background: #f9f6f0;
-            }
-            .kael-fav-img-wrap img {
-                width: 100%;
-                height: 220px;
-                object-fit: contain;
-                padding: 15px;
-                transition: transform 0.3s;
-            }
-            .kael-fav-card:hover .kael-fav-img-wrap img {
-                transform: scale(1.05);
-            }
-            .kael-fav-remove {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                background: rgba(231,76,60,0.9);
-                border: none;
-                border-radius: 50%;
-                width: 34px;
-                height: 34px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #fff;
-                font-size: 14px;
-                cursor: pointer;
-                opacity: 0;
-                transition: all 0.3s;
-                box-shadow: 0 2px 8px rgba(231,76,60,0.3);
-            }
-            .kael-fav-card:hover .kael-fav-remove {
-                opacity: 1;
-            }
-            .kael-fav-remove:hover {
-                background: #c0392b;
-                transform: scale(1.1);
-            }
-            .kael-fav-info {
-                padding: 15px;
-                text-align: right;
-            }
-            .kael-fav-name {
-                display: block;
-                font-weight: bold;
-                color: #103C2B;
-                font-size: 14px;
-                margin-bottom: 8px;
-                text-decoration: none;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            .kael-fav-name:hover {
-                color: #C5A059;
-            }
-            .kael-fav-price {
-                color: #C5A059;
-                font-weight: bold;
-                font-size: 16px;
-            }
-
-            /* ===== Favorites Empty State ===== */
-            .kael-fav-empty-state {
-                text-align: center;
-                padding: 60px 20px;
-            }
-            .kael-fav-empty-icon {
-                font-size: 70px;
-                color: #ddd;
-                margin-bottom: 20px;
-                animation: kael-float 3s ease-in-out infinite;
-            }
-            @keyframes kael-float {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-10px); }
-            }
-
-            /* ===== Header Wishlist Icon ===== */
-            .kael-header-wish a {
-                position: relative;
-            }
-            .kael-header-wish .kael-wish-badge {
-                position: absolute;
-                top: -8px;
-                right: -8px;
-                background: #e74c3c;
-                color: #fff;
-                font-size: 10px;
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-            }
-
-            @media (max-width: 768px) {
-                .kael-fav-img-wrap img {
-                    height: 160px;
-                }
-            }
-        `;
+        css.textContent = [
+            '/* Heart Button on Product Cards */',
+            '.kael-heart-btn {',
+            '    position: absolute;',
+            '    top: 10px;',
+            '    left: 10px;',
+            '    z-index: 10;',
+            '    background: rgba(255,255,255,0.92);',
+            '    border: none;',
+            '    border-radius: 50%;',
+            '    width: 38px;',
+            '    height: 38px;',
+            '    display: flex;',
+            '    align-items: center;',
+            '    justify-content: center;',
+            '    cursor: pointer;',
+            '    font-size: 17px;',
+            '    color: #ccc;',
+            '    box-shadow: 0 2px 10px rgba(0,0,0,0.12);',
+            '    transition: all 0.3s ease;',
+            '}',
+            '.kael-heart-btn:hover {',
+            '    transform: scale(1.15);',
+            '    box-shadow: 0 4px 16px rgba(0,0,0,0.2);',
+            '}',
+            '.kael-heart-btn.active,',
+            '.kael-heart-btn.active i {',
+            '    color: #e74c3c;',
+            '}',
+            '.kael-heart-btn i {',
+            '    transition: color 0.3s, transform 0.3s;',
+            '    pointer-events: none;',
+            '}',
+            '.kael-heart-btn.active i {',
+            '    animation: kael-heart-pop 0.4s ease;',
+            '}',
+            '@keyframes kael-heart-pop {',
+            '    0% { transform: scale(1); }',
+            '    50% { transform: scale(1.4); }',
+            '    100% { transform: scale(1); }',
+            '}',
+            '',
+            '/* Toast Notification */',
+            '#kael-toast {',
+            '    position: fixed;',
+            '    bottom: 30px;',
+            '    left: 50%;',
+            '    transform: translateX(-50%) translateY(80px);',
+            '    background: linear-gradient(135deg, #103C2B 0%, #1a5a3f 100%);',
+            '    color: #fff;',
+            '    padding: 14px 30px;',
+            '    border-radius: 30px;',
+            '    font-size: 15px;',
+            '    font-weight: bold;',
+            '    z-index: 99999;',
+            '    box-shadow: 0 8px 25px rgba(0,0,0,0.25);',
+            '    opacity: 0;',
+            '    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);',
+            '    pointer-events: none;',
+            '    border: 1px solid rgba(197,160,89,0.3);',
+            '    white-space: nowrap;',
+            '}',
+            '#kael-toast.show {',
+            '    opacity: 1;',
+            '    transform: translateX(-50%) translateY(0);',
+            '}',
+            '',
+            '/* Favorites Page Cards */',
+            '.kael-fav-card {',
+            '    background: #fff;',
+            '    border-radius: 15px;',
+            '    overflow: hidden;',
+            '    border: 1px solid #eee;',
+            '    transition: all 0.3s ease;',
+            '    box-shadow: 0 2px 10px rgba(0,0,0,0.06);',
+            '}',
+            '.kael-fav-card:hover {',
+            '    transform: translateY(-5px);',
+            '    box-shadow: 0 8px 25px rgba(0,0,0,0.12);',
+            '    border-color: #C5A059;',
+            '}',
+            '.kael-fav-img-wrap {',
+            '    position: relative;',
+            '    overflow: hidden;',
+            '    background: #f9f6f0;',
+            '}',
+            '.kael-fav-img-wrap img {',
+            '    width: 100%;',
+            '    height: 220px;',
+            '    object-fit: contain;',
+            '    padding: 15px;',
+            '    transition: transform 0.3s;',
+            '}',
+            '.kael-fav-card:hover .kael-fav-img-wrap img {',
+            '    transform: scale(1.05);',
+            '}',
+            '.kael-fav-remove {',
+            '    position: absolute;',
+            '    top: 10px;',
+            '    left: 10px;',
+            '    background: rgba(231,76,60,0.9);',
+            '    border: none;',
+            '    border-radius: 50%;',
+            '    width: 34px;',
+            '    height: 34px;',
+            '    display: flex;',
+            '    align-items: center;',
+            '    justify-content: center;',
+            '    color: #fff;',
+            '    font-size: 14px;',
+            '    cursor: pointer;',
+            '    opacity: 0;',
+            '    transition: all 0.3s;',
+            '    box-shadow: 0 2px 8px rgba(231,76,60,0.3);',
+            '}',
+            '.kael-fav-card:hover .kael-fav-remove {',
+            '    opacity: 1;',
+            '}',
+            '.kael-fav-remove:hover {',
+            '    background: #c0392b;',
+            '    transform: scale(1.1);',
+            '}',
+            '.kael-fav-info {',
+            '    padding: 15px;',
+            '    text-align: right;',
+            '}',
+            '.kael-fav-name {',
+            '    display: block;',
+            '    font-weight: bold;',
+            '    color: #103C2B;',
+            '    font-size: 14px;',
+            '    margin-bottom: 8px;',
+            '    text-decoration: none;',
+            '    overflow: hidden;',
+            '    text-overflow: ellipsis;',
+            '    white-space: nowrap;',
+            '}',
+            '.kael-fav-name:hover {',
+            '    color: #C5A059;',
+            '}',
+            '.kael-fav-price {',
+            '    color: #C5A059;',
+            '    font-weight: bold;',
+            '    font-size: 16px;',
+            '}',
+            '',
+            '/* Favorites Empty State */',
+            '.kael-fav-empty-state {',
+            '    text-align: center;',
+            '    padding: 60px 20px;',
+            '}',
+            '.kael-fav-empty-icon {',
+            '    font-size: 70px;',
+            '    color: #ddd;',
+            '    margin-bottom: 20px;',
+            '    animation: kael-float 3s ease-in-out infinite;',
+            '}',
+            '@keyframes kael-float {',
+            '    0%, 100% { transform: translateY(0); }',
+            '    50% { transform: translateY(-10px); }',
+            '}',
+            '',
+            '/* Header Wishlist Icon */',
+            '.kael-header-wish a {',
+            '    position: relative;',
+            '}',
+            '.kael-header-wish .kael-wish-badge {',
+            '    position: absolute;',
+            '    top: -8px;',
+            '    right: -8px;',
+            '    background: #e74c3c;',
+            '    color: #fff;',
+            '    font-size: 10px;',
+            '    width: 18px;',
+            '    height: 18px;',
+            '    border-radius: 50%;',
+            '    display: flex;',
+            '    align-items: center;',
+            '    justify-content: center;',
+            '    font-weight: bold;',
+            '}',
+            '',
+            '@media (max-width: 768px) {',
+            '    .kael-fav-img-wrap img {',
+            '        height: 160px;',
+            '    }',
+            '}'
+        ].join('\n');
         document.head.appendChild(css);
     }
 
     // ==================== MutationObserver for Reflow ====================
-    // Reflow loads products asynchronously, so we observe DOM changes
 
     function observeReflow() {
-        const target = document.querySelector('[data-reflow-type="product-list"]') ||
-                       document.querySelector('[data-reflow-type="product-grid"]');
-        if (!target) return;
+        var targets = document.querySelectorAll('[data-reflow-type="product-list"], [data-reflow-type="product-grid"], [data-reflow-type="product"]');
+        if (!targets.length) return;
 
-        const observer = new MutationObserver((mutations) => {
-            injectHeartButtons();
-        });
+        for (var t = 0; t < targets.length; t++) {
+            var observer = new MutationObserver(function() {
+                injectHeartButtons();
+            });
+            observer.observe(targets[t], { childList: true, subtree: true });
+        }
 
-        observer.observe(target, { childList: true, subtree: true });
-
-        // Also try immediately in case already loaded
-        setTimeout(injectHeartButtons, 1000);
-        setTimeout(injectHeartButtons, 2500);
+        // Retry multiple times since Reflow loads async
+        setTimeout(injectHeartButtons, 1500);
+        setTimeout(injectHeartButtons, 3000);
         setTimeout(injectHeartButtons, 5000);
+        setTimeout(injectHeartButtons, 8000);
+    }
+
+    // ==================== Clean corrupted data ====================
+
+    function cleanWishlist() {
+        var list = getWishlist();
+        var cleaned = list.filter(function(item) {
+            return item && item.id && item.name && item.name !== 'undefined';
+        });
+        if (cleaned.length !== list.length) {
+            saveWishlist(cleaned);
+        }
     }
 
     // ==================== Init ====================
 
     function init() {
         injectStyles();
+        cleanWishlist();
         updateHeaderCount();
         observeReflow();
         renderFavoritesPage();
-
-        // Also inject on product detail pages
-        setTimeout(() => {
-            const detailPage = document.querySelector('[data-reflow-type="product"]');
-            if (detailPage) {
-                const observer = new MutationObserver(() => injectHeartButtons());
-                observer.observe(detailPage, { childList: true, subtree: true });
-                setTimeout(injectHeartButtons, 1500);
-            }
-        }, 500);
     }
 
-    // Wait for DOM
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -464,8 +532,9 @@
         remove: removeFromWishlist,
         toggle: toggleWishlist,
         isIn: isInWishlist,
-        count: () => getWishlist().length,
-        render: renderFavoritesPage
+        count: function() { return getWishlist().length; },
+        render: renderFavoritesPage,
+        clear: function() { saveWishlist([]); updateHeaderCount(); renderFavoritesPage(); }
     };
 
 })();
