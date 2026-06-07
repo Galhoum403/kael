@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="ar">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>الصفحة غير موجودة | 404</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.reflowhq.com/v2/toolkit.min.css">
+    <link rel="stylesheet" href="assets/css/FontAwesome.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tajawal&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="assets/css/nouislider.min.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/DA_Whatsapp.css">
+    <link rel="stylesheet" href="assets/css/kael-theme.css">
+    <link rel="stylesheet" href="assets/css/Mega-Menu-Dropdown-100-Editable---Ambrodu.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <meta name="description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
+    <meta name="keywords" content="هدايا, ساعات, إكسسوارات, متجر هدايا, هدايا فاخرة, هدايا رجالي, هدايا نسائي, هدايا عيد ميلاد">
+    <meta property="og:title" content="Kael Store | متجر الهدايا الفاخرة">
+    <meta property="og:description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
+    <meta property="og:image" content="assets/img/logo.png">
+    <meta property="og:type" content="website">
+<style>
+        .offers-hero {
+            background: linear-gradient(135deg, #101512 0%, #1a231d 100%);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--kael-gold, #C5A059);
+        }
+        .offers-hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.1) 0%, transparent 60%);
+            animation: pulseLight 4s infinite alternate;
+        }
+        @keyframes pulseLight {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 0.8; }
+        }
+        .offers-hero h1 {
+            color: var(--kael-gold, #C5A059);
+            font-weight: 900;
+            font-size: 3rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .offers-hero p {
+            color: #e5e5e5;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: auto;
+            margin-bottom: 30px;
+        }
+        .offers-countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            direction: rtl;
+        }
+        .offers-countdown .time-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 80px;
+            text-align: center;
+            color: #fff;
+        }
+        .offers-countdown .time-box span {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--kael-gold, #C5A059);
+        }
+        .offers-countdown .time-box small {
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .offers-banner-img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        /* Style Reflow cards to have a golden glow on hover in offers page */
+        .ref-product:hover {
+            box-shadow: 0 10px 25px rgba(197, 160, 89, 0.2) !important;
+            transform: translateY(-5px);
+            transition: 0.3s;
+        } /* THIS WAS MISSING */
+
+        /* Slider Navigation Arrows - Override Slick Defaults */
+        button.slider-arrow.slick-prev,
+        button.slider-arrow.slick-next {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 20 !important;
+            background: rgba(197, 160, 89, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(197, 160, 89, 0.5) !important;
+            color: #fff !important;
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 20px !important;
+            padding: 0 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+        }
+        button.slider-arrow.slick-prev { right: 15px !important; left: auto !important; }
+        button.slider-arrow.slick-next { left: 15px !important; right: auto !important; }
+        
+        button.slider-arrow.slick-prev:hover,
+        button.slider-arrow.slick-next:hover {
+            background: var(--kael-gold, #C5A059) !important;
+            transform: translateY(-50%) scale(1.1) !important;
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.5) !important;
+        }
+
+        /* Hide default slick icons */
+        button.slider-arrow.slick-prev::before,
+        button.slider-arrow.slick-next::before {
+            display: none !important;
+        }
+        /* Slick Dots Styling */
+        .offers-hero .slick-dots {
+            bottom: 20px;
+        }
+        .offers-hero .slick-dots li button:before {
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+        }
+        .offers-hero .slick-dots li.slick-active button:before {
+            color: var(--kael-gold, #C5A059);
+        }
+    </style>
+
+    <!-- AOS CSS -->
+    
+    <!-- SweetAlert2 CSS -->
+    
+    
+    
+
+
+    <!-- Lylix Script Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="assets/css/lylix-core.css">
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <div id="lylix-preloader">
+        <img src="assets/img/logo.png" alt="Kael Logo">
+        <div class="lylix-spinner"></div>
+    </div>
+
+    <header>
+        <div id="top-header">
+            <div class="container">
+                <ul class="justify-content-center justify-content-md-start header-links">
+                    <li><i class="fas fa-phone"></i><bdi>+20 123 456 7890</bdi></li>
+                    <li><i class="fa fa-envelope-o"></i><a href="#"> info@kael.com</a></li>
+                    <li><i class="fas fa-map-marker"></i><a href="#"> مصر</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="header-ctn">
+                        <div class="d-block d-md-none"><a href="#mobileMenu" data-bs-toggle="offcanvas"><i class="fas fa-bars"></i><span>القائمة</span></a></div>
+                        
+                        <div><a href="/"><i class="fa fa-heart-o"></i><span>المفضلة</span></a></div>
+                        <div><span data-reflow-type="view-cart" data-reflow-summary-type="dropdown" data-reflow-shoppingcart-url="cart"><span>عربتي</span></span></div>
+                    </div>
+                    <div class="d-none d-md-block header-search">
+                        
+                        <form action="shop" method="GET" class="d-flex w-100">
+                            <input type="text" name="search" class="input text-end flex-grow-1" placeholder="ابحث عن منتج..." dir="rtl" required style="border-radius: 0 20px 20px 0;">
+                            <button type="submit" class="search-btn" style="border-radius: 20px 0 0 20px; padding: 0 20px;">بحث</button>
+                        </form>
+    
+                    </div>
+                    <div class="header-logo"><a href="/" class="logo"><img src="assets/img/logo.png" alt="Kael Logo"></a></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav class="d-none d-md-block" id="navigation" dir="rtl">
+        <div class="container">
+            <ul class="main-nav">
+                <li class="active"><a href="/">الرئيسية</a></li>
+                <li class=""><a href="offers" style="color:var(--kael-gold, #C5A059);font-weight:bold;">عروض مميزة 🌟</a></li>
+                <li class="dropdown ">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">تسوق بالمناسبة 🎈 <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
+                    <ul class="dropdown-menu shadow-sm" style="text-align: right; border: 1px solid var(--kael-gold, #C5A059); padding: 10px; border-radius: 8px;">
+                        <li><a class="dropdown-item" href="shop?category=birthday">هدايا أعياد الميلاد</a></li>
+                        <li><a class="dropdown-item" href="shop?category=wedding">هدايا زواج وخطوبة</a></li>
+                        <li><a class="dropdown-item" href="shop?category=bridal">تجهيز عرائس</a></li>
+                        <li><a class="dropdown-item" href="shop?category=baby">هدايا سبوع ومواليد</a></li>
+                        <li><a class="dropdown-item" href="shop?category=graduation">هدايا التخرج</a></li>
+                        <li><a class="dropdown-item" href="shop?category=anniversary">هدايا ذكرى سنوية</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown ">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">لمن الهدية؟ 🎁 <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
+                    <ul class="dropdown-menu shadow-sm" style="text-align: right; border: 1px solid var(--kael-gold, #C5A059); padding: 10px; border-radius: 8px;">
+                        <li><a class="dropdown-item" href="shop?category=men">هدايا رجالي</a></li>
+                        <li><a class="dropdown-item" href="shop?category=women">هدايا نسائي</a></li>
+                        <li><a class="dropdown-item" href="shop?category=kids">هدايا أطفال</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown ">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">الأقسام 💎 <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
+                    <ul class="dropdown-menu shadow-sm" style="text-align: right; border: 1px solid var(--kael-gold, #C5A059); padding: 10px; border-radius: 8px;">
+                        <li><a class="dropdown-item" href="shop?category=watches">ساعات فاخرة</a></li>
+                        <li><a class="dropdown-item" href="shop?category=accessories">إكسسوارات</a></li>
+                        <li><a class="dropdown-item" href="shop?category=custom">هدايا مخصصة بالاسم</a></li>
+                    </ul>
+                </li>
+                <li class=""><a href="contact">تواصل معنا</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu" dir="rtl">
+        <div class="offcanvas-header"><a class="text-decoration-none" href="/"><img src="assets/img/logo.png" alt="Kael Logo" style="max-height:40px;width:auto;"></a><button class="btn-close m-0" type="button" data-bs-dismiss="offcanvas"></button></div>
+        <div class="offcanvas-body">
+            <div class="input-group mb-4" style="border:2px solid var(--kael-gold);border-radius:5px;overflow:hidden;"><input class="border-0 shadow-none form-control form-control text-end" type="text" dir="rtl" placeholder="ابحث عن منتج..." style="background:var(--kael-white);"><button class="btn border-0 px-3" type="button" style="background-color:var(--kael-gold);color:#fff;"><i class="fas fa-search"></i></button></div>
+            <ul class="list-unstyled text-end mobile-nav">
+                <li><a href="/">الرئيسية</a></li>
+                <li><a href="offers" style="color:var(--kael-gold, #C5A059);">عروض مميزة 🌟</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">تسوق بالمناسبة 🎈 <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
+                    <ul class="dropdown-menu text-end border-0 bg-transparent pe-3" style="box-shadow: none;">
+                        <li><a class="dropdown-item" href="shop?category=birthday">أعياد الميلاد</a></li>
+                        <li><a class="dropdown-item" href="shop?category=wedding">زواج وخطوبة</a></li>
+                        <li><a class="dropdown-item" href="shop?category=bridal">تجهيز عرائس</a></li>
+                        <li><a class="dropdown-item" href="shop?category=baby">سبوع ومواليد</a></li>
+                        <li><a class="dropdown-item" href="shop?category=graduation">تخرج</a></li>
+                        <li><a class="dropdown-item" href="shop?category=anniversary">ذكرى سنوية</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">لمن الهدية؟ 🎁 <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
+                    <ul class="dropdown-menu text-end border-0 bg-transparent pe-3" style="box-shadow: none;">
+                        <li><a class="dropdown-item" href="shop?category=men">رجالي</a></li>
+                        <li><a class="dropdown-item" href="shop?category=women">نسائي</a></li>
+                        <li><a class="dropdown-item" href="shop?category=kids">أطفال</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">الأقسام 💎 <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i></a>
+                    <ul class="dropdown-menu text-end border-0 bg-transparent pe-3" style="box-shadow: none;">
+                        <li><a class="dropdown-item" href="shop?category=watches">ساعات فاخرة</a></li>
+                        <li><a class="dropdown-item" href="shop?category=accessories">إكسسوارات</a></li>
+                        <li><a class="dropdown-item" href="shop?category=custom">مخصصة بالاسم</a></li>
+                    </ul>
+                </li>
+                <li><a href="contact">تواصل معنا</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="section" data-aos="fade-up">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="shop">
+                        <div class="shop-img"><img src="assets/img/product01.png" alt=""></div>
+                        <div class="shop-body">
+                            <h3>تشكيلة<br>الهدايا</h3><a href="#" class="cta-btn">تسوق الآن <i class="fas fa-arrow-circle-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="shop">
+                        <div class="shop-img"><img src="assets/img/product02.png" alt=""></div>
+                        <div class="shop-body">
+                            <h3>أرقى<br>الإكسسوارات</h3><a href="#" class="cta-btn">تسوق الآن <i class="fas fa-arrow-circle-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="shop">
+                        <div class="shop-img"><img src="assets/img/product03.png" alt=""></div>
+                        <div class="shop-body">
+                            <h3>أفخم<br>الساعات</h3><a href="#" class="cta-btn">تسوق الآن <i class="fas fa-arrow-circle-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section" dir="rtl" data-aos="fade-up">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-title" style="text-align:right;">
+                        <h3 class="title">وصل حديثاً</h3>
+                        
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row"><div class="products-tabs">
+                        
+                        <div id="tab1" class="tab-pane active">
+                            
+                            <div class="kael-original-slick" data-nav="#slick-nav-1">
+                                
+                                
+                               
+                                
+
+                            </div>
+                            <div id="slick-nav-1" class="products-slick-nav"></div>
+                        </div>
+                        
+                    </div>
+                        <div class="col">
+                            <div data-reflow-type="product-list" data-reflow-shoppingcart-url="cart" data-reflow-layout="cards" data-reflow-perpage="10" data-reflow-order="date_desc" data-reflow-category="74607950" data-reflow-show="image,name,excerpt,price,add-to-cart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script><script>
+  $(document).ready(function(){
+      $('.kael-original-slick').each(function() {
+          var $this = $(this),
+              $nav = $this.attr('data-nav');
+
+          $this.slick({
+              slidesToShow: 4,
+              slidesToScroll: 1,
+              autoplay: true,
+              infinite: true,
+              speed: 300,
+              dots: false,
+              arrows: true,
+              appendArrows: $nav ? $($nav) : false,
+              rtl: true, /* ده اللي بيظبط العربي ويمنع الكروت من إنها تفرش */
+              responsive: [{
+                breakpoint: 991,
+                settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 1,
+                }
+              },
+              {
+                breakpoint: 480,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                }
+              }]
+          });
+      });
+  });
+</script>
+    <div class="offers-hero position-relative p-0" id="hero-slider-container">
+        <div class="offers-slider" dir="rtl" id="dynamic-slider">
+            <!-- Slides will be injected here via JavaScript -->
+        </div>
+    </div><div class="section" dir="rtl" data-aos="fade-up">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title" style="text-align: right;">
+                    <h3 class="title">الأكثر مبيعاً</h3>
+                    
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="products-tabs">
+                    <div id="tab2" class="tab-pane active">
+                        <div class="kael-original-slick" data-nav="#slick-nav-2">
+                            
+                        </div>
+                        <div id="slick-nav-2" class="products-slick-nav"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div data-reflow-type="product-list" data-reflow-shoppingcart-url="cart" data-reflow-layout="cards" data-reflow-perpage="10" data-reflow-order="date_desc" data-reflow-category="52135929" data-reflow-show="image,name,excerpt,price,add-to-cart"></div><script>
+  $(document).ready(function(){
+      $('.kael-widget-slick').each(function() {
+          var $this = $(this),
+              $nav = $this.attr('data-nav');
+
+          $this.slick({
+              slidesToShow: 1,      
+              slidesToScroll: 1,
+              autoplay: true,
+              infinite: true,
+              speed: 300,
+              dots: false,
+              arrows: true,
+              appendArrows: $nav ? $($nav) : false, 
+              rtl: true             
+          });
+      });
+  });
+</script>
+<script>
+$(document).ready(function() {
+    // 1. استدعاء المنتجات + (تنضيف الذاكرة من أي داتا بايظة من التجارب اللي فاتت)
+    let kaelWishlist = JSON.parse(localStorage.getItem('kael_wishlist')) || [];
+    kaelWishlist = kaelWishlist.filter(item => item && item !== '#' && item.length > 2);
+    localStorage.setItem('kael_wishlist', JSON.stringify(kaelWishlist)); // حفظ النضافة
+
+    // 2. تحديث العداد اللي في الهيدر
+    function updateWishlistBadge() {
+        $('.header-ctn a:contains("المفضلة") .qty span').text(kaelWishlist.length);
+    }
+    updateWishlistBadge();
+
+    // 3. مراقب قوي بيزرع القلوب (بيعتمد على اسم المنتج مش الرابط)
+    setInterval(function() {
+        $('.ref-product').each(function() {
+            let $product = $(this);
+            
+            // لو مفيش قلب، نركب واحد
+            if ($product.find('.kael-wishlist-btn').length === 0) {
+                
+                // هنجيب اسم المنتج عشان ده أدق حاجة مستحيل تتكرر
+                let productName = $product.find('.ref-name').text().trim();
+                
+                // لو لسه الاسم مظهرش، استنى متركبش القلب دلوقتي
+                if (!productName) return; 
+
+                // نحدد هو فاضي ولا مليان (باستخدام كلاسات FontAwesome 5 الأصلية)
+                let isFav = kaelWishlist.includes(productName) ? 'fas fa-heart active-heart' : 'far fa-heart';
+
+                let btnHtml = `<button class="kael-wishlist-btn" data-id="${productName}" style="z-index: 99 !important;"><i class="${isFav}"></i></button>`;
+                
+                $product.find('.ref-media').append(btnHtml);
+            }
+        });
+    }, 1000);
+
+    // 4. الأكشن عند الضغط
+    $(document).on('click', '.kael-wishlist-btn', function(e) {
+        e.preventDefault(); 
+        e.stopPropagation();
+
+        let productId = $(this).data('id');
+        let $icon = $(this).find('i');
+
+        if (kaelWishlist.includes(productId)) {
+            // إزالة
+            kaelWishlist = kaelWishlist.filter(item => item !== productId);
+            $icon.removeClass('fas fa-heart active-heart').addClass('far fa-heart');
+        } else {
+            // إضافة
+            kaelWishlist.push(productId);
+            $icon.removeClass('far fa-heart').addClass('fas fa-heart active-heart');
+        }
+
+        // حفظ وتحديث
+        localStorage.setItem('kael_wishlist', JSON.stringify(kaelWishlist));
+        updateWishlistBadge();
+    });
+});
+</script>
+
+    <!-- Premium Footer -->
+    <footer id="premium-footer" dir="rtl">
+        <div class="container">
+            <!-- Newsletter -->
+            <div class="row mb-5">
+                <div class="col-md-10 offset-md-1">
+                    <div class="newsletter-box text-center">
+                        <h4 class="text-white mb-3">اشترك في قائمتنا البريدية</h4>
+                        <p style="color: #999;" class="mb-4">احصل على أحدث العروض الحصرية وكوبونات الخصم مباشرة على بريدك</p>
+                        <form action="https://api.web3forms.com/submit" method="POST" class="d-flex justify-content-center" style="max-width: 500px; margin: auto;">
+                            <input type="hidden" name="access_key" value="585d1f02-f9d1-4a09-86f9-955c5233b239">
+                            <input type="hidden" name="subject" value="اشتراك جديد في القائمة البريدية!">
+                            <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                            <input type="email" name="email" class="form-control text-end" placeholder="أدخل بريدك الإلكتروني..." required>
+                            <button type="submit" class="btn me-2">اشترك الآن</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-md-4 mb-4">
+                    <div class="footer-logo">
+                        <img src="assets/img/logo.png" alt="Kael Logo">
+                    </div>
+                    <p style="color:#a0a0a0; font-size:14px; line-height:1.8;">نقدم لك تشكيلة فاخرة من الهدايا، الساعات، والإكسسوارات التي تليق بأصحاب الذوق الرفيع. الجودة والأناقة هما عنواننا.</p>
+                    <ul class="list-unstyled footer-links mt-4">
+                        <li><i class="fas fa-map-marker-alt"></i><span>القاهرة، مصر</span></li>
+                        <li><i class="fas fa-phone"></i><bdi>+20 123 456 7890</bdi></li>
+                        <li><i class="fas fa-envelope"></i><span>info@kael.com</span></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 mb-4">
+                    <h3 class="footer-title">روابط هامة</h3>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="/">الرئيسية</a></li>
+                        <li><a href="offers">عروض مميزة</a></li>
+                        <li><a href="shop">تسوق الآن</a></li>
+                        <li><a href="contact">تواصل معنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-12 col-md-4 mb-4">
+                    <h3 class="footer-title">خدمة العملاء</h3>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#">حسابي الشخصي</a></li>
+                        <li><a href="cart">عربة التسوق</a></li>
+                        <li><a href="return-policy">سياسة الاسترجاع والاستبدال</a></li>
+                        <li><a href="terms">الشروط والأحكام</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="bottom-premium-footer">
+            <div class="container">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <p class="copyright mb-3 mb-md-0">© 2026 <span data-lylix="storeName">Lylix Store</span>. جميع الحقوق محفوظة.</p>
+                    <ul class="list-unstyled footer-payments m-0">
+                        <li><i class="fa fa-cc-visa"></i></li>
+                        <li><i class="fa fa-cc-mastercard"></i></li>
+                        <li><i class="fas fa-credit-card"></i></li>
+                        <li><i class="fa fa-money-bill-wave"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer><a class="d-md-flex justify-content-md-center align-items-md-center" id="wp" target="_blank" style="background-color: #5bbf21;"><i class="fa fa-whatsapp d-md-flex justify-content-md-center align-items-md-center"></i></a>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdn.reflowhq.com/v2/toolkit.min.js" data-reflow-project="1911270116" data-reflow-locale="assets/js/ar.json"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/jquery.zoom.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/nouislider.min.js"></script>
+    <script src="assets/js/slick.min.js"></script>
+<style>
+        @media (max-width: 768px) {
+            .offers-hero { padding: 30px 0 !important; }
+            .offers-hero h1 { font-size: 1.6rem !important; }
+            .offers-hero p { font-size: 0.95rem !important; }
+            .offers-countdown { gap: 8px !important; }
+            .offers-countdown .time-box { padding: 10px 8px !important; min-width: 60px !important; }
+            .offers-countdown .time-box span { font-size: 18px !important; }
+            .offers-countdown .time-box small { font-size: 10px !important; }
+            .offers-banner-img { max-height: 200px !important; margin-top: 20px; }
+            .slider-arrow { width: 38px !important; height: 38px !important; font-size: 16px !important; }
+            .slider-nav-arrows { padding: 0 5px !important; }
+            .hero-slide-item .row { min-height: 350px !important; }
+        }
+        @media (max-width: 480px) {
+            .offers-hero h1 { font-size: 1.3rem !important; }
+            .offers-countdown .time-box { min-width: 50px !important; padding: 8px 5px !important; }
+            .offers-countdown .time-box span { font-size: 16px !important; }
+        }
+    </style>
+
+    <script>
+        // === Countdown Timer (runs independently) ===
+        setInterval(function() {
+            $('.offers-countdown').each(function() {
+                var endTime = new Date($(this).data('end')).getTime();
+                var now = new Date().getTime();
+                var distance = endTime - now;
+
+                if (distance > 0) {
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    $(this).find('.c-days').text(days < 10 ? '0'+days : days);
+                    $(this).find('.c-hours').text(hours < 10 ? '0'+hours : hours);
+                    $(this).find('.c-minutes').text(minutes < 10 ? '0'+minutes : minutes);
+                    $(this).find('.c-seconds').text(seconds < 10 ? '0'+seconds : seconds);
+                } else {
+                    $(this).html('<h4 style="color:#C5A059; font-weight:bold;">انتهى العرض</h4>');
+                }
+            });
+        }, 1000);
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
+            authDomain: "kael-85f70.firebaseapp.com",
+            databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
+            projectId: "kael-85f70",
+            storageBucket: "kael-85f70.firebasestorage.app",
+            messagingSenderId: "446946602490",
+            appId: "1:446946602490:web:bf875962bb4e6bb03f8843"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const sliderRef = ref(db, 'offers_slider');
+
+        function buildSlider(sliderData) {
+            // Destroy slick if it exists
+            if ($('#dynamic-slider').hasClass('slick-initialized')) {
+                $('#dynamic-slider').slick('unslick');
+            }
+
+            // Inject slides
+            let html = '';
+            sliderData.forEach(function(slide) {
+                html += `
+                <div class="hero-slide-item">
+                    <div class="container position-relative" style="z-index: 2;">
+                        <div class="row align-items-center" style="min-height: 450px;">
+                            <div class="col-lg-6 mb-4 mb-lg-0 text-lg-end text-center">
+                                <h1 class="slide-title">${slide.title}</h1>
+                                <p class="slide-desc">${slide.desc}</p>
+                                <div class="offers-countdown justify-content-center justify-content-lg-start" data-end="${slide.endDate}">
+                                    <div class="time-box"><span class="c-days">00</span><small>أيام</small></div>
+                                    <div class="time-box"><span class="c-hours">00</span><small>ساعات</small></div>
+                                    <div class="time-box"><span class="c-minutes">00</span><small>دقيقة</small></div>
+                                    <div class="time-box"><span class="c-seconds">00</span><small>ثانية</small></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <img src="${slide.img}" alt="${slide.title}" class="offers-banner-img img-fluid" style="max-height: 350px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            $('#dynamic-slider').html(html);
+
+            // Init Slick
+            $('#dynamic-slider').slick({
+                rtl: true,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                arrows: true,
+                prevArrow: '<button class="slider-arrow slick-prev"><i class="fas fa-chevron-right"></i></button>',
+                nextArrow: '<button class="slider-arrow slick-next"><i class="fas fa-chevron-left"></i></button>',
+                dots: true,
+                fade: true,
+                cssEase: 'linear',
+                pauseOnHover: true
+            });
+        }
+
+        // Default slides (shown until Firebase loads)
+        var defaultSlides = [
+            {
+                title: "تخفيضات تصل إلى 50%",
+                desc: "استمتع بأقوى العروض الحصرية على تشكيلة فاخرة من الساعات والإكسسوارات.",
+                img: "assets/img/product01.png",
+                endDate: new Date(new Date().getTime() + 72*60*60*1000).toISOString()
+            },
+            {
+                title: "عرض اشتري 2 واحصل على خصم",
+                desc: "اشتري قطعتين واحصل على خصم 25% على الثانية. لفترة محدودة!",
+                img: "assets/img/product02.png",
+                endDate: new Date(new Date().getTime() + 48*60*60*1000).toISOString()
+            }
+        ];
+
+        $(document).ready(function() {
+            // Build with defaults first (instant display)
+            buildSlider(defaultSlides);
+
+            // Then listen to Firebase for real data
+            onValue(sliderRef, function(snapshot) {
+                var data = snapshot.val();
+                if (data && data.length > 0) {
+                    buildSlider(data);
+                }
+            });
+        });
+    </script>
+
+
+    
+    
+    
+    
+
+
+    
+    
+
+\n
+    
+
+
+    <!-- Lylix Script Libraries & Logic -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/lylix-config.js"></script>
+    <script src="assets/js/lylix-core.js"></script>
+</body>
+
+</html>
