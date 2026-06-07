@@ -1,0 +1,63 @@
+
+/* ==========================================
+   LYLIX SCRIPT CORE STYLES
+   ========================================== */
+
+/* Preloader */
+#lylix-preloader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--lylix-secondary, #103C2B); z-index: 999999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#lylix-preloader img { width: 120px; margin-bottom: 20px; animation: pulse 1.5s infinite; }
+.lylix-spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(197, 160, 89, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--lylix-primary, #C5A059);
+    animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+
+/* Sticky Glass Header */
+.sticky-glass {
+    position: fixed !important;
+    top: 0; left: 0; width: 100%;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    z-index: 9999 !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    animation: slideDown 0.4s ease forwards;
+}
+@keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+body.header-is-sticky { padding-top: 150px; }
+
+/* WhatsApp Circle Button */
+.lylix-wa-circle-btn {
+    position: absolute !important;
+    top: 55px !important;
+    right: 10px !important;
+    border: none !important;
+    border-radius: 50% !important;
+    width: 35px !important;
+    height: 35px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
+    color: #ffffff !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    z-index: 10 !important;
+    transition: 0.3s !important;
+}
+.lylix-wa-circle-btn:hover {
+    transform: scale(1.1) !important;
+}
+
+/* Base Primary Color Resets */
+.btn, .search-btn, .active-heart, .dropdown-menu {
+    border-color: var(--lylix-primary) !important;
+}

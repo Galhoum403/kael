@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kael</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tajawal&amp;display=swap">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            height: 100vh;
+            background: #101512;
+            color: #fff;
+            padding-top: 20px;
+            position: fixed;
+            width: 250px;
+        }
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .sidebar .logo img {
+            max-width: 120px;
+        }
+        .sidebar a {
+            color: #a0a0a0;
+            text-decoration: none;
+            display: block;
+            padding: 15px 25px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background: rgba(197, 160, 89, 0.2);
+            color: #C5A059;
+            border-right: 4px solid #C5A059;
+        }
+        .sidebar a i {
+            width: 25px;
+        }
+        .main-content {
+            margin-right: 250px;
+            padding: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .card-header {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+            font-weight: bold;
+            color: #101512;
+            border-radius: 10px 10px 0 0 !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-gold {
+            background: #C5A059;
+            color: #fff;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-gold:hover {
+            background: #a98341;
+            color: #fff;
+        }
+        .form-control:focus {
+            border-color: #C5A059;
+            box-shadow: 0 0 5px rgba(197, 160, 89, 0.3);
+        }
+        .slide-item {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .delete-slide {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #dc3545;
+            cursor: pointer;
+        }
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #101512;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        /* Responsive Admin */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-right: 0 !important; padding: 15px; }
+            .main-content h2 { font-size: 1.2rem; }
+            .card-header { flex-direction: column; gap: 10px; text-align: center; }
+            .login-box { padding: 25px; margin: 0 15px; }
+            .slide-item .row .col-md-6,
+            .slide-item .row .col-md-8,
+            .slide-item .row .col-md-4 { margin-bottom: 10px; }
+        }
+    </style>
+    <meta name="description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
+    <meta name="keywords" content="هدايا, ساعات, إكسسوارات, متجر هدايا, هدايا فاخرة, هدايا رجالي, هدايا نسائي, هدايا عيد ميلاد">
+    <meta property="og:title" content="Kael Store | متجر الهدايا الفاخرة">
+    <meta property="og:description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
+    <meta property="og:image" content="assets/img/logo.png">
+    <meta property="og:type" content="website">
+
+    <!-- AOS CSS -->
+    
+    <!-- SweetAlert2 CSS -->
+    
+    
+    
+
+
+    <!-- Lylix Script Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="assets/css/lylix-core.css">
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="lylix-preloader">
+        <img src="assets/img/logo.png" alt="Kael Logo">
+        <div class="lylix-spinner"></div>
+    </div>
+
+
+    <!-- Login Screen -->
+    
+    <div id="login-screen">
+        <div class="login-box">
+            <img src="assets/img/logo.png" alt="Logo" style="filter: invert(1); max-width: 150px; margin-bottom: 20px;">
+            <h4 class="mb-3">تسجيل الدخول للإدارة</h4>
+            
+            <div class="alert alert-warning text-end" style="font-size: 12px; padding: 10px;">
+                <strong>ملاحظة هامة:</strong> يجب تفعيل (Email/Password) وإنشاء حساب لك من لوحة تحكم Firebase Auth لتتمكن من الدخول.
+            </div>
+
+            <input type="email" id="admin-email" class="form-control text-end mb-2" placeholder="البريد الإلكتروني..." dir="ltr">
+            <input type="password" id="admin-pass" class="form-control text-end mb-3" placeholder="كلمة المرور..." dir="ltr">
+            
+            <button id="login-btn" class="btn btn-gold w-100" onclick="checkLogin()">دخول</button>
+            <p id="login-error" class="text-danger mt-2" style="display:none; font-size: 14px;">خطأ في البيانات</p>
+        </div>
+    </div>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="assets/img/logo.png" alt="Kael Logo">
+        </div>
+        <a href="#" class="active"><i class="fas fa-images"></i> سلايدر العروض</a>
+        <a href="#"><i class="fas fa-box"></i> المنتجات (قريباً)</a>
+        <a href="#"><i class="fas fa-shopping-cart"></i> الطلبات (قريباً)</a>
+        <a href="#"><i class="fas fa-cog"></i> الإعدادات</a>
+        
+        <a href="#" onclick="logout()" style="color: #dc3545;"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+        <a href="/" style="margin-top: auto; border-top: 1px solid #333;"><i class="fas fa-store"></i> العودة للمتجر</a>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>لوحة التحكم - العروض المميزة</h2>
+            <div>
+                <span class="badge bg-success" id="db-status">متصل محلياً (جاهز لـ Firebase)</span>
+            </div>
+        </div>
+
+        <!-- Slider Config -->
+        <div class="card mb-4">
+            <div class="card-header">
+                إدارة شرائح السلايدر (Hero Section)
+                <button class="btn btn-sm btn-gold" onclick="addSlide()"><i class="fas fa-plus"></i> إضافة عرض جديد</button>
+            </div>
+            <div class="card-body">
+                <form id="slider-form">
+                    <div id="slides-container">
+                        <!-- Slides will be injected here via JS -->
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-gold px-4 py-2" onclick="saveData()">
+                        <i class="fas fa-save me-2"></i> حفظ التعديلات ونشرها
+                    </button>
+                    <span id="save-msg" class="text-success ms-3 fw-bold" style="display: none;">تم الحفظ بنجاح!</span>
+                </form>
+            </div>
+        </div>
+
+        <!-- Custom Packaging Config -->
+        <div class="card mb-4" id="packaging-section">
+            <div class="card-header bg-dark text-white" style="border-radius: 10px 10px 0 0;">
+                <i class="fas fa-gift"></i> طلبات التغليف المخصص
+            </div>
+            <div class="card-body">
+                <p class="text-muted">ابحث برقم كود التغليف المرفق في طلبات العميل من Reflow لترى التفاصيل هنا.</p>
+                <div class="input-group mb-3" style="max-width: 400px;">
+                    <input type="text" id="search-pkg-input" class="form-control text-end" placeholder="مثال: PKG-ABCD">
+                    <button class="btn btn-gold" id="search-pkg-btn" type="button"><i class="fas fa-search"></i> بحث</button>
+                </div>
+                <div id="pkg-result" style="display:none;" class="p-3 border rounded bg-light">
+                    <!-- Results here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Firebase SDK (Modular) will be loaded here later. Using LocalStorage fallback for now -->
+    
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
+            authDomain: "kael-85f70.firebaseapp.com",
+            databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
+            projectId: "kael-85f70",
+            storageBucket: "kael-85f70.firebasestorage.app",
+            messagingSenderId: "446946602490",
+            appId: "1:446946602490:web:bf875962bb4e6bb03f8843"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const sliderRef = ref(db, 'offers_slider');
+
+        window.sliderData = [];
+
+        // --- 1. Auth State Listener ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('login-screen').style.display = 'none';
+                window.loadData();
+                document.getElementById('db-status').innerText = 'متصل كـ: ' + user.email;
+                document.getElementById('db-status').classList.replace('bg-danger', 'bg-success');
+                document.getElementById('db-status').classList.replace('bg-warning', 'bg-success');
+            } else {
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('db-status').innerText = 'غير متصل';
+                document.getElementById('db-status').className = 'badge bg-danger ms-2';
+            }
+        });
+
+        // --- 2. Login Logic ---
+        window.checkLogin = function() {
+            let email = document.getElementById('admin-email').value;
+            let pass = document.getElementById('admin-pass').value;
+            let btn = document.getElementById('login-btn');
+            
+            if(!email || !pass) return;
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
+            btn.disabled = true;
+            document.getElementById('login-error').style.display = 'none';
+
+            signInWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    btn.innerHTML = 'دخول';
+                    btn.disabled = false;
+                })
+                .catch((error) => {
+                    document.getElementById('login-error').style.display = 'block';
+                    document.getElementById('login-error').innerText = 'البيانات غير صحيحة أو الحساب غير مسجل.';
+                    btn.innerHTML = 'دخول';
+                    btn.disabled = false;
+                });
+        };
+
+        // --- 3. Logout Logic ---
+        window.logout = function() {
+            signOut(auth);
+        };
+
+        // --- 4. Data Management (Firebase DB) ---
+        window.loadData = function() {
+            onValue(sliderRef, (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    window.sliderData = data;
+                } else {
+                    window.sliderData = [
+                        {
+                            title: "تخفيضات تصل إلى 50%",
+                            desc: "استمتع بأقوى العروض الحصرية على تشكيلة فاخرة من الساعات.",
+                            img: "assets/img/product01.png",
+                            endDate: new Date(new Date().getTime() + 72*60*60*1000).toISOString().slice(0,16)
+                        }
+                    ];
+                }
+                if(typeof window.renderSlides === 'function') window.renderSlides();
+            });
+        };
+
+        window.saveData = function() {
+            window.sliderData = [];
+            let slides = document.querySelectorAll('.slide-item');
+            slides.forEach((slide) => {
+                window.sliderData.push({
+                    title: slide.querySelector('.s-title').value,
+                    desc: slide.querySelector('.s-desc').value,
+                    img: slide.querySelector('.s-img').value,
+                    endDate: slide.querySelector('.s-date').value
+                });
+            });
+
+            let btn = document.getElementById('save-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
+            set(sliderRef, window.sliderData).then(() => {
+                let msg = document.getElementById('save-msg');
+                msg.style.display = 'inline-block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }).catch((error) => {
+                alert("فشل الحفظ: لا تملك الصلاحيات! يرجى التأكد من أنك سجلت الدخول وأن قواعد بيانات Firebase (Rules) تسمح بالكتابة.");
+            }).finally(() => {
+                btn.innerHTML = originalText;
+            });
+        };
+    </script>
+
+
+    
+    
+    
+    
+
+
+    
+    
+
+\n
+    
+
+
+    <!-- Lylix Script Libraries & Logic -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/lylix-config.js"></script>
+    <script src="assets/js/lylix-core.js"></script>
+</body>
+</html>

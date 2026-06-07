@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Kael - تسوق الآن</title>
+    <title>Kael</title>
     <link rel="icon" type="image/png" href="assets/img/logo.png">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.reflowhq.com/v2/toolkit.min.css">
@@ -28,51 +28,25 @@
     <meta property="og:type" content="website">
 
     <!-- AOS CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
-    <style>
-        /* Preloader */
-        #kael-preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #103C2B; z-index: 999999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        #kael-preloader img { width: 120px; margin-bottom: 20px; animation: pulse 1.5s infinite; }
-        .kael-spinner {
-            width: 40px; height: 40px;
-            border: 3px solid rgba(197, 160, 89, 0.3);
-            border-radius: 50%;
-            border-top-color: #C5A059;
-            animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
-        
-        /* Sticky Glass Header */
-        .sticky-glass {
-            position: fixed !important;
-            top: 0; left: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px);
-            z-index: 9999 !important;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-            animation: slideDown 0.4s ease forwards;
-        }
-        @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-        body.header-is-sticky { padding-top: 150px; /* prevent layout jump */ }
-    </style>
+    <!-- SweetAlert2 CSS -->
+    
+    
+    
 
+
+    <!-- Lylix Script Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="assets/css/lylix-core.css">
 </head>
 
 <body>
 
     <!-- Preloader -->
-    <div id="kael-preloader">
+    <div id="lylix-preloader">
         <img src="assets/img/logo.png" alt="Kael Logo">
-        <div class="kael-spinner"></div>
+        <div class="lylix-spinner"></div>
     </div>
 
     <header>
@@ -188,10 +162,10 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb justify-content-center mb-3" style="background:none;">
                     <li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.7);text-decoration:none;">الرئيسية</a></li>
-                    <li class="breadcrumb-item active" style="color:#C5A059;" id="kael-breadcrumb-current">جميع المنتجات</li>
+                    <li class="breadcrumb-item active" style="color:#C5A059;" id="lylix-breadcrumb-current">جميع المنتجات</li>
                 </ol>
             </nav>
-            <h1 class="kael-shop-hero-title" id="kael-shop-title">تسوق الآن</h1>
+            <h1 class="kael-shop-hero-title" id="lylix-shop-title">تسوق الآن</h1>
             <p class="kael-shop-hero-desc">اكتشف تشكيلتنا الفاخرة من الهدايا والإكسسوارات لجميع المناسبات</p>
         </div>
     </div>
@@ -323,299 +297,22 @@
     </style>
 
     <!-- Dynamic Title based on URL category -->
-    <script>
-        (function() {
-            var categoryMap = {
-                'birthday': 'هدايا أعياد الميلاد 🎂',
-                'wedding': 'هدايا زواج وخطوبة 💍',
-                'bridal': 'تجهيز عرائس 👰',
-                'baby': 'هدايا سبوع ومواليد 👶',
-                'graduation': 'هدايا التخرج 🎓',
-                'anniversary': 'هدايا ذكرى سنوية 💕',
-                'men': 'هدايا رجالي 🎁',
-                'women': 'هدايا نسائي 🎀',
-                'kids': 'هدايا أطفال 🧸',
-                'watches': 'ساعات فاخرة ⌚',
-                'accessories': 'إكسسوارات 💎',
-                'custom': 'هدايا مخصصة بالاسم ✨'
-            };
-            var params = new URLSearchParams(window.location.search);
-            var cat = params.get('category');
-            if (cat && categoryMap[cat]) {
-                var titleEl = document.getElementById('kael-shop-title');
-                var breadcrumbEl = document.getElementById('kael-breadcrumb-current');
-                if (titleEl) titleEl.textContent = categoryMap[cat];
-                if (breadcrumbEl) breadcrumbEl.textContent = categoryMap[cat];
-                document.title = 'Kael - ' + categoryMap[cat];
-            }
-        })();
-    </script>
-
-
-    <!-- Premium Footer -->
-    <footer id="premium-footer" dir="rtl">
-        <div class="container">
-            <!-- Newsletter -->
-            <div class="row mb-5">
-                <div class="col-md-10 offset-md-1">
-                    <div class="newsletter-box text-center">
-                        <h4 class="text-white mb-3">اشترك في قائمتنا البريدية</h4>
-                        <p style="color: #999;" class="mb-4">احصل على أحدث العروض الحصرية وكوبونات الخصم مباشرة على بريدك</p>
-                        <form action="https://api.web3forms.com/submit" method="POST" class="d-flex justify-content-center" style="max-width: 500px; margin: auto;">
-                            <input type="hidden" name="access_key" value="585d1f02-f9d1-4a09-86f9-955c5233b239">
-                            <input type="hidden" name="subject" value="اشتراك جديد في القائمة البريدية!">
-                            <input type="hidden" name="redirect" value="https://web3forms.com/success">
-                            <input type="email" name="email" class="form-control text-end" placeholder="أدخل بريدك الإلكتروني..." required>
-                            <button type="submit" class="btn me-2">اشترك الآن</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6 col-md-4 mb-4">
-                    <div class="footer-logo">
-                        <img src="assets/img/logo.png" alt="Kael Logo">
-                    </div>
-                    <p style="color:#a0a0a0; font-size:14px; line-height:1.8;">نقدم لك تشكيلة فاخرة من الهدايا، الساعات، والإكسسوارات التي تليق بأصحاب الذوق الرفيع. الجودة والأناقة هما عنواننا.</p>
-                    <ul class="list-unstyled footer-links mt-4">
-                        <li><i class="fas fa-map-marker-alt"></i><span>القاهرة، مصر</span></li>
-                        <li><i class="fas fa-phone"></i><bdi>+20 123 456 7890</bdi></li>
-                        <li><i class="fas fa-envelope"></i><span>info@kael.com</span></li>
-                    </ul>
-                </div>
-                
-                <div class="col-sm-6 col-md-4 mb-4">
-                    <h3 class="footer-title">روابط هامة</h3>
-                    <ul class="list-unstyled footer-links">
-                        <li><a href="/">الرئيسية</a></li>
-                        <li><a href="offers">عروض مميزة</a></li>
-                        <li><a href="shop">تسوق الآن</a></li>
-                        <li><a href="contact">تواصل معنا</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-sm-12 col-md-4 mb-4">
-                    <h3 class="footer-title">خدمة العملاء</h3>
-                    <ul class="list-unstyled footer-links">
-                        <li><a href="#">حسابي الشخصي</a></li>
-                        <li><a href="cart">عربة التسوق</a></li>
-                        <li><a href="return-policy">سياسة الاسترجاع والاستبدال</a></li>
-                        <li><a href="terms">الشروط والأحكام</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div id="bottom-premium-footer">
-            <div class="container">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                    <p class="copyright mb-3 mb-md-0">© 2026 Kael Store. جميع الحقوق محفوظة.</p>
-                    <ul class="list-unstyled footer-payments m-0">
-                        <li><i class="fa fa-cc-visa"></i></li>
-                        <li><i class="fa fa-cc-mastercard"></i></li>
-                        <li><i class="fas fa-credit-card"></i></li>
-                        <li><i class="fa fa-money-bill-wave"></i></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://cdn.reflowhq.com/v2/toolkit.min.js" data-reflow-project="1911270116" data-reflow-locale="assets/js/ar.json"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/jquery.zoom.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/nouislider.min.js"></script>
-    <script src="assets/js/slick.min.js"></script>
-
-    <!-- AOS JS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Init AOS
-            AOS.init({ duration: 800, once: true, offset: 50 });
+    
 
-            // Sticky Header
-            const header = document.getElementById('header');
-            const topHeader = document.getElementById('top-header');
-            const mainNav = document.getElementById('navigation');
-            if (header) {
-                const headerOffset = header.offsetTop;
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > headerOffset + 50) {
-                        header.classList.add('sticky-glass');
-                        if(mainNav) mainNav.style.display = 'none'; // Optional: simplify nav on scroll
-                    } else {
-                        header.classList.remove('sticky-glass');
-                        if(mainNav && window.innerWidth >= 768) mainNav.style.display = 'block';
-                    }
-                });
-            }
-
-            // Web3Forms AJAX Override
-            const forms = document.querySelectorAll('form');
-            forms.forEach(form => {
-                const isWeb3 = form.querySelector('input[name="access_key"]');
-                if (isWeb3) {
-                    // Remove standard redirect to stop page reload
-                    const redirectInput = form.querySelector('input[name="redirect"]');
-                    if(redirectInput) redirectInput.remove();
-
-                    form.addEventListener('submit', async function(e) {
-                        e.preventDefault();
-                        const btn = form.querySelector('button[type="submit"]');
-                        const originalText = btn.innerHTML;
-                        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-                        btn.disabled = true;
-
-                        const formData = new FormData(form);
-                        try {
-                            const response = await fetch('https://api.web3forms.com/submit', {
-                                method: 'POST',
-                                body: formData
-                            });
-                            const data = await response.json();
-                            if (data.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'تم بنجاح!',
-                                    text: 'تم استلام طلبك وسنتواصل معك قريباً.',
-                                    confirmButtonColor: '#C5A059',
-                                    confirmButtonText: 'حسناً'
-                                });
-                                form.reset();
-                            } else {
-                                throw new Error('فشل الإرسال');
-                            }
-                        } catch (error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'عذراً!',
-                                text: 'حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.',
-                                confirmButtonColor: '#103C2B',
-                                confirmButtonText: 'حسناً'
-                            });
-                        } finally {
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                        }
-                    });
-                }
-            });
-        });
-
-        // Hide preloader on load
-        window.addEventListener('load', function() {
-            const preloader = document.getElementById('kael-preloader');
-            if (preloader) {
-                preloader.style.opacity = '0';
-                setTimeout(() => preloader.style.display = 'none', 500);
-            }
-        });
-    </script>
-
-
-    <script>
-        // Sync custom search URL parameter with Reflow
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const searchQuery = urlParams.get('search');
-            if (searchQuery) {
-                // Update title
-                document.getElementById('kael-shop-title').textContent = 'نتائج البحث عن: ' + searchQuery;
-                document.getElementById('kael-breadcrumb-current').textContent = 'نتائج البحث';
-                
-                // Tell Reflow to filter by this search query
-                const reflowContainer = document.querySelector('[data-reflow-type="product-list"]');
-                if (reflowContainer) {
-                    reflowContainer.setAttribute('data-reflow-search', searchQuery);
-                }
-            }
-        });
-    </script>
 \n
     
-    <!-- Smart WhatsApp Integration -->
-    <style>
-        .kael-wa-circle-btn {
-            position: absolute !important;
-            top: 55px !important; /* Below the wishlist heart which is at 10px */
-            right: 10px !important;
-            background: #25D366 !important;
-            border: none !important;
-            border-radius: 50% !important;
-            width: 35px !important;
-            height: 35px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
-            color: #ffffff !important;
-            font-size: 18px !important;
-            cursor: pointer !important;
-            z-index: 10 !important;
-            transition: 0.3s !important;
-        }
-        .kael-wa-circle-btn:hover {
-            transform: scale(1.1) !important;
-        }
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const waNumber = "201234567890"; // Kael Store Number
+    
 
-            // 1. Update the main floating WhatsApp button
-            const mainWpBtn = document.getElementById('wp');
-            if (mainWpBtn) {
-                const currentUrl = encodeURIComponent(window.location.href);
-                mainWpBtn.href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent('مرحباً، أود الاستفسار عن متجركم. أنا أتصفح هذه الصفحة: ') + currentUrl;
-            }
+\n
+    
 
-            // 2. Add WhatsApp Inquire Button to all Reflow Products dynamically
-            const observer = new MutationObserver(function(mutations) {
-                const products = document.querySelectorAll('.ref-product');
-                products.forEach(function(product) {
-                    // Check if we already added the button
-                    if (!product.querySelector('.kael-wa-circle-btn')) {
-                        const nameEl = product.querySelector('.ref-name');
-                        const priceEl = product.querySelector('.ref-price');
-                        
-                        if (nameEl) {
-                            const productName = nameEl.textContent.trim();
-                            const productPrice = priceEl ? priceEl.textContent.trim() : '';
-                            
-                            const waMessage = encodeURIComponent('مرحباً Kael Store، أود الاستفسار عن هذا المنتج:\n📦 ' + productName + '\n💰 السعر: ' + productPrice + '\nهل هو متوفر حالياً؟');
-                            const waLink = 'https://wa.me/' + waNumber + '?text=' + waMessage;
 
-                            // Create the WhatsApp circle button
-                            const waBtn = document.createElement('a');
-                            waBtn.className = 'kael-wa-circle-btn';
-                            waBtn.href = waLink;
-                            waBtn.target = '_blank';
-                            waBtn.innerHTML = '<i class="fab fa-whatsapp"></i>';
-                            waBtn.title = 'استفسار عبر واتساب';
-
-                            // Append it to the media container so it sits over the image like the heart
-                            const mediaEl = product.querySelector('.ref-media');
-                            if (mediaEl) {
-                                mediaEl.appendChild(waBtn);
-                            } else {
-                                product.appendChild(waBtn);
-                            }
-                        }
-                    }
-                });
-            });
-
-            // Start observing the body for Reflow products loading
-            observer.observe(document.body, { childList: true, subtree: true });
-        });
-    </script>
-
-\n</body>
+    <!-- Lylix Script Libraries & Logic -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/lylix-config.js"></script>
+    <script src="assets/js/lylix-core.js"></script>
+</body>
 
 </html>
