@@ -218,6 +218,25 @@
         </div>
 
         
+    
+        <!-- General Settings Config -->
+        <div class="card mb-4" id="settings-section">
+            <div class="card-header bg-secondary text-white" style="border-radius: 10px 10px 0 0;">
+                <i class="fas fa-cog"></i> إعدادات المتجر العامة (الخريطة وغيرها)
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">رابط خريطة تواصل معنا (Google Maps Embed URL)</label>
+                    <input type="text" id="map-url-input" class="form-control text-end" placeholder="https://www.google.com/maps/embed?pb=..." dir="ltr">
+                    <small class="text-muted d-block mt-1">انسخ الرابط من خرائط جوجل (مشاركة -> تضمين خريطة -> انسخ الرابط الموجود داخل src="...")</small>
+                </div>
+                <button type="button" class="btn btn-gold px-4 py-2" onclick="saveSettings()">
+                    <i class="fas fa-save me-2"></i> حفظ الإعدادات
+                </button>
+                <span id="save-settings-msg" class="text-success ms-3 fw-bold" style="display: none;">تم الحفظ بنجاح!</span>
+            </div>
+        </div>
+
     </div>
 
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
@@ -292,24 +311,42 @@
         };
 
         // --- 4. Data Management (Firebase DB) ---
+        
+        const settingsRef = ref(db, 'store_settings');
+        
         window.loadData = function() {
             onValue(sliderRef, (snapshot) => {
                 const data = snapshot.val();
-                if(data) {
-                    window.sliderData = data;
-                } else {
-                    window.sliderData = [
-                        {
-                            title: "تخفيضات تصل إلى 50%",
-                            desc: "استمتع بأقوى العروض الحصرية على تشكيلة فاخرة من الساعات.",
-                            img: "assets/img/product01.png",
-                            endDate: new Date(new Date().getTime() + 72*60*60*1000).toISOString().slice(0,16)
-                        }
-                    ];
-                }
+                if(data) window.sliderData = data;
+                else window.sliderData = [];
                 if(typeof window.renderSlides === 'function') window.renderSlides();
             });
+            // Load settings
+            onValue(settingsRef, (snapshot) => {
+                const data = snapshot.val();
+                if(data && data.mapUrl) {
+                    document.getElementById('map-url-input').value = data.mapUrl;
+                }
+            });
         };
+
+        window.saveSettings = function() {
+            let mapUrl = document.getElementById('map-url-input').value;
+            let btn = document.querySelector('#settings-section button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+            
+            set(settingsRef, { mapUrl: mapUrl }).then(() => {
+                let msg = document.getElementById('save-settings-msg');
+                msg.style.display = 'inline-block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }).catch((error) => {
+                alert("فشل الحفظ: تأكد من الصلاحيات.");
+            }).finally(() => {
+                btn.innerHTML = originalText;
+            });
+        };
+
 
         
         window.renderSlides = function() {

@@ -348,7 +348,7 @@
     <!-- Map Section -->
     <div class="container mb-5 pb-5">
         <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110502.61185038936!2d31.32849980894086!3d30.05961134336041!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583e1c6670e28f%3A0xc0784af235540306!2sNasr%20City%2C%20Cairo%20Governorate!5e0!3m2!1sen!2seg!4v1714488390886!5m2!1sen!2seg" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe id="kael-dynamic-map" allowfullscreen="" frameborder="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110502.60389552702!2d31.25846435!3d30.05948845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583fa60b21beeb%3A0x79dfb296e8423bba!2z2KfZhNmC2KfZh9ix2KnYjCDZhdi62KfZgdi42Kkg2KfZhNmC2KfZh9ix2KnigKw!5e0!3m2!1sar!2seg!4v1715690000000!5m2!1sar!2seg" width="100%" height="100%"></iframe>
         </div>
     </div>
 
@@ -443,6 +443,33 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/lylix-config.js"></script>
     <script src="assets/js/lylix-core.js"></script>
+
+    <!-- Dynamic Map Loader -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
+            authDomain: "kael-85f70.firebaseapp.com",
+            databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
+            projectId: "kael-85f70"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const settingsRef = ref(db, 'store_settings');
+
+        onValue(settingsRef, (snapshot) => {
+            const data = snapshot.val();
+            if(data && data.mapUrl) {
+                const mapIframe = document.getElementById('kael-dynamic-map');
+                if(mapIframe) {
+                    mapIframe.src = data.mapUrl;
+                }
+            }
+        });
+    </script>
+
 </body>
 
 </html>
