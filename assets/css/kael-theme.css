@@ -1569,3 +1569,90 @@ div[data-reflow-type="product"], div[data-reflow-type="product-list"], div[data-
     color: var(--kael-gold, #C5A059);
 }
 
+/* =========================================
+   SEASONAL THEME: WORLD CUP 2026
+   ========================================= */
+
+.theme-wc2026 #top-header {
+    background: linear-gradient(135deg, #18032e 0%, #0d011a 100%);
+    border-bottom: 1px solid rgba(200, 255, 0, 0.3);
+}
+
+.theme-wc2026 #top-header .header-links li,
+.theme-wc2026 #top-header .header-links li a {
+    color: #e0e0e0;
+}
+
+.theme-wc2026 #top-header .header-links li i {
+    color: #c8ff00; /* WC2026 Neon Green */
+}
+
+.theme-wc2026 #header {
+    background: linear-gradient(90deg, #18032e, #2d0a4e, #18032e);
+    background-size: 200% 200%;
+    animation: wcGradient 8s ease infinite;
+    border-bottom: 2px solid #c8ff00;
+}
+
+@keyframes wcGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.theme-wc2026 #header .header-ctn > div > a {
+    color: #fff;
+}
+
+.theme-wc2026 #header .header-ctn > div > a:hover {
+    color: #c8ff00 !important;
+}
+
+.theme-wc2026 #navigation {
+    background: #0d011a;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(200, 255, 0, 0.2);
+}
+
+.theme-wc2026 .main-nav > li > a {
+    color: #fff;
+}
+
+.theme-wc2026 .main-nav > li > a:hover,
+.theme-wc2026 .main-nav > li.active > a {
+    color: #c8ff00 !important;
+    background-color: transparent !important;
+}
+
+.theme-wc2026 .main-nav > li > a::after {
+    background-color: #c8ff00;
+}
+
+.theme-wc2026 .search-btn {
+    background: #c8ff00 !important;
+    color: #18032e !important;
+    border-color: #c8ff00 !important;
+}
+.theme-wc2026 .search-btn:hover {
+    background: #a3cc00 !important;
+}
+
+/* WC2026 Badge/Logo decoration */
+.theme-wc2026 #header::before {
+    content: '🏆 كأس العالم 2026';
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    color: #c8ff00;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    animation: wcPulse 2s infinite;
+}
+
+@keyframes wcPulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; text-shadow: 0 0 10px #c8ff00; }
+    100% { opacity: 0.5; }
+}
+

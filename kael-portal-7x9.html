@@ -250,6 +250,14 @@
                     <input type="text" id="map-url-input" class="form-control text-end" placeholder="https://www.google.com/maps/embed?pb=..." dir="ltr">
                     <small class="text-muted d-block mt-1">انسخ الرابط من خرائط جوجل (مشاركة -> تضمين خريطة -> انسخ الرابط الموجود داخل src="...")</small>
                 </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">تصميم كأس العالم 2026 (الناف بار)</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="theme-toggle" style="float: right; margin-left: 10px;">
+                        <label class="form-check-label" for="theme-toggle">تفعيل التصميم الموسمي</label>
+                    </div>
+                    <small class="text-muted d-block mt-1">عند تفعيل هذا الخيار، سيتغير شكل الناف بار ليواكب ألوان وحركة كأس العالم 2026. عند إغلاقه سيعود للون الأبيض الطبيعي.</small>
+                </div>
                 <button type="button" class="btn btn-gold px-4 py-2" onclick="saveSettings()">
                     <i class="fas fa-save me-2"></i> حفظ الإعدادات
                 </button>
@@ -281,9 +289,19 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const auth = getAuth(app);
-        const sliderRef = ref(db, 'offers_slider');
+        const sliderRef = ref(db, 'slider_images');
+        const wheelRef = ref(db, 'lucky_wheel');
+        const configRef = ref(db, 'kael_config');
 
-        window.sliderData = [];
+        // Load config
+        onValue(configRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.seasonal_theme) {
+                document.getElementById('theme-toggle').checked = true;
+            } else {
+                document.getElementById('theme-toggle').checked = false;
+            }
+        });
 
         // --- 1. Auth State Listener ---
         onAuthStateChanged(auth, (user) => {
@@ -538,6 +556,19 @@
                 setTimeout(() => msg.style.display = 'none', 3000);
             }).catch((error) => {
                 alert("فشل الحفظ: تأكد من الصلاحيات.");
+            });
+        };
+
+        window.saveSettings = function() {
+            const isThemeActive = document.getElementById('theme-toggle').checked;
+            set(configRef, {
+                seasonal_theme: isThemeActive
+            }).then(() => {
+                let msg = document.getElementById('save-settings-msg');
+                msg.style.display = 'inline-block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }).catch((error) => {
+                alert("فشل الحفظ.");
             });
         };
     </script>

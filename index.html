@@ -28,6 +28,21 @@
     <meta property="og:description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
     <meta property="og:image" content="assets/img/logo.png">
     <meta property="og:type" content="website">
+    <link rel="stylesheet" href="assets/css/floating-whatsapp.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "Kael Store",
+      "image": "assets/img/logo.png",
+      "description": "متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.",
+      "telephone": "+201113119058",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "EG"
+      }
+    }
+    </script>
 <style>
         .offers-hero {
             background: linear-gradient(135deg, #101512 0%, #1a231d 100%);
@@ -291,7 +306,7 @@
             <div class="row">
                 <div class="col-12 col-md-4">
                     <div class="shop">
-                        <div class="shop-img"><img src="assets/img/product01.png" alt=""></div>
+                        <div class="shop-img"><img src="assets/img/product01.png" alt="تشكيلة الهدايا" loading="lazy"></div>
                         <div class="shop-body">
                             <h3>تشكيلة<br>الهدايا</h3><a href="#" class="cta-btn">تسوق الآن <i class="fas fa-arrow-circle-left"></i></a>
                         </div>
@@ -299,7 +314,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="shop">
-                        <div class="shop-img"><img src="assets/img/product02.png" alt=""></div>
+                        <div class="shop-img"><img src="assets/img/product02.png" alt="الساعات الفاخرة" loading="lazy"></div>
                         <div class="shop-body">
                             <h3>أرقى<br>الإكسسوارات</h3><a href="#" class="cta-btn">تسوق الآن <i class="fas fa-arrow-circle-left"></i></a>
                         </div>
@@ -307,13 +322,41 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="shop">
-                        <div class="shop-img"><img src="assets/img/product03.png" alt=""></div>
+                        <div class="shop-img"><img src="assets/img/product03.png" alt="الإكسسوارات" loading="lazy"></div>
                         <div class="shop-body">
                             <h3>أفخم<br>الساعات</h3><a href="#" class="cta-btn">تسوق الآن <i class="fas fa-arrow-circle-left"></i></a>
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
+            
+            <!-- Trust Badges -->
+            <div class="row mt-5 text-center">
+                <div class="col-12 col-md-4 mb-3">
+                    <div style="background: var(--kael-cream); padding: 20px; border-radius: 10px; border: 1px solid var(--kael-border);">
+                        <i class="fas fa-lock" style="font-size: 30px; color: var(--kael-gold); margin-bottom: 10px;"></i>
+                        <h5 style="color: var(--kael-green-dark); font-weight: bold;">دفع آمن 100%</h5>
+                        <p style="color: #666; font-size: 13px; margin: 0;">نضمن لك حماية تامة لبياناتك</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-3">
+                    <div style="background: var(--kael-cream); padding: 20px; border-radius: 10px; border: 1px solid var(--kael-border);">
+                        <i class="fas fa-shipping-fast" style="font-size: 30px; color: var(--kael-gold); margin-bottom: 10px;"></i>
+                        <h5 style="color: var(--kael-green-dark); font-weight: bold;">شحن سريع</h5>
+                        <p style="color: #666; font-size: 13px; margin: 0;">توصيل لباب البيت في أسرع وقت</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-3">
+                    <div style="background: var(--kael-cream); padding: 20px; border-radius: 10px; border: 1px solid var(--kael-border);">
+                        <i class="fas fa-medal" style="font-size: 30px; color: var(--kael-gold); margin-bottom: 10px;"></i>
+                        <h5 style="color: var(--kael-green-dark); font-weight: bold;">جودة مضمونة</h5>
+                        <p style="color: #666; font-size: 13px; margin: 0;">منتجات أصلية ومطابقة للمواصفات</p>
+                    </div>
+                </div>
+            </div>
+            <!-- End Trust Badges -->
+
         </div>
     </div>
     <div class="section" dir="rtl" data-aos="fade-up">
@@ -773,6 +816,34 @@ $(document).ready(function() {
     
 
 
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/201113119058" class="floating-whatsapp" target="_blank" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Theme Config Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
+            databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
+            projectId: "kael-85f70"
+        };
+        const app = initializeApp(firebaseConfig, 'themeApp');
+        const db = getDatabase(app);
+        
+        onValue(ref(db, 'kael_config/seasonal_theme'), (snapshot) => {
+            const val = snapshot.val();
+            if (val === true) {
+                document.body.classList.add('theme-wc2026');
+            } else {
+                document.body.classList.remove('theme-wc2026');
+            }
+        });
+    </script>
+
     <!-- Lylix Script Libraries & Logic -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -780,5 +851,4 @@ $(document).ready(function() {
     <script src="assets/js/lylix-core.js"></script>
     <script src="assets/js/lucky-wheel.js"></script>
 </body>
-
 </html>
