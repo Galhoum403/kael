@@ -18,10 +18,10 @@ const LylixConfig = {
     storeDescription: "الوجهة الأولى للهدايا الفاخرة والساعات والإكسسوارات.",
     
     // 2. Contact Information
-    phone: "+20 123 456 7890",
+    phone: "0111 311 9058",
     email: "info@lylix.com",
     address: "مصر",
-    whatsappNumber: "201234567890",
+    whatsappNumber: "201113119058",
     
     // 3. Integrations
     reflowProjectID: "1911270116",
@@ -334,3 +334,4 @@ htmlFiles.forEach(file => {
 });
 
 console.log('Massive Refactoring to Lylix Script Completed!');
+

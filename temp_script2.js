@@ -1,6 +1,6 @@
 
         document.addEventListener('DOMContentLoaded', function() {
-            const waNumber = "201234567890"; // Kael Store Number
+            const waNumber = "201113119058"; // Kael Store Number
 
             // 1. Update the main floating WhatsApp button
             const mainWpBtn = document.getElementById('wp');

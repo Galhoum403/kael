@@ -239,7 +239,7 @@
         if(el('.wwp-code-value')) el('.wwp-code-value').textContent = code;
         if(el('.wwp-code-hint')) el('.wwp-code-hint').textContent = (product.promoCode && product.promoCode.trim()) ? 'استخدم هذا الكود عند إتمام الشراء للحصول على الخصم!' : 'أرسل هذا الكود عبر واتساب لتفعيل العرض';
         if(el('.wwp-whatsapp')) {
-            var num = '201234567890';
+            var num = '201113119058';
             try { if (window.LylixConfig && window.LylixConfig.whatsapp) num = window.LylixConfig.whatsapp.replace(/[^0-9]/g,''); } catch(e){}
             el('.wwp-whatsapp').href = 'https://wa.me/' + num + '?text=' + encodeURIComponent(
                 '🎰 مرحباً! ربحت عرض عجلة الحظ!\n\n📦 المنتج: ' + product.name +
@@ -298,3 +298,4 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 
 })();
+
