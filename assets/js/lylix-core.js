@@ -117,6 +117,74 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (categoryId) reflowContainer.setAttribute('data-reflow-category', categoryId);
     }
 
+    // G. Dynamic Navigation Builder
+    function renderNavigation() {
+        if (!LylixConfig.navigation) return;
+        
+        const currentPath = window.location.pathname.split('/').pop() || '/';
+        const searchStr = window.location.search;
+        
+        document.querySelectorAll('.main-nav').forEach(navEl => {
+            navEl.innerHTML = ''; // Clear existing
+            
+            LylixConfig.navigation.forEach(item => {
+                const li = document.createElement('li');
+                
+                if (item.isDropdown) {
+                    li.className = 'dropdown';
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.className = 'dropdown-toggle';
+                    a.setAttribute('data-bs-toggle', 'dropdown');
+                    a.innerHTML = item.title + ' <i class="fas fa-chevron-down me-1" style="font-size: 11px;"></i>';
+                    
+                    const ul = document.createElement('ul');
+                    ul.className = 'dropdown-menu shadow-sm';
+                    ul.style.cssText = 'text-align: right; border: 1px solid var(--lylix-primary, #C5A059); padding: 10px; border-radius: 8px;';
+                    
+                    item.items.forEach(subItem => {
+                        const subLi = document.createElement('li');
+                        const subA = document.createElement('a');
+                        subA.className = 'dropdown-item';
+                        subA.href = subItem.url;
+                        subA.textContent = subItem.title;
+                        subLi.appendChild(subA);
+                        ul.appendChild(subLi);
+                        
+                        // Check active state
+                        if (subItem.url.includes(currentPath) && (subItem.url.includes(searchStr) || searchStr === '')) {
+                            li.classList.add('active');
+                            subA.style.color = 'var(--lylix-primary)';
+                        }
+                    });
+                    
+                    li.appendChild(a);
+                    li.appendChild(ul);
+                } else {
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.textContent = item.title.replace(/🤝|🌟|🎈|🎁|💎/g, '').trim(); // Remove emoji for text
+                    
+                    if (item.highlight) {
+                        a.innerHTML = item.title;
+                        a.style.color = 'var(--lylix-primary)';
+                        a.style.fontWeight = 'bold';
+                    }
+                    
+                    // Check active
+                    if (item.url === currentPath || (item.url === '/' && currentPath === 'index.html')) {
+                        li.classList.add('active');
+                    }
+                    
+                    li.appendChild(a);
+                }
+                
+                navEl.appendChild(li);
+            });
+        });
+    }
+    renderNavigation();
+
     // H. Smart WhatsApp Integration
     const mainWpBtn = document.getElementById('wp');
     if (mainWpBtn) {
