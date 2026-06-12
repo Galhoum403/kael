@@ -87,60 +87,127 @@
         return products.length - 1;
     }
 
-    // --- Build infinite strip ---
-    function buildStrip(products) {
+    // --- Shuffle helper ---
+    function shuffleArray(arr) {
+        var a = arr.slice();
+        for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        }
+        return a;
+    }
+
+    // --- Make a single card DOM element ---
+    function makeCard(product, productIndex) {
+        var card = document.createElement('div');
+        card.className = 'wheel-card';
+        card.setAttribute('data-product-index', productIndex);
+
+        var img = document.createElement('img');
+        img.src = product.image || 'assets/img/logo.png';
+        img.alt = product.name;
+        img.loading = 'eager';
+        img.width = 90;
+        img.height = 90;
+
+        var nameEl = document.createElement('div');
+        nameEl.className = 'wc-name';
+        nameEl.textContent = product.name;
+
+        var pricesEl = document.createElement('div');
+        pricesEl.className = 'wc-prices';
+
+        var origEl = document.createElement('span');
+        origEl.className = 'wc-original';
+        origEl.textContent = product.originalPrice + ' ' + CURRENCY;
+
+        var wheelEl = document.createElement('span');
+        wheelEl.className = 'wc-wheel';
+        wheelEl.textContent = product.wheelPrice + ' ' + CURRENCY;
+
+        pricesEl.appendChild(origEl);
+        pricesEl.appendChild(wheelEl);
+        card.appendChild(img);
+        card.appendChild(nameEl);
+        card.appendChild(pricesEl);
+        return card;
+    }
+
+    // Global tracker for DOM card positions
+    var winnerDomIndex = -1;
+
+    // --- Build infinite strip with random shuffle ---
+    // Returns the DOM index where the winner card appears at targetSet
+    function buildStrip(products, winnerProductIndex, targetSet) {
+        var strip = document.getElementById('wheel-strip');
+        if (!strip || products.length === 0) return;
+        strip.innerHTML = '';
+        winnerDomIndex = -1;
+
+        var totalSets = 12; // enough for long spin without seeing edge
+        var domIndex = 0;
+
+        for (var s = 0; s < totalSets; s++) {
+            // Shuffle each set randomly - looks organic, never predictable
+            var shuffled = shuffleArray(products.map(function(p, i) { return { p: p, origIdx: i }; }));
+
+            for (var k = 0; k < shuffled.length; k++) {
+                var card = makeCard(shuffled[k].p, shuffled[k].origIdx);
+                strip.appendChild(card);
+
+                // Track exactly where the winner lands in target set
+                if (s === targetSet && winnerDomIndex === -1 && winnerProductIndex !== undefined) {
+                    // We'll override one card in the target position to be our winner
+                    // Mark after loop
+                }
+                domIndex++;
+            }
+        }
+
+        // Now surgically place the winner card in targetSet at a random position within that set
+        if (winnerProductIndex !== undefined && winnerProductIndex !== null) {
+            var allCards = strip.querySelectorAll('.wheel-card');
+            var setSize = products.length;
+            // Pick a random slot within targetSet to replace with winner
+            var slotInSet = Math.floor(Math.random() * setSize);
+            var targetDomIdx = targetSet * setSize + slotInSet;
+            // Replace that card with winner card
+            var winnerCard = makeCard(products[winnerProductIndex], winnerProductIndex);
+            winnerCard.setAttribute('data-winner', '1');
+            if (allCards[targetDomIdx]) {
+                strip.replaceChild(winnerCard, allCards[targetDomIdx]);
+            }
+            winnerDomIndex = targetDomIdx;
+        }
+
+        // Position strip to start from set 2 (hidden middle area)
+        var cardUnit = getCardUnit();
+        var startPos = products.length * 2 * cardUnit;
+        var wrapperWidth = (document.querySelector('.wheel-track-wrapper') || {offsetWidth: 400}).offsetWidth;
+        var offset = startPos - (wrapperWidth / 2) + (cardUnit / 2);
+        strip.style.transition = 'none';
+        strip.style.transform = 'translateX(-' + Math.max(0, offset) + 'px)';
+    }
+
+    // --- Initial idle build (no winner, just show cards) ---
+    function buildIdleStrip(products) {
         var strip = document.getElementById('wheel-strip');
         if (!strip || products.length === 0) return;
         strip.innerHTML = '';
 
-        // Create enough repetitions for smooth infinite feel (8 full sets)
-        var reps = 8;
+        var reps = 6;
         for (var r = 0; r < reps; r++) {
-            for (var i = 0; i < products.length; i++) {
-                var card = document.createElement('div');
-                card.className = 'wheel-card';
-                card.setAttribute('data-product-index', i);
-
-                var img = document.createElement('img');
-                img.src = products[i].image || 'assets/img/logo.png';
-                img.alt = products[i].name;
-                img.loading = (r < 2) ? 'eager' : 'lazy';
-                img.width = 90;
-                img.height = 90;
-
-                var nameEl = document.createElement('div');
-                nameEl.className = 'wc-name';
-                nameEl.textContent = products[i].name;
-
-                var pricesEl = document.createElement('div');
-                pricesEl.className = 'wc-prices';
-
-                var origEl = document.createElement('span');
-                origEl.className = 'wc-original';
-                origEl.textContent = products[i].originalPrice + ' ' + CURRENCY;
-
-                var wheelEl = document.createElement('span');
-                wheelEl.className = 'wc-wheel';
-                wheelEl.textContent = products[i].wheelPrice + ' ' + CURRENCY;
-
-                pricesEl.appendChild(origEl);
-                pricesEl.appendChild(wheelEl);
-
-                card.appendChild(img);
-                card.appendChild(nameEl);
-                card.appendChild(pricesEl);
-                strip.appendChild(card);
+            var shuffled = shuffleArray(products);
+            for (var i = 0; i < shuffled.length; i++) {
+                strip.appendChild(makeCard(shuffled[i], i));
             }
         }
 
-        // Position strip so it starts from the middle (looks infinite both ways)
         var cardUnit = getCardUnit();
-        var totalCards = products.length;
-        var middleSetStart = totalCards * 3 * cardUnit;
-        var wrapperWidth = document.querySelector('.wheel-track-wrapper').offsetWidth;
-        var offset = middleSetStart - (wrapperWidth / 2) + (cardUnit / 2);
+        var wrapperWidth = (document.querySelector('.wheel-track-wrapper') || {offsetWidth: 400}).offsetWidth;
+        var offset = products.length * 2 * cardUnit - (wrapperWidth / 2) + (cardUnit / 2);
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-' + offset + 'px)';
+        strip.style.transform = 'translateX(-' + Math.max(0, offset) + 'px)';
     }
 
     // --- Spin Animation ---
@@ -158,61 +225,71 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري اللف...';
         }
 
-        var strip = document.getElementById('wheel-strip');
         var products = wheelProducts.length > 0 ? wheelProducts : defaultProducts;
         var cardUnit = getCardUnit();
-        var totalCards = products.length;
 
-        // Pick winner using weighted random
-        var winnerIndex = pickWeightedRandom(products);
+        // Pick winner
+        var winnerProductIndex = pickWeightedRandom(products);
 
-        // Rebuild strip fresh
-        buildStrip(products);
+        // Winner will be placed in set index 8 (out of 12 total sets)
+        var targetSet = 8;
 
-        // Calculate positions
-        var wrapperWidth = document.querySelector('.wheel-track-wrapper').offsetWidth;
+        // Build strip with winner placed precisely in targetSet
+        buildStrip(products, winnerProductIndex, targetSet);
+
+        var strip = document.getElementById('wheel-strip');
+        var wrapperWidth = (document.querySelector('.wheel-track-wrapper') || {offsetWidth:400}).offsetWidth;
         var centerOffset = wrapperWidth / 2 - cardUnit / 2;
 
-        // Current position: strip is at middle set (set index 3)
-        var currentSetStart = totalCards * 3 * cardUnit;
-        var currentPos = currentSetStart - centerOffset;
+        // Starting position is at set 2
+        var startPos = products.length * 2 * cardUnit - centerOffset;
+        startPos = Math.max(0, startPos);
 
-        // Target: travel 3 more full sets + land on winnerIndex in set 6
-        var targetSetStart = totalCards * 6 * cardUnit;
-        var targetPos = targetSetStart + (winnerIndex * cardUnit) - centerOffset;
+        // Target: center the winner card in viewport
+        var targetPos = winnerDomIndex * cardUnit - centerOffset;
+        targetPos = Math.max(0, targetPos);
 
-        // Add slight random offset within the card for natural feel
-        targetPos += (Math.random() * 30) - 15;
-
-        // Set starting position
+        // Set strip at start
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-' + currentPos + 'px)';
-
-        // Force reflow
+        strip.style.transform = 'translateX(-' + startPos + 'px)';
         void strip.offsetHeight;
 
-        // Animate
-        var duration = 4000 + Math.random() * 1500;
-        strip.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.15, 0.6, 0.25, 1)';
-        strip.style.transform = 'translateX(-' + targetPos + 'px)';
+        // --- Two-phase animation ---
+        // Phase 1: fast burst (linear, 1.5s) - feel the acceleration
+        var phase1Distance = products.length * 3 * cardUnit; // travel 3 sets fast
+        var phase1Target = startPos + phase1Distance;
+        strip.style.transition = 'transform 1400ms cubic-bezier(0.4, 0, 1, 1)';
+        strip.style.transform = 'translateX(-' + phase1Target + 'px)';
 
-        // After animation ends
+        // Phase 2: decelerate to winner (after 1.3s)
         setTimeout(function() {
-            // Find the exact winner card in the DOM
-            var allCards = strip.querySelectorAll('.wheel-card');
-            var targetCardDomIndex = (totalCards * 6) + winnerIndex;
-            if (allCards[targetCardDomIndex]) {
-                allCards[targetCardDomIndex].classList.add('winner');
-            }
+            // Make sure targetPos accounts for phase1 travel
+            var finalTarget = phase1Target + (targetPos - startPos);
+            // Clamp: winner must be ahead of phase1 position
+            if (finalTarget < phase1Target) finalTarget = phase1Target + (products.length * 2 * cardUnit) + (winnerDomIndex % products.length) * cardUnit;
 
-            // Show win popup with correct product
+            var slowDuration = 5000 + Math.random() * 1500; // 5 - 6.5 seconds slowdown
+            strip.style.transition = 'transform ' + slowDuration + 'ms cubic-bezier(0.05, 0.7, 0.1, 1)';
+            strip.style.transform = 'translateX(-' + targetPos + 'px)';
+
+            // After deceleration ends
             setTimeout(function() {
-                showWinPopup(products[winnerIndex]);
-                isSpinning = false;
-                updateSpinsUI();
-            }, 600);
+                // Highlight winner
+                var allCards = strip.querySelectorAll('.wheel-card');
+                if (winnerDomIndex >= 0 && allCards[winnerDomIndex]) {
+                    allCards[winnerDomIndex].classList.add('winner');
+                }
 
-        }, duration + 100);
+                // Show popup after a beat
+                setTimeout(function() {
+                    showWinPopup(products[winnerProductIndex]);
+                    isSpinning = false;
+                    updateSpinsUI();
+                }, 700);
+
+            }, slowDuration + 100);
+
+        }, 1300);
     }
 
     // --- Generate unique deal code ---
@@ -348,13 +425,13 @@
                     } else {
                         wheelProducts = defaultProducts;
                     }
-                    buildStrip(wheelProducts);
+                    buildIdleStrip(wheelProducts);
                     updateSpinsUI();
                 });
             });
         }).catch(function() {
             wheelProducts = defaultProducts;
-            buildStrip(wheelProducts);
+            buildIdleStrip(wheelProducts);
             updateSpinsUI();
         });
     }
