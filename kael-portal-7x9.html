@@ -177,7 +177,8 @@
         <div class="logo">
             <img src="assets/img/logo.png" alt="Kael Logo">
         </div>
-        <a href="#" class="active"><i class="fas fa-images"></i> سلايدر العروض</a>
+        <a href="#" class="active" onclick="showSection('slider')"><i class="fas fa-images"></i> سلايدر العروض</a>
+        <a href="#" onclick="showSection('wheel')"><i class="fas fa-dice"></i> عجلة الحظ</a>
         <a href="kael-packaging-7x9.html"><i class="fas fa-gift"></i> طلبات التغليف</a>
         <a href="#"><i class="fas fa-box"></i> المنتجات (قريباً)</a>
         <a href="#"><i class="fas fa-shopping-cart"></i> الطلبات (قريباً)</a>
@@ -217,7 +218,26 @@
             </div>
         </div>
 
-        
+        <!-- 🎰 Lucky Wheel Config -->
+        <div class="card mb-4" id="wheel-section" style="display:none;">
+            <div class="card-header" style="background: linear-gradient(135deg, #0a1f16, #103C2B); color: #fff;">
+                <span><i class="fas fa-dice"></i> إدارة عجلة الحظ</span>
+                <button class="btn btn-sm btn-gold" onclick="addWheelProduct()"><i class="fas fa-plus"></i> إضافة منتج</button>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info text-end" style="font-size: 13px;">
+                    <strong>ملاحظة:</strong> نسبة الظهور (%) تحدد احتمال توقف العجلة عند هذا المنتج. مثال: إذا وضعت 5% لمنتج غالي و40% لكوبون، سيظهر الكوبون أكثر بكثير.
+                </div>
+                <div id="wheel-products-container">
+                    <!-- Wheel products injected here -->
+                </div>
+                <hr>
+                <button type="button" class="btn btn-gold px-4 py-2" onclick="saveWheelData()">
+                    <i class="fas fa-save me-2"></i> حفظ منتجات العجلة ونشرها
+                </button>
+                <span id="save-wheel-msg" class="text-success ms-3 fw-bold" style="display: none;">تم الحفظ بنجاح!</span>
+            </div>
+        </div>
     
         <!-- General Settings Config -->
         <div class="card mb-4" id="settings-section">
@@ -414,6 +434,110 @@
                 alert("فشل الحفظ: لا تملك الصلاحيات! يرجى التأكد من أنك سجلت الدخول وأن قواعد بيانات Firebase (Rules) تسمح بالكتابة.");
             }).finally(() => {
                 btn.innerHTML = originalText;
+            });
+        };
+
+        // --- Lucky Wheel Management ---
+        const wheelRef = ref(db, 'lucky_wheel');
+        window.wheelData = [];
+
+        // Section switching
+        window.showSection = function(section) {
+            const sliderCard = document.querySelector('.card.mb-4:not(#wheel-section):not(#settings-section)');
+            const wheelCard = document.getElementById('wheel-section');
+            const links = document.querySelectorAll('.sidebar a');
+
+            links.forEach(l => l.classList.remove('active'));
+
+            if (section === 'wheel') {
+                if (sliderCard) sliderCard.style.display = 'none';
+                if (wheelCard) wheelCard.style.display = 'block';
+                links[1].classList.add('active');
+            } else {
+                if (sliderCard) sliderCard.style.display = 'block';
+                if (wheelCard) wheelCard.style.display = 'none';
+                links[0].classList.add('active');
+            }
+        };
+
+        // Load wheel data
+        onValue(wheelRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) window.wheelData = data;
+            else window.wheelData = [];
+            window.renderWheelProducts();
+        });
+
+        window.renderWheelProducts = function() {
+            const container = document.getElementById('wheel-products-container');
+            if (!container) return;
+            container.innerHTML = '';
+            window.wheelData.forEach((item, index) => {
+                const html = `
+                    <div class="slide-item" style="border-right: 4px solid #C5A059;">
+                        <i class="fas fa-trash delete-slide" onclick="deleteWheelProduct(${index})"></i>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <label>اسم المنتج</label>
+                                <input type="text" class="form-control wp-name text-end" value="${item.name || ''}">
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label>رابط الصورة</label>
+                                <input type="text" class="form-control wp-image text-end" value="${item.image || ''}" placeholder="assets/img/product01.png">
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label>رابط المنتج (صفحة المنتج)</label>
+                                <input type="text" class="form-control wp-link text-end" value="${item.link || 'shop'}" placeholder="shop">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label>السعر الأصلي</label>
+                                <input type="text" class="form-control wp-original text-end" value="${item.originalPrice || ''}">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label>سعر العجلة (المخفض)</label>
+                                <input type="text" class="form-control wp-wheel text-end" value="${item.wheelPrice || ''}">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label>نسبة الظهور (%)</label>
+                                <input type="number" class="form-control wp-weight text-end" value="${item.weight || 10}" min="1" max="100">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        };
+
+        window.addWheelProduct = function() {
+            window.wheelData.push({ name: '', image: '', originalPrice: '', wheelPrice: '', weight: 10, link: 'shop' });
+            window.renderWheelProducts();
+        };
+
+        window.deleteWheelProduct = function(index) {
+            window.wheelData.splice(index, 1);
+            window.renderWheelProducts();
+        };
+
+        window.saveWheelData = function() {
+            window.wheelData = [];
+            let items = document.querySelectorAll('#wheel-products-container .slide-item');
+            items.forEach((item) => {
+                window.wheelData.push({
+                    name: item.querySelector('.wp-name').value,
+                    image: item.querySelector('.wp-image').value,
+                    originalPrice: item.querySelector('.wp-original').value,
+                    wheelPrice: item.querySelector('.wp-wheel').value,
+                    weight: parseInt(item.querySelector('.wp-weight').value) || 10,
+                    link: item.querySelector('.wp-link').value || 'shop'
+                });
+            });
+
+            set(wheelRef, window.wheelData).then(() => {
+                let msg = document.getElementById('save-wheel-msg');
+                msg.style.display = 'inline-block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }).catch((error) => {
+                alert("فشل الحفظ: تأكد من الصلاحيات.");
             });
         };
     </script>

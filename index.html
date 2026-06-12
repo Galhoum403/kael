@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="assets/css/DA_Whatsapp.css">
     <link rel="stylesheet" href="assets/css/kael-theme.css">
     <link rel="stylesheet" href="assets/css/Mega-Menu-Dropdown-100-Editable---Ambrodu.css">
+    <link rel="stylesheet" href="assets/css/lucky-wheel.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta name="description" content="متجر Kael وجهتك الأولى للهدايا الفاخرة، الساعات، والإكسسوارات. تسوق الآن لأفضل الهدايا لجميع المناسبات.">
     <meta name="keywords" content="هدايا, ساعات, إكسسوارات, متجر هدايا, هدايا فاخرة, هدايا رجالي, هدايا نسائي, هدايا عيد ميلاد">
@@ -381,11 +382,48 @@
       });
   });
 </script>
-    <div class="offers-hero position-relative p-0" id="hero-slider-container">
-        <div class="offers-slider" dir="rtl" id="dynamic-slider">
-            <!-- Slides will be injected here via JavaScript -->
+    <!-- 🎰 Lucky Wheel Section -->
+    <div class="lucky-wheel-section" dir="rtl" data-aos="fade-up">
+        <div class="container">
+            <div class="wheel-title">
+                <h2>🎰 جرّب حظك واربح <span>خصم فوري!</span></h2>
+                <p>لف العجلة واحصل على عرض حصري لا يتكرر</p>
+                <div class="wheel-spins-left" id="wheel-spins-badge">لديك 3 محاولات متبقية اليوم</div>
+            </div>
         </div>
-    </div><div class="section" dir="rtl" data-aos="fade-up">
+        <div class="wheel-track-wrapper">
+            <div class="wheel-indicator"></div>
+            <div class="wheel-indicator-line"></div>
+            <div class="wheel-strip" id="wheel-strip">
+                <!-- Cards injected by JS -->
+            </div>
+        </div>
+        <div class="container">
+            <div class="wheel-spin-btn-wrap">
+                <button class="wheel-spin-btn" id="wheel-spin-btn">
+                    <i class="fas fa-dice"></i> لف العجلة!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Win Popup -->
+    <div class="wheel-win-overlay" id="wheel-win-overlay">
+        <div class="wheel-win-popup">
+            <button class="wwp-close" id="wheel-win-close"><i class="fas fa-times"></i></button>
+            <div class="wwp-badge">🎉 مبروك!</div>
+            <img class="wwp-img" src="assets/img/logo.png" alt="Prize">
+            <div class="wwp-name">اسم المنتج</div>
+            <div class="wwp-prices">
+                <span class="wwp-original">0 ر.س</span>
+                <span class="wwp-deal">0 ر.س</span>
+            </div>
+            <br>
+            <a class="wwp-cta" href="shop">🛒 أضف للسلة بهذا السعر</a>
+        </div>
+    </div>
+
+    <div class="section" dir="rtl" data-aos="fade-up">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -725,6 +763,7 @@ $(document).ready(function() {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/lylix-config.js"></script>
     <script src="assets/js/lylix-core.js"></script>
+    <script src="assets/js/lucky-wheel.js"></script>
 </body>
 
 </html>

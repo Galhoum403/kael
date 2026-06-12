@@ -1,0 +1,393 @@
+/* ==========================================
+   🎰 Lucky Wheel / Slot Machine Styles
+   Kael Store - Lylix Script
+   ========================================== */
+
+:root {
+    --wheel-card-w: 160px;
+    --wheel-card-h: 200px;
+    --wheel-gap: 12px;
+    --wheel-bg: #0a1f16;
+    --wheel-gold: #C5A059;
+    --wheel-green: #103C2B;
+    --wheel-glow: rgba(197, 160, 89, 0.5);
+}
+
+/* Container */
+.lucky-wheel-section {
+    background: var(--wheel-bg);
+    padding: 50px 0 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.lucky-wheel-section::before,
+.lucky-wheel-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 120px;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+.lucky-wheel-section::before {
+    left: 0;
+    background: linear-gradient(to right, var(--wheel-bg), transparent);
+}
+.lucky-wheel-section::after {
+    right: 0;
+    background: linear-gradient(to left, var(--wheel-bg), transparent);
+}
+
+/* Title */
+.wheel-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+.wheel-title h2 {
+    color: #fff;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+.wheel-title h2 span {
+    color: var(--wheel-gold);
+}
+.wheel-title p {
+    color: rgba(255,255,255,0.6);
+    font-size: 1rem;
+    margin: 0;
+}
+.wheel-spins-left {
+    display: inline-block;
+    background: rgba(197, 160, 89, 0.15);
+    border: 1px solid var(--wheel-gold);
+    color: var(--wheel-gold);
+    padding: 5px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+
+/* Track */
+.wheel-track-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    height: calc(var(--wheel-card-h) + 30px);
+    margin-bottom: 30px;
+}
+
+/* Center Indicator */
+.wheel-indicator {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 20px solid var(--wheel-gold);
+    filter: drop-shadow(0 0 8px var(--wheel-glow));
+}
+.wheel-indicator-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--wheel-gold), transparent);
+    z-index: 4;
+    opacity: 0.4;
+}
+
+/* Strip */
+.wheel-strip {
+    display: flex;
+    gap: var(--wheel-gap);
+    position: absolute;
+    top: 15px;
+    left: 0;
+    will-change: transform;
+}
+
+/* Cards */
+.wheel-card {
+    flex-shrink: 0;
+    width: var(--wheel-card-w);
+    height: var(--wheel-card-h);
+    background: linear-gradient(145deg, #1a2f24, #0d1f17);
+    border: 2px solid rgba(197, 160, 89, 0.2);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    cursor: default;
+}
+.wheel-card img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+.wheel-card .wc-name {
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    max-height: 2.6em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.wheel-card .wc-prices {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.wheel-card .wc-original {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.7rem;
+    text-decoration: line-through;
+}
+.wheel-card .wc-wheel {
+    color: var(--wheel-gold);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+/* Winner glow */
+.wheel-card.winner {
+    border-color: var(--wheel-gold) !important;
+    box-shadow: 0 0 25px var(--wheel-glow), 0 0 60px rgba(197, 160, 89, 0.2);
+    animation: winPulse 0.8s ease-in-out 3;
+}
+@keyframes winPulse {
+    0%, 100% { box-shadow: 0 0 25px var(--wheel-glow); }
+    50% { box-shadow: 0 0 45px var(--wheel-glow), 0 0 80px rgba(197, 160, 89, 0.3); }
+}
+
+/* Spin Button */
+.wheel-spin-btn-wrap {
+    text-align: center;
+}
+.wheel-spin-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--wheel-gold), #d4af61);
+    color: #fff;
+    border: none;
+    padding: 14px 50px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 5px 25px rgba(197, 160, 89, 0.4);
+}
+.wheel-spin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 35px rgba(197, 160, 89, 0.5);
+}
+.wheel-spin-btn:active {
+    transform: translateY(0);
+}
+.wheel-spin-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+.wheel-spin-btn i {
+    margin-left: 8px;
+}
+
+/* No spins left */
+.wheel-no-spins {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.95rem;
+    padding: 15px;
+}
+
+/* Win Popup Overlay */
+.wheel-win-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9998;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+.wheel-win-overlay.active {
+    display: flex;
+    animation: fadeInOverlay 0.3s ease;
+}
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.wheel-win-popup {
+    background: linear-gradient(145deg, #1a2f24, #0d1f17);
+    border: 2px solid var(--wheel-gold);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+@keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.wheel-win-popup .wwp-badge {
+    background: var(--wheel-gold);
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.wheel-win-popup img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+.wheel-win-popup .wwp-name {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.wheel-win-popup .wwp-prices {
+    margin-bottom: 20px;
+}
+.wheel-win-popup .wwp-original {
+    color: rgba(255,255,255,0.4);
+    font-size: 1rem;
+    text-decoration: line-through;
+    margin-left: 10px;
+}
+.wheel-win-popup .wwp-deal {
+    color: var(--wheel-gold);
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+.wheel-win-popup .wwp-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--wheel-gold), #d4af61);
+    color: #fff;
+    padding: 12px 35px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+}
+.wheel-win-popup .wwp-cta:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(197, 160, 89, 0.4);
+}
+.wheel-win-popup .wwp-close {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: rgba(255,255,255,0.5);
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: 0.3s;
+}
+.wheel-win-popup .wwp-close:hover {
+    color: #fff;
+}
+
+/* Confetti particles */
+.wheel-confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: confettiFall 1.5s ease-out forwards;
+    pointer-events: none;
+}
+@keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(200px) rotate(720deg); opacity: 0; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    :root {
+        --wheel-card-w: 120px;
+        --wheel-card-h: 160px;
+    }
+    .lucky-wheel-section {
+        padding: 30px 0 40px;
+    }
+    .lucky-wheel-section::before,
+    .lucky-wheel-section::after {
+        width: 40px;
+    }
+    .wheel-title h2 {
+        font-size: 1.4rem;
+    }
+    .wheel-card img {
+        width: 65px;
+        height: 65px;
+    }
+    .wheel-card .wc-name {
+        font-size: 0.7rem;
+    }
+    .wheel-spin-btn {
+        padding: 12px 35px;
+        font-size: 1rem;
+    }
+    .wheel-win-popup {
+        padding: 25px;
+    }
+    .wheel-win-popup img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --wheel-card-w: 100px;
+        --wheel-card-h: 140px;
+    }
+    .wheel-card img {
+        width: 55px;
+        height: 55px;
+    }
+    .wheel-card .wc-name {
+        font-size: 0.65rem;
+    }
+    .wheel-card .wc-wheel {
+        font-size: 0.75rem;
+    }
+}
