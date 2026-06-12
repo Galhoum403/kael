@@ -240,87 +240,7 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
                 </div>
             </div>
 
-            <!-- Modal for Custom Packaging -->
-            <div class="modal fade" id="customPackagingModal" tabindex="-1" dir="rtl">
-              <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content border-0" style="border-radius: 15px; overflow: hidden; text-align: right;">
-                  <div class="modal-header" style="background: var(--kael-green-dark, #103C2B); color: white; border-bottom: 3px solid var(--kael-gold, #C5A059);">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-magic me-2"></i> صمم تغليفك بنفسك</h5>
-                    <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body p-4 text-dark">
-                    <form id="packaging-form">
-                        <h6 class="fw-bold mb-3">1. اختر نوع البوكس:</h6>
-                        <div class="row mb-4">
-                            <div class="col-md-4 mb-2">
-                                <label class="w-100 p-3 border rounded text-center pkg-option" style="cursor: pointer; transition: 0.3s;">
-                                    <input type="radio" name="boxType" value="classic|50" class="d-none" required>
-                                    <i class="fas fa-box-open fa-2x mb-2" style="color: var(--kael-gold);"></i>
-                                    <div class="fw-bold">بوكس كلاسيك</div>
-                                    <small class="text-muted">+50 ج.م</small>
-                                </label>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <label class="w-100 p-3 border rounded text-center pkg-option" style="cursor: pointer; transition: 0.3s;">
-                                    <input type="radio" name="boxType" value="velvet|150" class="d-none">
-                                    <i class="fas fa-gem fa-2x mb-2" style="color: var(--kael-gold);"></i>
-                                    <div class="fw-bold">بوكس قطيفة فاخر</div>
-                                    <small class="text-muted">+150 ج.م</small>
-                                </label>
-                            </div>
-                            <div class="col-md-4 mb-2">
-                                <label class="w-100 p-3 border rounded text-center pkg-option" style="cursor: pointer; transition: 0.3s;">
-                                    <input type="radio" name="boxType" value="wood|300" class="d-none">
-                                    <i class="fas fa-tree fa-2x mb-2" style="color: var(--kael-gold);"></i>
-                                    <div class="fw-bold">بوكس خشبي محفور</div>
-                                    <small class="text-muted">+300 ج.م</small>
-                                </label>
-                            </div>
-                        </div>
-
-                        <h6 class="fw-bold mb-3">2. إضافات الهدية:</h6>
-                        <div class="row mb-4">
-                            <div class="col-md-6 mb-2">
-                                <label class="w-100 p-2 border rounded d-flex align-items-center justify-content-between" style="cursor: pointer; transition: 0.3s;">
-                                    <div>
-                                        <input type="checkbox" class="me-2 pkg-addon" value="bubbles|20"> بابلز لحماية الهدية
-                                    </div>
-                                    <span class="badge bg-light text-dark">+20 ج.م</span>
-                                </label>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="w-100 p-2 border rounded d-flex align-items-center justify-content-between" style="cursor: pointer; transition: 0.3s;">
-                                    <div>
-                                        <input type="checkbox" class="me-2 pkg-addon" value="card|30"> كارت إهداء مطبوع
-                                    </div>
-                                    <span class="badge bg-light text-dark">+30 ج.م</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <h6 class="fw-bold mb-3">3. تخصيص الاسم (اختياري):</h6>
-                        <div class="mb-4">
-                            <label class="w-100 p-2 border rounded d-flex align-items-center justify-content-between mb-2" style="cursor: pointer; transition: 0.3s;">
-                                <div>
-                                    <input type="checkbox" class="me-2 pkg-addon" value="name|50" id="print-name-chk"> حفر / طباعة اسم على البوكس
-                                </div>
-                                <span class="badge bg-light text-dark">+50 ج.م</span>
-                            </label>
-                            <input type="text" id="custom-name-input" class="form-control" placeholder="اكتب الاسم هنا (مثال: أحمد)..." style="display:none; text-align: right;">
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center mt-4 p-3 rounded" style="background: var(--kael-cream, #F9F6F0);">
-                            <span class="fw-bold fs-5" style="color: var(--kael-green-dark);">إجمالي التغليف:</span>
-                            <span class="fw-bold fs-4" style="color: var(--kael-gold);"><span id="pkg-total">0</span> ج.م</span>
-                        </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer" style="border-top: 1px solid #eee;">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="button" class="btn" style="background: var(--kael-gold, #C5A059); color: white; font-weight: bold;" id="save-pkg-btn">حفظ وإرفاق بالطلب</button>
-                  </div>
-                </div>
-              </div>
+            
             </div>
 
             <div data-reflow-type="shopping-cart"></div>
@@ -547,7 +467,89 @@ label:has(.ref-field-details-postcode) span::after { content: "أقرب علام
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/lylix-config.js"></script>
     <script src="assets/js/lylix-core.js"></script>
+<!-- Modal for Custom Packaging -->
+            <div class="modal fade" id="customPackagingModal" tabindex="-1" dir="rtl">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0" style="border-radius: 15px; overflow: hidden; text-align: right;">
+                  <div class="modal-header" style="background: var(--kael-green-dark, #103C2B); color: white; border-bottom: 3px solid var(--kael-gold, #C5A059);">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-magic me-2"></i> صمم تغليفك بنفسك</h5>
+                    <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-4 text-dark">
+                    <form id="packaging-form">
+                        <h6 class="fw-bold mb-3">1. اختر نوع البوكس:</h6>
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-2">
+                                <label class="w-100 p-3 border rounded text-center pkg-option" style="cursor: pointer; transition: 0.3s;">
+                                    <input type="radio" name="boxType" value="classic|50" class="d-none" required>
+                                    <i class="fas fa-box-open fa-2x mb-2" style="color: var(--kael-gold);"></i>
+                                    <div class="fw-bold">بوكس كلاسيك</div>
+                                    <small class="text-muted">+50 ج.م</small>
+                                </label>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label class="w-100 p-3 border rounded text-center pkg-option" style="cursor: pointer; transition: 0.3s;">
+                                    <input type="radio" name="boxType" value="velvet|150" class="d-none">
+                                    <i class="fas fa-gem fa-2x mb-2" style="color: var(--kael-gold);"></i>
+                                    <div class="fw-bold">بوكس قطيفة فاخر</div>
+                                    <small class="text-muted">+150 ج.م</small>
+                                </label>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label class="w-100 p-3 border rounded text-center pkg-option" style="cursor: pointer; transition: 0.3s;">
+                                    <input type="radio" name="boxType" value="wood|300" class="d-none">
+                                    <i class="fas fa-tree fa-2x mb-2" style="color: var(--kael-gold);"></i>
+                                    <div class="fw-bold">بوكس خشبي محفور</div>
+                                    <small class="text-muted">+300 ج.م</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <h6 class="fw-bold mb-3">2. إضافات الهدية:</h6>
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-2">
+                                <label class="w-100 p-2 border rounded d-flex align-items-center justify-content-between" style="cursor: pointer; transition: 0.3s;">
+                                    <div>
+                                        <input type="checkbox" class="me-2 pkg-addon" value="bubbles|20"> بابلز لحماية الهدية
+                                    </div>
+                                    <span class="badge bg-light text-dark">+20 ج.م</span>
+                                </label>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="w-100 p-2 border rounded d-flex align-items-center justify-content-between" style="cursor: pointer; transition: 0.3s;">
+                                    <div>
+                                        <input type="checkbox" class="me-2 pkg-addon" value="card|30"> كارت إهداء مطبوع
+                                    </div>
+                                    <span class="badge bg-light text-dark">+30 ج.م</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <h6 class="fw-bold mb-3">3. تخصيص الاسم (اختياري):</h6>
+                        <div class="mb-4">
+                            <label class="w-100 p-2 border rounded d-flex align-items-center justify-content-between mb-2" style="cursor: pointer; transition: 0.3s;">
+                                <div>
+                                    <input type="checkbox" class="me-2 pkg-addon" value="name|50" id="print-name-chk"> حفر / طباعة اسم على البوكس
+                                </div>
+                                <span class="badge bg-light text-dark">+50 ج.م</span>
+                            </label>
+                            <input type="text" id="custom-name-input" class="form-control" placeholder="اكتب الاسم هنا (مثال: أحمد)..." style="display:none; text-align: right;">
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-4 p-3 rounded" style="background: var(--kael-cream, #F9F6F0);">
+                            <span class="fw-bold fs-5" style="color: var(--kael-green-dark);">إجمالي التغليف:</span>
+                            <span class="fw-bold fs-4" style="color: var(--kael-gold);"><span id="pkg-total">0</span> ج.م</span>
+                        </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer" style="border-top: 1px solid #eee;">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn" style="background: var(--kael-gold, #C5A059); color: white; font-weight: bold;" id="save-pkg-btn">حفظ وإرفاق بالطلب</button>
+                  </div>
+                </div>
+              </div>
 </body>
 
 </html>
+
 
