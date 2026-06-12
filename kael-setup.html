@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>إعداد متجر Kael (Setup Wizard)</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #F9F6F0; color: #333; }
+        .wizard-container { max-width: 900px; margin: 50px auto; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; }
+        .wizard-header { background: #103C2B; color: #fff; padding: 40px; text-align: center; border-bottom: 5px solid #C5A059; }
+        .wizard-header img { max-height: 80px; margin-bottom: 20px; }
+        .wizard-body { padding: 40px; }
+        .step-title { color: #103C2B; font-weight: bold; border-bottom: 2px solid #EAE5D9; padding-bottom: 10px; margin-bottom: 30px; margin-top: 40px; }
+        .form-label { font-weight: bold; color: #555; }
+        .form-control { border-radius: 8px; border: 1px solid #ddd; padding: 12px; }
+        .form-control:focus { border-color: #C5A059; box-shadow: 0 0 0 0.25rem rgba(197, 160, 89, 0.25); }
+        .btn-primary { background: #C5A059; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; width: 100%; transition: 0.3s; }
+        .btn-primary:hover { background: #103C2B; }
+        #code-result { background: #222; color: #0f0; padding: 20px; border-radius: 8px; text-align: left; direction: ltr; font-family: monospace; max-height: 400px; overflow-y: auto; white-space: pre-wrap; display: none; }
+        .success-box { display: none; background: #e8f5e9; border: 1px solid #4caf50; padding: 30px; border-radius: 8px; text-align: center; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div class="wizard-container">
+        <div class="wizard-header">
+            <h2>🚀 مرحباً بك في Kael Store Setup</h2>
+            <p>قم بإعداد متجرك الإلكتروني الفاخر في خطوات بسيطة دون كتابة سطر كود واحد.</p>
+        </div>
+
+        <div class="wizard-body">
+            <form id="setup-form">
+                
+                <h4 class="step-title">1. البيانات الأساسية للمتجر</h4>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">اسم المتجر (Store Name)</label>
+                        <input type="text" class="form-control" id="storeName" value="Kael Store" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">دولة المتجر أو العنوان</label>
+                        <input type="text" class="form-control" id="address" value="المملكة العربية السعودية">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">وصف المتجر (للسيو - SEO)</label>
+                        <input type="text" class="form-control" id="storeDesc" value="متجر فاخر للهدايا والعطور والساعات">
+                    </div>
+                </div>
+
+                <h4 class="step-title">2. معلومات التواصل</h4>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">رقم الهاتف (للاتصال)</label>
+                        <input type="text" class="form-control" id="phone" value="0500000000">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">رقم الواتساب (بدون +)</label>
+                        <input type="text" class="form-control" id="whatsapp" value="966500000000">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">البريد الإلكتروني</label>
+                        <input type="email" class="form-control" id="email" value="info@mystore.com">
+                    </div>
+                </div>
+
+                <h4 class="step-title">3. الربط البرمجي (Integrations)</h4>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">معرف Reflow (عربة التسوق)</label>
+                        <input type="text" class="form-control" id="reflowId" placeholder="مثال: 123456789" required>
+                        <small class="text-muted">تحصل عليه من موقع ReflowHQ</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Web3Forms Access Key (لنماذج الاتصال)</label>
+                        <input type="text" class="form-control" id="web3key" placeholder="أدخل المفتاح هنا">
+                    </div>
+                </div>
+
+                <h4 class="step-title">4. ألوان هويتك (Colors)</h4>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">اللون الرئيسي (Primary)</label>
+                        <input type="color" class="form-control form-control-color w-100" id="colorPrimary" value="#C5A059">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">اللون الثانوي (Secondary)</label>
+                        <input type="color" class="form-control form-control-color w-100" id="colorSecondary" value="#103C2B">
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-cogs"></i> توليد ملف الإعدادات</button>
+                </div>
+            </form>
+
+            <div class="success-box" id="successBox">
+                <h3 style="color: #4caf50;"><i class="fas fa-check-circle"></i> تم بنجاح!</h3>
+                <p>تم توليد كود الإعدادات الخاص بمتجرك. قم بنسخ الكود التالي وضعه بالكامل داخل ملف <code>assets/js/lylix-config.js</code> ليتم تطبيقه على المتجر.</p>
+                
+                <button class="btn btn-dark mb-3" onclick="copyCode()"><i class="fas fa-copy"></i> نسخ الكود</button>
+                <button class="btn btn-success mb-3 ms-2" onclick="downloadConfig()"><i class="fas fa-download"></i> تحميل كملف</button>
+                
+                <pre id="code-result"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('setup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const configStr = `// ==========================================
+// LYLIX SCRIPT CONFIGURATION
+// تم التوليد تلقائياً بواسطة Kael Setup Wizard
+// ==========================================
+
+const LylixConfig = {
+    // 1. General Settings
+    storeName: "${document.getElementById('storeName').value}",
+    storeDescription: "${document.getElementById('storeDesc').value}",
+    
+    // 2. Contact Information
+    phone: "${document.getElementById('phone').value}",
+    email: "${document.getElementById('email').value}",
+    address: "${document.getElementById('address').value}",
+    whatsappNumber: "${document.getElementById('whatsapp').value}",
+    
+    // 3. Integrations
+    reflowProjectID: "${document.getElementById('reflowId').value}",
+    web3formsAccessKey: "${document.getElementById('web3key').value}",
+    
+    // 4. Design & Colors
+    colors: {
+        primary: "${document.getElementById('colorPrimary').value}",
+        secondary: "${document.getElementById('colorSecondary').value}",
+        textDark: "#333333"
+    },
+
+    // 5. Dynamic Navigation Menu
+    // You can manually add or remove categories below:
+    navigation: [
+        { title: "الرئيسية", url: "/" },
+        { title: "تسوق الآن", url: "shop.html" },
+        { title: "العروض الخاصة", url: "offers.html" },
+        { title: "تسوق بالمناسبة 🎈", isDropdown: true, items: [
+            { title: "أعياد الميلاد", url: "shop.html?category=birthday" },
+            { title: "زواج وخطوبة", url: "shop.html?category=wedding" }
+        ]},
+        { title: "الأقسام 💎", isDropdown: true, items: [
+            { title: "ساعات فاخرة", url: "shop.html?category=watches" },
+            { title: "إكسسوارات", url: "shop.html?category=accessories" },
+            { title: "عطور", url: "shop.html?category=perfumes" }
+        ]},
+        { title: "تواصل معنا", url: "contact.html" }
+    ]
+};
+`;
+            const resultBox = document.getElementById('code-result');
+            resultBox.textContent = configStr;
+            resultBox.style.display = 'block';
+            document.getElementById('successBox').style.display = 'block';
+            
+            // Scroll down
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+
+        function copyCode() {
+            const text = document.getElementById('code-result').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("تم نسخ الكود بنجاح!");
+            });
+        }
+
+        function downloadConfig() {
+            const text = document.getElementById('code-result').textContent;
+            const blob = new Blob([text], { type: "text/javascript" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "lylix-config.js";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
