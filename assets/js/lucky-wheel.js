@@ -1,55 +1,53 @@
 /* ==========================================
-   🎰 Lucky Wheel / Slot Machine Logic
+   🎰 Lucky Wheel / Slot Machine Logic v2
    Kael Store - Lylix Script
    ========================================== */
 (function() {
     'use strict';
 
-    const STORAGE_KEY = 'kael_wheel_spins';
-    const MAX_SPINS = 3;
-    const CARD_WIDTH_DESKTOP = 172; // card width + gap
-    const CARD_WIDTH_MOBILE = 132;
-    const CARD_WIDTH_SMALL = 112;
+    var STORAGE_KEY = 'kael_wheel_spins';
+    var MAX_SPINS = 3;
+    var CURRENCY = 'ج.م';
 
-    let wheelProducts = [];
-    let isSpinning = false;
+    var wheelProducts = [];
+    var isSpinning = false;
 
     // --- Default products (fallback if Firebase is empty) ---
-    const defaultProducts = [
-        { name: 'ساعة كلاسيكية', image: 'assets/img/product01.png', originalPrice: '350', wheelPrice: '280', weight: 15, link: 'shop' },
-        { name: 'سوار ذهبي', image: 'assets/img/product02.png', originalPrice: '120', wheelPrice: '85', weight: 25, link: 'shop' },
-        { name: 'طقم هدايا فاخر', image: 'assets/img/product03.png', originalPrice: '500', wheelPrice: '399', weight: 10, link: 'shop' },
-        { name: 'كوبون خصم 10%', image: 'assets/img/logo.png', originalPrice: '50', wheelPrice: '0', weight: 30, link: 'shop' },
-        { name: 'نظارة شمسية', image: 'assets/img/product01.png', originalPrice: '200', wheelPrice: '150', weight: 20, link: 'shop' }
+    var defaultProducts = [
+        { name: 'ساعة كلاسيكية', image: 'assets/img/product01.png', originalPrice: '350', wheelPrice: '280', weight: 15, link: '' },
+        { name: 'سوار ذهبي', image: 'assets/img/product02.png', originalPrice: '120', wheelPrice: '85', weight: 25, link: '' },
+        { name: 'طقم هدايا فاخر', image: 'assets/img/product03.png', originalPrice: '500', wheelPrice: '399', weight: 10, link: '' },
+        { name: 'كوبون خصم 10%', image: 'assets/img/logo.png', originalPrice: '50', wheelPrice: '0', weight: 30, link: '' },
+        { name: 'نظارة شمسية', image: 'assets/img/product01.png', originalPrice: '200', wheelPrice: '150', weight: 20, link: '' }
     ];
 
     // --- Get card width based on screen ---
     function getCardUnit() {
-        if (window.innerWidth <= 480) return CARD_WIDTH_SMALL;
-        if (window.innerWidth <= 768) return CARD_WIDTH_MOBILE;
-        return CARD_WIDTH_DESKTOP;
+        var w = window.innerWidth;
+        if (w <= 480) return 112; // 100 + 12 gap
+        if (w <= 768) return 132; // 120 + 12 gap
+        return 172; // 160 + 12 gap
     }
 
     // --- Spins management (localStorage) ---
-    function getSpinsData() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return null;
-            return JSON.parse(raw);
-        } catch(e) { return null; }
-    }
-
     function getSpinsLeft() {
-        const data = getSpinsData();
-        if (!data) return MAX_SPINS;
-        const today = new Date().toDateString();
-        if (data.date !== today) return MAX_SPINS;
-        return Math.max(0, MAX_SPINS - (data.count || 0));
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return MAX_SPINS;
+            var data = JSON.parse(raw);
+            var today = new Date().toDateString();
+            if (data.date !== today) return MAX_SPINS;
+            return Math.max(0, MAX_SPINS - (data.count || 0));
+        } catch(e) { return MAX_SPINS; }
     }
 
     function useSpin() {
-        const today = new Date().toDateString();
-        let data = getSpinsData();
+        var today = new Date().toDateString();
+        var data;
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            data = raw ? JSON.parse(raw) : null;
+        } catch(e) { data = null; }
         if (!data || data.date !== today) {
             data = { date: today, count: 1 };
         } else {
@@ -59,7 +57,7 @@
     }
 
     function updateSpinsUI() {
-        const left = getSpinsLeft();
+        var left = getSpinsLeft();
         var badge = document.getElementById('wheel-spins-badge');
         var btn = document.getElementById('wheel-spin-btn');
         if (badge) badge.textContent = 'لديك ' + left + ' محاولات متبقية اليوم';
@@ -89,22 +87,24 @@
         return products.length - 1;
     }
 
-    // --- Build the strip of cards ---
-    function buildStrip(products, repetitions) {
+    // --- Build infinite strip ---
+    function buildStrip(products) {
         var strip = document.getElementById('wheel-strip');
-        if (!strip) return;
+        if (!strip || products.length === 0) return;
         strip.innerHTML = '';
 
-        for (var r = 0; r < repetitions; r++) {
+        // Create enough repetitions for smooth infinite feel (8 full sets)
+        var reps = 8;
+        for (var r = 0; r < reps; r++) {
             for (var i = 0; i < products.length; i++) {
                 var card = document.createElement('div');
                 card.className = 'wheel-card';
-                card.setAttribute('data-index', i);
+                card.setAttribute('data-product-index', i);
 
                 var img = document.createElement('img');
                 img.src = products[i].image || 'assets/img/logo.png';
                 img.alt = products[i].name;
-                img.loading = 'lazy';
+                img.loading = (r < 2) ? 'eager' : 'lazy';
                 img.width = 90;
                 img.height = 90;
 
@@ -117,11 +117,11 @@
 
                 var origEl = document.createElement('span');
                 origEl.className = 'wc-original';
-                origEl.textContent = products[i].originalPrice + ' ر.س';
+                origEl.textContent = products[i].originalPrice + ' ' + CURRENCY;
 
                 var wheelEl = document.createElement('span');
                 wheelEl.className = 'wc-wheel';
-                wheelEl.textContent = products[i].wheelPrice + ' ر.س';
+                wheelEl.textContent = products[i].wheelPrice + ' ' + CURRENCY;
 
                 pricesEl.appendChild(origEl);
                 pricesEl.appendChild(wheelEl);
@@ -132,6 +132,15 @@
                 strip.appendChild(card);
             }
         }
+
+        // Position strip so it starts from the middle (looks infinite both ways)
+        var cardUnit = getCardUnit();
+        var totalCards = products.length;
+        var middleSetStart = totalCards * 3 * cardUnit;
+        var wrapperWidth = document.querySelector('.wheel-track-wrapper').offsetWidth;
+        var offset = middleSetStart - (wrapperWidth / 2) + (cardUnit / 2);
+        strip.style.transition = 'none';
+        strip.style.transform = 'translateX(-' + offset + 'px)';
     }
 
     // --- Spin Animation ---
@@ -157,39 +166,46 @@
         // Pick winner using weighted random
         var winnerIndex = pickWeightedRandom(products);
 
-        // Build enough cards for smooth animation (3 full cycles + winner position)
-        buildStrip(products, 4);
+        // Rebuild strip fresh
+        buildStrip(products);
 
-        // Calculate target position: 3 full cycles + winner card centered
+        // Calculate positions
         var wrapperWidth = document.querySelector('.wheel-track-wrapper').offsetWidth;
-        var centerOffset = (wrapperWidth / 2) - (cardUnit / 2);
-        var targetPos = (totalCards * 3 * cardUnit) + (winnerIndex * cardUnit) - centerOffset;
+        var centerOffset = wrapperWidth / 2 - cardUnit / 2;
 
-        // Add slight randomness so it doesn't always land perfectly center
-        targetPos += (Math.random() * 20) - 10;
+        // Current position: strip is at middle set (set index 3)
+        var currentSetStart = totalCards * 3 * cardUnit;
+        var currentPos = currentSetStart - centerOffset;
 
-        // Reset position
+        // Target: travel 3 more full sets + land on winnerIndex in set 6
+        var targetSetStart = totalCards * 6 * cardUnit;
+        var targetPos = targetSetStart + (winnerIndex * cardUnit) - centerOffset;
+
+        // Add slight random offset within the card for natural feel
+        targetPos += (Math.random() * 30) - 15;
+
+        // Set starting position
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(0px)';
+        strip.style.transform = 'translateX(-' + currentPos + 'px)';
 
         // Force reflow
-        strip.offsetHeight;
+        void strip.offsetHeight;
 
-        // Animate with cubic-bezier for realistic deceleration
-        var duration = 4000 + Math.random() * 1500; // 4-5.5 seconds
+        // Animate
+        var duration = 4000 + Math.random() * 1500;
         strip.style.transition = 'transform ' + duration + 'ms cubic-bezier(0.15, 0.6, 0.25, 1)';
         strip.style.transform = 'translateX(-' + targetPos + 'px)';
 
         // After animation ends
         setTimeout(function() {
-            // Find the winner card and highlight it
+            // Find the exact winner card in the DOM
             var allCards = strip.querySelectorAll('.wheel-card');
-            var targetCardIndex = (totalCards * 3) + winnerIndex;
-            if (allCards[targetCardIndex]) {
-                allCards[targetCardIndex].classList.add('winner');
+            var targetCardDomIndex = (totalCards * 6) + winnerIndex;
+            if (allCards[targetCardDomIndex]) {
+                allCards[targetCardDomIndex].classList.add('winner');
             }
 
-            // Show win popup after a short delay
+            // Show win popup with correct product
             setTimeout(function() {
                 showWinPopup(products[winnerIndex]);
                 isSpinning = false;
@@ -199,22 +215,63 @@
         }, duration + 100);
     }
 
+    // --- Generate unique deal code ---
+    function generateDealCode() {
+        var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        var code = 'KAEL-';
+        for (var i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+    }
+
     // --- Show Win Popup ---
     function showWinPopup(product) {
         var overlay = document.getElementById('wheel-win-overlay');
         if (!overlay) return;
 
+        // Use admin-defined promo code from Reflow, or generate fallback
+        var dealCode = (product.promoCode && product.promoCode.trim()) ? product.promoCode.trim() : generateDealCode();
+
         var popupImg = overlay.querySelector('.wwp-img');
         var popupName = overlay.querySelector('.wwp-name');
         var popupOriginal = overlay.querySelector('.wwp-original');
         var popupDeal = overlay.querySelector('.wwp-deal');
-        var popupCta = overlay.querySelector('.wwp-cta');
+        var popupCode = overlay.querySelector('.wwp-code-value');
+        var popupWhatsapp = overlay.querySelector('.wwp-whatsapp');
+        var popupHint = overlay.querySelector('.wwp-code-hint');
 
         if (popupImg) popupImg.src = product.image || 'assets/img/logo.png';
         if (popupName) popupName.textContent = product.name;
-        if (popupOriginal) popupOriginal.textContent = product.originalPrice + ' ر.س';
-        if (popupDeal) popupDeal.textContent = product.wheelPrice + ' ر.س';
-        if (popupCta) popupCta.href = product.link || 'shop';
+        if (popupOriginal) popupOriginal.textContent = product.originalPrice + ' ' + CURRENCY;
+        if (popupDeal) popupDeal.textContent = product.wheelPrice + ' ' + CURRENCY;
+        if (popupCode) popupCode.textContent = dealCode;
+
+        // Show correct hint based on whether promo code is from Reflow
+        if (popupHint) {
+            if (product.promoCode && product.promoCode.trim()) {
+                popupHint.textContent = 'استخدم هذا الكود عند إتمام الشراء للحصول على الخصم!';
+            } else {
+                popupHint.textContent = 'أرسل هذا الكود عبر واتساب لتفعيل العرض';
+            }
+        }
+
+        // WhatsApp message
+        if (popupWhatsapp) {
+            var waNumber = '201234567890'; // Default, can be changed
+            try {
+                if (window.LylixConfig && window.LylixConfig.whatsapp) {
+                    waNumber = window.LylixConfig.whatsapp.replace(/[^0-9]/g, '');
+                }
+            } catch(e) {}
+            var msg = '🎰 مرحباً! ربحت عرض عجلة الحظ!\n\n' +
+                      '📦 المنتج: ' + product.name + '\n' +
+                      '💰 السعر الأصلي: ' + product.originalPrice + ' ' + CURRENCY + '\n' +
+                      '🔥 سعر العرض: ' + product.wheelPrice + ' ' + CURRENCY + '\n' +
+                      '🎟️ كود العرض: ' + dealCode + '\n\n' +
+                      'أريد الاستفادة من هذا العرض!';
+            popupWhatsapp.href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
+        }
 
         overlay.classList.add('active');
 
@@ -227,6 +284,30 @@
         var overlay = document.getElementById('wheel-win-overlay');
         if (overlay) overlay.classList.remove('active');
     }
+
+    // --- Copy deal code ---
+    window.copyDealCode = function() {
+        var codeEl = document.querySelector('.wwp-code-value');
+        if (!codeEl) return;
+        var code = codeEl.textContent;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(code);
+        } else {
+            var ta = document.createElement('textarea');
+            ta.value = code;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        }
+        var copyBtn = document.querySelector('.wwp-copy-btn');
+        if (copyBtn) {
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!';
+            setTimeout(function() {
+                copyBtn.innerHTML = '<i class="fas fa-copy"></i> نسخ الكود';
+            }, 2000);
+        }
+    };
 
     // --- Mini confetti ---
     function spawnConfetti(container) {
@@ -241,14 +322,12 @@
             particle.style.animationDelay = (Math.random() * 0.5) + 's';
             particle.style.animationDuration = (1 + Math.random()) + 's';
             container.appendChild(particle);
-            // Cleanup
             setTimeout(function(el) { if (el.parentNode) el.parentNode.removeChild(el); }, 2500, particle);
         }
     }
 
     // --- Load from Firebase ---
     function loadFromFirebase() {
-        // Dynamic import to keep it lightweight
         import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js').then(function(firebaseApp) {
             import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js').then(function(firebaseDB) {
                 var config = {
@@ -256,7 +335,9 @@
                     databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
                     projectId: "kael-85f70"
                 };
-                var app = firebaseApp.initializeApp(config, 'wheel-reader');
+                var app;
+                try { app = firebaseApp.initializeApp(config, 'wheel-reader'); }
+                catch(e) { app = firebaseApp.getApp('wheel-reader'); }
                 var db = firebaseDB.getDatabase(app);
                 var wheelRef = firebaseDB.ref(db, 'lucky_wheel');
 
@@ -267,26 +348,22 @@
                     } else {
                         wheelProducts = defaultProducts;
                     }
-                    // Initial build
-                    buildStrip(wheelProducts, 4);
+                    buildStrip(wheelProducts);
                     updateSpinsUI();
                 });
             });
         }).catch(function() {
-            // Fallback to defaults
             wheelProducts = defaultProducts;
-            buildStrip(wheelProducts, 4);
+            buildStrip(wheelProducts);
             updateSpinsUI();
         });
     }
 
     // --- Init ---
     function init() {
-        // Bind spin button
         var btn = document.getElementById('wheel-spin-btn');
         if (btn) btn.addEventListener('click', spin);
 
-        // Bind close popup
         var closeBtn = document.getElementById('wheel-win-close');
         if (closeBtn) closeBtn.addEventListener('click', closeWinPopup);
 
@@ -297,15 +374,12 @@
             });
         }
 
-        // Load products
         loadFromFirebase();
     }
 
-    // Wait for DOM
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
-
 })();

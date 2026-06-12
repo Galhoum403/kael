@@ -486,8 +486,8 @@
                                 <input type="text" class="form-control wp-image text-end" value="${item.image || ''}" placeholder="assets/img/product01.png">
                             </div>
                             <div class="col-md-4 mb-2">
-                                <label>رابط المنتج (صفحة المنتج)</label>
-                                <input type="text" class="form-control wp-link text-end" value="${item.link || 'shop'}" placeholder="shop">
+                                <label>كود الخصم (Promo Code من Reflow)</label>
+                                <input type="text" class="form-control wp-promo text-end" value="${item.promoCode || ''}" placeholder="مثال: WHEEL50" dir="ltr" style="font-weight:bold; color:#C5A059;">
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label>السعر الأصلي</label>
@@ -509,7 +509,7 @@
         };
 
         window.addWheelProduct = function() {
-            window.wheelData.push({ name: '', image: '', originalPrice: '', wheelPrice: '', weight: 10, link: 'shop' });
+            window.wheelData.push({ name: '', image: '', originalPrice: '', wheelPrice: '', weight: 10, promoCode: '' });
             window.renderWheelProducts();
         };
 
@@ -528,7 +528,7 @@
                     originalPrice: item.querySelector('.wp-original').value,
                     wheelPrice: item.querySelector('.wp-wheel').value,
                     weight: parseInt(item.querySelector('.wp-weight').value) || 10,
-                    link: item.querySelector('.wp-link').value || 'shop'
+                    promoCode: item.querySelector('.wp-promo').value
                 });
             });
 

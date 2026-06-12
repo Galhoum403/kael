@@ -411,15 +411,30 @@
     <div class="wheel-win-overlay" id="wheel-win-overlay">
         <div class="wheel-win-popup">
             <button class="wwp-close" id="wheel-win-close"><i class="fas fa-times"></i></button>
-            <div class="wwp-badge">🎉 مبروك!</div>
+            <div class="wwp-badge">🎉 مبروك! ربحت عرض حصري</div>
             <img class="wwp-img" src="assets/img/logo.png" alt="Prize">
             <div class="wwp-name">اسم المنتج</div>
             <div class="wwp-prices">
-                <span class="wwp-original">0 ر.س</span>
-                <span class="wwp-deal">0 ر.س</span>
+                <span class="wwp-original">0 ج.م</span>
+                &nbsp;→&nbsp;
+                <span class="wwp-deal">0 ج.م</span>
             </div>
-            <br>
-            <a class="wwp-cta" href="shop">🛒 أضف للسلة بهذا السعر</a>
+            <div style="margin: 15px 0; padding: 12px; background: rgba(197,160,89,0.1); border: 1px dashed #C5A059; border-radius: 10px;">
+                <small style="color: rgba(255,255,255,0.6);">كود الخصم الخاص بك:</small>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #C5A059; letter-spacing: 3px; margin: 6px 0;" class="wwp-code-value">KAEL-XXXXXX</div>
+                <small class="wwp-code-hint" style="color: rgba(255,255,255,0.5); font-size: 0.78rem; display:block; margin-bottom: 8px;">استخدم هذا الكود عند إتمام الشراء للحصول على الخصم!</small>
+                <button onclick="copyDealCode()" class="wwp-copy-btn" style="background:none; border:1px solid rgba(255,255,255,0.3); color:#fff; padding:5px 15px; border-radius:20px; font-size:0.8rem; cursor:pointer; font-family:'Tajawal',sans-serif;">
+                    <i class="fas fa-copy"></i> نسخ الكود
+                </button>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <a class="wwp-cta wwp-whatsapp" href="#" target="_blank" style="background: linear-gradient(135deg, #25D366, #128C7E); font-family:'Tajawal',sans-serif; text-decoration:none; padding:12px 25px; border-radius:30px; color:#fff; font-weight:700;">
+                    <i class="fab fa-whatsapp"></i> اطلب عبر واتساب
+                </a>
+                <a class="wwp-cta" href="shop" style="background: linear-gradient(135deg, #C5A059, #d4af61); font-family:'Tajawal',sans-serif; text-decoration:none; padding:12px 25px; border-radius:30px; color:#fff; font-weight:700;">
+                    <i class="fas fa-shopping-bag"></i> تسوق الآن
+                </a>
+            </div>
         </div>
     </div>
 
