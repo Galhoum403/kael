@@ -1588,16 +1588,21 @@ div[data-reflow-type="product"], div[data-reflow-type="product-list"], div[data-
 }
 
 .theme-wc2026 #header {
-    background: linear-gradient(90deg, #18032e, #2d0a4e, #18032e);
-    background-size: 200% 200%;
-    animation: wcGradient 8s ease infinite;
+    background-image: url('../img/wc2026-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border-bottom: 2px solid #c8ff00;
+    position: relative;
+    z-index: 1;
 }
 
-@keyframes wcGradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+.theme-wc2026 #header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(13, 1, 26, 0.7); /* Dark overlay to keep text readable */
+    z-index: -1;
 }
 
 .theme-wc2026 #header .header-ctn > div > a {
