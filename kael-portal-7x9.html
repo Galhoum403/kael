@@ -324,7 +324,11 @@
             let pass = document.getElementById('admin-pass').value;
             let btn = document.getElementById('login-btn');
             
-            if(!email || !pass) return;
+            if(!email || !pass) {
+                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('login-error').innerText = 'يرجى إدخال البريد الإلكتروني وكلمة المرور.';
+                return;
+            }
 
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
             btn.disabled = true;
@@ -365,23 +369,6 @@
                 if(data && data.mapUrl) {
                     document.getElementById('map-url-input').value = data.mapUrl;
                 }
-            });
-        };
-
-        window.saveSettings = function() {
-            let mapUrl = document.getElementById('map-url-input').value;
-            let btn = document.querySelector('#settings-section button');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-            
-            set(settingsRef, { mapUrl: mapUrl }).then(() => {
-                let msg = document.getElementById('save-settings-msg');
-                msg.style.display = 'inline-block';
-                setTimeout(() => msg.style.display = 'none', 3000);
-            }).catch((error) => {
-                alert("فشل الحفظ: تأكد من الصلاحيات.");
-            }).finally(() => {
-                btn.innerHTML = originalText;
             });
         };
 
@@ -561,6 +548,15 @@
 
         window.saveSettings = function() {
             const isThemeActive = document.getElementById('theme-toggle').checked;
+            let mapUrl = document.getElementById('map-url-input').value;
+            let btn = document.querySelector('#settings-section button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
+            // Save mapUrl to settingsRef
+            set(settingsRef, { mapUrl: mapUrl }).catch(e => console.error(e));
+
+            // Save theme to configRef
             set(configRef, {
                 seasonal_theme: isThemeActive
             }).then(() => {
@@ -569,6 +565,8 @@
                 setTimeout(() => msg.style.display = 'none', 3000);
             }).catch((error) => {
                 alert("فشل الحفظ.");
+            }).finally(() => {
+                btn.innerHTML = originalText;
             });
         };
     </script>

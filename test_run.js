@@ -1,7 +1,27 @@
 
-        //import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        //import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-        //import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const initializeApp = ()=>({});
+const getDatabase = ()=>({});
+const getAuth = ()=>({});
+const ref = ()=>({});
+const set = ()=>({then:()=>({catch:()=>({finally:()=>{}})})});
+const onValue = (r, cb)=>{
+    cb({val:()=>({seasonal_theme: true})});
+};
+const onAuthStateChanged = ()=>{};
+const signInWithEmailAndPassword = ()=>({then:()=>({catch:()=>{}})});
+const signOut = ()=>{};
+const document = {
+    getElementById: (id) => ({style:{}, classList:{replace:()=>{}}, checked: false, value: ''}),
+    querySelectorAll: ()=>[],
+    querySelector: ()=>({innerHTML:''})
+};
+const window = {};
+const alert = ()=>{};
+
+
+        
+        
+        
 
         const firebaseConfig = {
             apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
