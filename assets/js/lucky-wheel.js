@@ -1,6 +1,7 @@
 /* ==========================================
-   🎰 Lucky Wheel v10 - THE FOOLPROOF EDITION
-   Standard CSS Transitions + Forced LTR + Forced Reflow
+   🎰 Lucky Wheel v11 - THE FORWARD-ONLY TRACK
+   No DOM destruction, no faking infinity.
+   Just one long track moving forward 3 times!
    ========================================== */
 (function() {
     'use strict';
@@ -11,6 +12,9 @@
     var wheelProducts = [];
     var isSpinning = false;
     var audioCtx = null;
+    
+    // We start at repetition 2 to give a buffer at the beginning
+    var currentRep = 2; 
 
     var defaultProducts = [
         { name: 'ساعة كلاسيكية', image: 'assets/img/product01.png', originalPrice: '350', wheelPrice: '280', weight: 15, promoCode: '' },
@@ -127,36 +131,37 @@
         return c;
     }
 
-    function buildStrip(products, reps) {
+    // Build the strip exactly ONCE with enough cards for all spins
+    function buildIdleStrip(products) {
         var strip = document.getElementById('wheel-strip');
         if (!strip) return;
         
         strip.innerHTML = '';
         strip.style.transition = 'none';
         
-        // CRITICAL: Force LTR so array index ALWAYS matches visual left-to-right order (Fixes the mismatch bug forever)
+        // Force LTR to prevent matching bugs
         strip.dir = 'ltr';
         strip.style.direction = 'ltr';
         
-        for (var r = 0; r < reps; r++) {
+        // 50 reps is enough for 5 full spins (user only has 3 max)
+        for (var r = 0; r < 50; r++) {
             for (var i = 0; i < products.length; i++) {
                 strip.appendChild(makeCard(products[i]));
             }
         }
-    }
 
-    function buildIdleStrip(products) {
-        buildStrip(products, 6);
+        // Set initial idle position
         setTimeout(function() {
-            var strip = document.getElementById('wheel-strip');
-            if (!strip) return;
             var cu = getExactCardUnit();
             var first = strip.querySelector('.wheel-card');
             var cardWidth = first ? first.getBoundingClientRect().width : cu;
             var ww = (document.querySelector('.wheel-track-wrapper') || {}).offsetWidth || 400;
-            var offset = (products.length * 2 * cu) - ((ww / 2) - (cardWidth / 2));
+            var centerOffset = (ww / 2) - (cardWidth / 2);
+            
+            // Start at repetition 2 to hide the edges
+            var offset = (products.length * currentRep * cu) - centerOffset;
             strip.style.transform = 'translateX(-' + offset + 'px)';
-        }, 50);
+        }, 100);
     }
 
     // ===== 🎰 SPIN ENGINE =====
@@ -171,57 +176,49 @@
         var products = wheelProducts.length > 0 ? wheelProducts : defaultProducts;
         var n = products.length;
         var winIdx = pickWinner(products);
-
-        buildStrip(products, 15);
-
         var strip = document.getElementById('wheel-strip');
         
-        // Give DOM time to render the new 15 reps
+        // Remove winner class from previous spin if exists
+        var oldWinners = strip.querySelectorAll('.winner');
+        for (var w = 0; w < oldWinners.length; w++) oldWinners[w].classList.remove('winner');
+
+        var cu = getExactCardUnit();
+        var first = strip.querySelector('.wheel-card');
+        var cardWidth = first ? first.getBoundingClientRect().width : cu;
+        var ww = (document.querySelector('.wheel-track-wrapper') || {}).offsetWidth || 400;
+        var centerOffset = (ww / 2) - (cardWidth / 2);
+
+        // We travel exactly 10 repetitions forward per spin
+        var targetRep = currentRep + 10;
+        
+        // The DOM index we want to land on
+        var winDomIdx = (targetRep * n) + winIdx;
+        var endX = (winDomIdx * cu) - centerOffset;
+
+        var DURATION = 6500;
+        var cardsTravel = winDomIdx - (currentRep * n); // Always 50+ cards
+        scheduleTicks(cardsTravel, DURATION);
+
+        // Transition forward
+        strip.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.12, 0.8, 0.08, 1)';
+        strip.style.transform = 'translateX(-' + endX + 'px)';
+
         setTimeout(function() {
-            var cu = getExactCardUnit();
-            var first = strip.querySelector('.wheel-card');
-            var cardWidth = first ? first.getBoundingClientRect().width : cu;
-            var ww = (document.querySelector('.wheel-track-wrapper') || {}).offsetWidth || 400;
-            
-            var centerOffset = (ww / 2) - (cardWidth / 2);
-            var startX = (n * 1 * cu) - centerOffset;
-            var winDomIdx = (11 * n) + winIdx;
-            var endX = (winDomIdx * cu) - centerOffset;
+            var cards = strip.querySelectorAll('.wheel-card');
+            if (cards[winDomIdx]) cards[winDomIdx].classList.add('winner');
+            winSound();
 
-            // Step 1: Teleport instantly to start position without animation
-            strip.style.transition = 'none';
-            strip.style.transform = 'translateX(-' + startX + 'px)';
-
-            // Step 2: FORCE BROWSER REFLOW (Crucial to prevent skipping animation on 2nd spin)
-            void strip.offsetHeight; 
-
-            // Step 3: Trigger the animation on the next tick
             setTimeout(function() {
-                var DURATION = 6500;
-                var cardsTravel = winDomIdx - (n * 1);
-                scheduleTicks(cardsTravel, DURATION);
-
-                // GO!
-                strip.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.12, 0.8, 0.08, 1)';
-                strip.style.transform = 'translateX(-' + endX + 'px)';
-
-                // Step 4: Finish naturally
-                setTimeout(function() {
-                    strip.style.transition = 'none';
-                    var cards = strip.querySelectorAll('.wheel-card');
-                    if (cards[winDomIdx]) cards[winDomIdx].classList.add('winner');
-                    winSound();
-
-                    setTimeout(function() {
-                        useSpin(); // Deduct spin
-                        showWinPopup(products[winIdx]);
-                        isSpinning = false;
-                        updateSpinsUI();
-                    }, 800);
-                    
-                }, DURATION + 100);
-            }, 50); // Small delay to guarantee DOM is ready
-        }, 50);
+                // Update currentRep so the next spin starts from where this one ended
+                currentRep = targetRep;
+                
+                useSpin();
+                showWinPopup(products[winIdx]);
+                isSpinning = false;
+                updateSpinsUI();
+            }, 800);
+            
+        }, DURATION + 100);
     }
 
     // ===== DEAL CODE & POPUP =====
