@@ -1,7 +1,6 @@
 /* ==========================================
-   🎰 Lucky Wheel v9 - THE ULTIMATE FIX
-   Web Animations API with End-State Pre-assignment
-   Zero CSS transition bugs, no hanging on 2nd spin
+   🎰 Lucky Wheel v10 - THE FOOLPROOF EDITION
+   Standard CSS Transitions + Forced LTR + Forced Reflow
    ========================================== */
 (function() {
     'use strict';
@@ -30,7 +29,6 @@
         } catch(e) {}
     }
     
-    // The good tick sound
     function tick() {
         if (!audioCtx) return;
         try {
@@ -133,13 +131,10 @@
         var strip = document.getElementById('wheel-strip');
         if (!strip) return;
         
-        // Remove old animation if exists to avoid conflicts
-        if (strip.wheelAnim) { strip.wheelAnim.cancel(); strip.wheelAnim = null; }
-        
         strip.innerHTML = '';
         strip.style.transition = 'none';
         
-        // Force LTR to prevent matching bugs
+        // CRITICAL: Force LTR so array index ALWAYS matches visual left-to-right order (Fixes the mismatch bug forever)
         strip.dir = 'ltr';
         strip.style.direction = 'ltr';
         
@@ -181,7 +176,7 @@
 
         var strip = document.getElementById('wheel-strip');
         
-        // Wait 50ms for DOM to render the new cards so we can measure accurately
+        // Give DOM time to render the new 15 reps
         setTimeout(function() {
             var cu = getExactCardUnit();
             var first = strip.querySelector('.wheel-card');
@@ -193,40 +188,39 @@
             var winDomIdx = (11 * n) + winIdx;
             var endX = (winDomIdx * cu) - centerOffset;
 
-            // THE PRO TRICK:
-            // Set the FINAL state permanently on the DOM so when animation ends, it naturally stays there without flickering
+            // Step 1: Teleport instantly to start position without animation
             strip.style.transition = 'none';
-            strip.style.transform = 'translateX(-' + endX + 'px)';
+            strip.style.transform = 'translateX(-' + startX + 'px)';
 
-            var DURATION = 6500;
-            var cardsTravel = winDomIdx - (n * 1);
-            scheduleTicks(cardsTravel, DURATION);
+            // Step 2: FORCE BROWSER REFLOW (Crucial to prevent skipping animation on 2nd spin)
+            void strip.offsetHeight; 
 
-            // Run native animation which overrides the DOM style while playing
-            var anim = strip.animate([
-                { transform: 'translateX(-' + startX + 'px)' },
-                { transform: 'translateX(-' + endX + 'px)' }
-            ], {
-                duration: DURATION,
-                easing: 'cubic-bezier(0.12, 0.8, 0.08, 1)',
-                fill: 'none' // Don't hold the animation forever (prevents hanging on 2nd spin)
-            });
-            
-            strip.wheelAnim = anim;
+            // Step 3: Trigger the animation on the next tick
+            setTimeout(function() {
+                var DURATION = 6500;
+                var cardsTravel = winDomIdx - (n * 1);
+                scheduleTicks(cardsTravel, DURATION);
 
-            anim.onfinish = function() {
-                var cards = strip.querySelectorAll('.wheel-card');
-                if (cards[winDomIdx]) cards[winDomIdx].classList.add('winner');
-                winSound();
+                // GO!
+                strip.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.12, 0.8, 0.08, 1)';
+                strip.style.transform = 'translateX(-' + endX + 'px)';
 
+                // Step 4: Finish naturally
                 setTimeout(function() {
-                    useSpin(); // Deduct spin
-                    showWinPopup(products[winIdx]);
-                    isSpinning = false;
-                    updateSpinsUI();
-                }, 800);
-            };
-            
+                    strip.style.transition = 'none';
+                    var cards = strip.querySelectorAll('.wheel-card');
+                    if (cards[winDomIdx]) cards[winDomIdx].classList.add('winner');
+                    winSound();
+
+                    setTimeout(function() {
+                        useSpin(); // Deduct spin
+                        showWinPopup(products[winIdx]);
+                        isSpinning = false;
+                        updateSpinsUI();
+                    }, 800);
+                    
+                }, DURATION + 100);
+            }, 50); // Small delay to guarantee DOM is ready
         }, 50);
     }
 
