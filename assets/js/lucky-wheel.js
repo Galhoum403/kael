@@ -1,6 +1,5 @@
 /* ==========================================
-   🎰 Lucky Wheel v5 - DEAD SIMPLE
-   Zero complexity, zero glitch
+   🎰 Lucky Wheel v6 - NATIVE ANIMATION API
    ========================================== */
 (function() {
     'use strict';
@@ -50,26 +49,16 @@
         } catch(e) {}
     }
 
-    // ===== SIMPLE TICK SCHEDULE =====
-    // Pre-schedule tick sounds that decelerate over the spin duration
     function scheduleTicks(totalCards, durationMs) {
-        // Simulate cubic-bezier deceleration: fast ticks → slow ticks
-        var ticks = [];
-        var t = 0;
-        var interval = 30; // start fast (30ms between ticks)
+        var t = 0, interval = 30;
         for (var i = 0; i < totalCards && t < durationMs - 500; i++) {
-            ticks.push(t);
-            // Gradually increase interval (decelerate)
+            setTimeout(tick, t);
             var progress = t / durationMs;
             if (progress < 0.3) interval = 30 + progress * 50;
             else if (progress < 0.6) interval = 50 + (progress - 0.3) * 200;
             else if (progress < 0.85) interval = 110 + (progress - 0.6) * 600;
             else interval = 260 + (progress - 0.85) * 1500;
             t += interval;
-        }
-        // Schedule each tick
-        for (var j = 0; j < ticks.length; j++) {
-            setTimeout(tick, ticks[j]);
         }
     }
 
@@ -113,9 +102,6 @@
     }
 
     // ===== BUILD STRIP =====
-    // Products repeated 15 times in ORDER.
-    // Winner is at: REPS * products.length + winnerIndex
-    // This is 100% predictable math - impossible to mismatch.
     function buildStrip(products, reps) {
         var strip = document.getElementById('wheel-strip');
         if (!strip) return;
@@ -132,7 +118,6 @@
         var strip = document.getElementById('wheel-strip');
         var cu = getCardUnit();
         var ww = (document.querySelector('.wheel-track-wrapper')||{}).offsetWidth||400;
-        strip.style.transition = 'none';
         strip.style.transform = 'translateX(-'+(products.length*2*cu - ww/2 + cu/2)+'px)';
     }
 
@@ -160,44 +145,38 @@
         var ww = (document.querySelector('.wheel-track-wrapper')||{}).offsetWidth||400;
         var center = ww / 2 - cu / 2;
 
-        // Start: show from repetition 1
         var startX = n * 1 * cu - center;
-
-        // End: winner in repetition 11
-        //   DOM index = 11 * n + winIdx
-        //   Pixel = domIndex * cu
         var winDomIdx = 11 * n + winIdx;
         var endX = winDomIdx * cu - center;
 
-        // Total cards traveled (for sound scheduling)
-        var cardsTravel = Math.floor((endX - startX) / cu);
-
-        // 1) Set start position
+        // Reset any inline CSS transitions
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-' + startX + 'px)';
-        void strip.offsetHeight;
 
-        // 2) Schedule tick sounds
+        var cardsTravel = Math.floor((endX - startX) / cu);
         var DURATION = 7000;
         scheduleTicks(cardsTravel, DURATION);
 
-        // 3) GO! Single transition to winner
-        strip.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.12, 0.75, 0.08, 1)';
-        strip.style.transform = 'translateX(-' + endX + 'px)';
+        // NATIVE WEB ANIMATION API - NO GLITCHES
+        var animation = strip.animate([
+            { transform: 'translateX(-' + startX + 'px)' },
+            { transform: 'translateX(-' + endX + 'px)' }
+        ], {
+            duration: DURATION,
+            easing: 'cubic-bezier(0.12, 0.8, 0.08, 1)',
+            fill: 'forwards'
+        });
 
-        // 4) When done: highlight + popup
-        setTimeout(function() {
+        animation.onfinish = function() {
             var cards = strip.querySelectorAll('.wheel-card');
             if (cards[winDomIdx]) cards[winDomIdx].classList.add('winner');
             winSound();
 
             setTimeout(function() {
-                // THE PRODUCT IS products[winIdx] — 100% guaranteed match
                 showWinPopup(products[winIdx]);
                 isSpinning = false;
                 updateSpinsUI();
             }, 700);
-        }, DURATION + 200);
+        };
     }
 
     // ===== DEAL CODE =====
