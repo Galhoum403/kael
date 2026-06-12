@@ -1,5 +1,6 @@
 /* ==========================================
-   🎰 Lucky Wheel / Slot Machine Logic v2
+   🎰 Lucky Wheel / Slot Machine Logic v3
+   Casino-style roulette with sound
    Kael Store - Lylix Script
    ========================================== */
 (function() {
@@ -11,25 +12,78 @@
 
     var wheelProducts = [];
     var isSpinning = false;
+    var audioCtx = null;
 
-    // --- Default products (fallback if Firebase is empty) ---
+    // --- Default products ---
     var defaultProducts = [
-        { name: 'ساعة كلاسيكية', image: 'assets/img/product01.png', originalPrice: '350', wheelPrice: '280', weight: 15, link: '' },
-        { name: 'سوار ذهبي', image: 'assets/img/product02.png', originalPrice: '120', wheelPrice: '85', weight: 25, link: '' },
-        { name: 'طقم هدايا فاخر', image: 'assets/img/product03.png', originalPrice: '500', wheelPrice: '399', weight: 10, link: '' },
-        { name: 'كوبون خصم 10%', image: 'assets/img/logo.png', originalPrice: '50', wheelPrice: '0', weight: 30, link: '' },
-        { name: 'نظارة شمسية', image: 'assets/img/product01.png', originalPrice: '200', wheelPrice: '150', weight: 20, link: '' }
+        { name: 'ساعة كلاسيكية', image: 'assets/img/product01.png', originalPrice: '350', wheelPrice: '280', weight: 15, promoCode: '' },
+        { name: 'سوار ذهبي', image: 'assets/img/product02.png', originalPrice: '120', wheelPrice: '85', weight: 25, promoCode: '' },
+        { name: 'طقم هدايا فاخر', image: 'assets/img/product03.png', originalPrice: '500', wheelPrice: '399', weight: 10, promoCode: '' },
+        { name: 'كوبون خصم 10%', image: 'assets/img/logo.png', originalPrice: '50', wheelPrice: '0', weight: 30, promoCode: '' },
+        { name: 'نظارة شمسية', image: 'assets/img/product01.png', originalPrice: '200', wheelPrice: '150', weight: 20, promoCode: '' }
     ];
 
-    // --- Get card width based on screen ---
-    function getCardUnit() {
-        var w = window.innerWidth;
-        if (w <= 480) return 112; // 100 + 12 gap
-        if (w <= 768) return 132; // 120 + 12 gap
-        return 172; // 160 + 12 gap
+    // ==========================================
+    //  SOUND ENGINE (Web Audio API - no files!)
+    // ==========================================
+    function initAudio() {
+        if (audioCtx) return;
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        catch(e) { audioCtx = null; }
     }
 
-    // --- Spins management (localStorage) ---
+    // Short tick/click sound - like roulette ball hitting pegs
+    function playTick(volume) {
+        if (!audioCtx) return;
+        try {
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.value = 1800 + Math.random() * 400; // slight pitch variation
+            gain.gain.setValueAtTime(Math.min(volume || 0.15, 0.3), audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.06);
+        } catch(e) {}
+    }
+
+    // Win jingle - ascending notes
+    function playWinSound() {
+        if (!audioCtx) return;
+        try {
+            var notes = [523, 659, 784, 1047]; // C5 E5 G5 C6
+            for (var i = 0; i < notes.length; i++) {
+                (function(freq, delay) {
+                    var osc = audioCtx.createOscillator();
+                    var gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + 0.3);
+                    osc.start(audioCtx.currentTime + delay);
+                    osc.stop(audioCtx.currentTime + delay + 0.3);
+                })(notes[i], i * 0.12);
+            }
+        } catch(e) {}
+    }
+
+    // ==========================================
+    //  CARD UNIT
+    // ==========================================
+    function getCardUnit() {
+        var w = window.innerWidth;
+        if (w <= 480) return 112;
+        if (w <= 768) return 132;
+        return 172;
+    }
+
+    // ==========================================
+    //  SPINS (localStorage)
+    // ==========================================
     function getSpinsLeft() {
         try {
             var raw = localStorage.getItem(STORAGE_KEY);
@@ -40,44 +94,32 @@
             return Math.max(0, MAX_SPINS - (data.count || 0));
         } catch(e) { return MAX_SPINS; }
     }
-
     function useSpin() {
         var today = new Date().toDateString();
         var data;
-        try {
-            var raw = localStorage.getItem(STORAGE_KEY);
-            data = raw ? JSON.parse(raw) : null;
-        } catch(e) { data = null; }
-        if (!data || data.date !== today) {
-            data = { date: today, count: 1 };
-        } else {
-            data.count = (data.count || 0) + 1;
-        }
+        try { var raw = localStorage.getItem(STORAGE_KEY); data = raw ? JSON.parse(raw) : null; }
+        catch(e) { data = null; }
+        if (!data || data.date !== today) data = { date: today, count: 1 };
+        else data.count = (data.count || 0) + 1;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
-
     function updateSpinsUI() {
         var left = getSpinsLeft();
         var badge = document.getElementById('wheel-spins-badge');
         var btn = document.getElementById('wheel-spin-btn');
         if (badge) badge.textContent = 'لديك ' + left + ' محاولات متبقية اليوم';
         if (btn) {
-            if (left <= 0) {
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-clock"></i> انتهت محاولاتك اليوم';
-            } else {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-dice"></i> لف العجلة!';
-            }
+            if (left <= 0) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-clock"></i> انتهت محاولاتك اليوم'; }
+            else { btn.disabled = false; btn.innerHTML = '<i class="fas fa-dice"></i> لف العجلة!'; }
         }
     }
 
-    // --- Weighted random pick ---
+    // ==========================================
+    //  WEIGHTED RANDOM
+    // ==========================================
     function pickWeightedRandom(products) {
         var totalWeight = 0;
-        for (var i = 0; i < products.length; i++) {
-            totalWeight += (parseInt(products[i].weight) || 1);
-        }
+        for (var i = 0; i < products.length; i++) totalWeight += (parseInt(products[i].weight) || 1);
         var rand = Math.random() * totalWeight;
         var cumulative = 0;
         for (var j = 0; j < products.length; j++) {
@@ -87,7 +129,9 @@
         return products.length - 1;
     }
 
-    // --- Shuffle helper ---
+    // ==========================================
+    //  SHUFFLE
+    // ==========================================
     function shuffleArray(arr) {
         var a = arr.slice();
         for (var i = a.length - 1; i > 0; i--) {
@@ -97,18 +141,19 @@
         return a;
     }
 
-    // --- Make a single card DOM element ---
-    function makeCard(product, productIndex) {
+    // ==========================================
+    //  CARD BUILDER
+    // ==========================================
+    function makeCard(product, origIndex) {
         var card = document.createElement('div');
         card.className = 'wheel-card';
-        card.setAttribute('data-product-index', productIndex);
+        card.setAttribute('data-product-index', origIndex);
 
         var img = document.createElement('img');
         img.src = product.image || 'assets/img/logo.png';
         img.alt = product.name;
         img.loading = 'eager';
-        img.width = 90;
-        img.height = 90;
+        img.width = 90; img.height = 90;
 
         var nameEl = document.createElement('div');
         nameEl.className = 'wc-name';
@@ -116,11 +161,9 @@
 
         var pricesEl = document.createElement('div');
         pricesEl.className = 'wc-prices';
-
         var origEl = document.createElement('span');
         origEl.className = 'wc-original';
         origEl.textContent = product.originalPrice + ' ' + CURRENCY;
-
         var wheelEl = document.createElement('span');
         wheelEl.className = 'wc-wheel';
         wheelEl.textContent = product.wheelPrice + ' ' + CURRENCY;
@@ -133,181 +176,206 @@
         return card;
     }
 
-    // Global tracker for DOM card positions
+    // ==========================================
+    //  BUILD STRIP (shuffled, with winner planted)
+    // ==========================================
     var winnerDomIndex = -1;
 
-    // --- Build infinite strip with random shuffle ---
-    // Returns the DOM index where the winner card appears at targetSet
-    function buildStrip(products, winnerProductIndex, targetSet) {
+    function buildSpinStrip(products, winnerIdx) {
         var strip = document.getElementById('wheel-strip');
-        if (!strip || products.length === 0) return;
+        if (!strip || !products.length) return;
         strip.innerHTML = '';
         winnerDomIndex = -1;
 
-        var totalSets = 12; // enough for long spin without seeing edge
-        var domIndex = 0;
+        // 14 shuffled sets = tons of cards for long smooth spin
+        var totalSets = 14;
+        var winnerSet = 10; // plant winner in set 10
 
         for (var s = 0; s < totalSets; s++) {
-            // Shuffle each set randomly - looks organic, never predictable
-            var shuffled = shuffleArray(products.map(function(p, i) { return { p: p, origIdx: i }; }));
-
-            for (var k = 0; k < shuffled.length; k++) {
-                var card = makeCard(shuffled[k].p, shuffled[k].origIdx);
+            var indices = [];
+            for (var n = 0; n < products.length; n++) indices.push(n);
+            indices = shuffleArray(indices);
+            for (var k = 0; k < indices.length; k++) {
+                var idx = indices[k];
+                var card = makeCard(products[idx], idx);
                 strip.appendChild(card);
-
-                // Track exactly where the winner lands in target set
-                if (s === targetSet && winnerDomIndex === -1 && winnerProductIndex !== undefined) {
-                    // We'll override one card in the target position to be our winner
-                    // Mark after loop
-                }
-                domIndex++;
             }
         }
 
-        // Now surgically place the winner card in targetSet at a random position within that set
-        if (winnerProductIndex !== undefined && winnerProductIndex !== null) {
-            var allCards = strip.querySelectorAll('.wheel-card');
-            var setSize = products.length;
-            // Pick a random slot within targetSet to replace with winner
-            var slotInSet = Math.floor(Math.random() * setSize);
-            var targetDomIdx = targetSet * setSize + slotInSet;
-            // Replace that card with winner card
-            var winnerCard = makeCard(products[winnerProductIndex], winnerProductIndex);
-            winnerCard.setAttribute('data-winner', '1');
-            if (allCards[targetDomIdx]) {
-                strip.replaceChild(winnerCard, allCards[targetDomIdx]);
-            }
+        // Plant the winner card at a specific position in winnerSet
+        var allCards = strip.querySelectorAll('.wheel-card');
+        var setSize = products.length;
+        var slotInSet = Math.floor(Math.random() * setSize);
+        var targetDomIdx = winnerSet * setSize + slotInSet;
+
+        if (allCards[targetDomIdx]) {
+            var winCard = makeCard(products[winnerIdx], winnerIdx);
+            winCard.setAttribute('data-winner', '1');
+            strip.replaceChild(winCard, allCards[targetDomIdx]);
             winnerDomIndex = targetDomIdx;
         }
 
-        // Position strip to start from set 2 (hidden middle area)
-        var cardUnit = getCardUnit();
-        var startPos = products.length * 2 * cardUnit;
-        var wrapperWidth = (document.querySelector('.wheel-track-wrapper') || {offsetWidth: 400}).offsetWidth;
-        var offset = startPos - (wrapperWidth / 2) + (cardUnit / 2);
-        strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-' + Math.max(0, offset) + 'px)';
+        return strip;
     }
 
-    // --- Initial idle build (no winner, just show cards) ---
     function buildIdleStrip(products) {
         var strip = document.getElementById('wheel-strip');
-        if (!strip || products.length === 0) return;
+        if (!strip || !products.length) return;
         strip.innerHTML = '';
-
-        var reps = 6;
-        for (var r = 0; r < reps; r++) {
+        for (var r = 0; r < 6; r++) {
             var shuffled = shuffleArray(products);
             for (var i = 0; i < shuffled.length; i++) {
                 strip.appendChild(makeCard(shuffled[i], i));
             }
         }
-
         var cardUnit = getCardUnit();
-        var wrapperWidth = (document.querySelector('.wheel-track-wrapper') || {offsetWidth: 400}).offsetWidth;
-        var offset = products.length * 2 * cardUnit - (wrapperWidth / 2) + (cardUnit / 2);
+        var ww = (document.querySelector('.wheel-track-wrapper') || {}).offsetWidth || 400;
+        var off = products.length * 2 * cardUnit - ww / 2 + cardUnit / 2;
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-' + Math.max(0, offset) + 'px)';
+        strip.style.transform = 'translateX(-' + Math.max(0, off) + 'px)';
     }
 
-    // --- Spin Animation ---
+    // ==========================================
+    //  🎰 CASINO SPIN (requestAnimationFrame)
+    // ==========================================
     function spin() {
         if (isSpinning) return;
         if (getSpinsLeft() <= 0) return;
 
+        initAudio(); // init on user gesture
         isSpinning = true;
         useSpin();
         updateSpinsUI();
 
         var btn = document.getElementById('wheel-spin-btn');
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري اللف...';
-        }
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري اللف...'; }
 
         var products = wheelProducts.length > 0 ? wheelProducts : defaultProducts;
         var cardUnit = getCardUnit();
+        var winnerIdx = pickWeightedRandom(products);
 
-        // Pick winner
-        var winnerProductIndex = pickWeightedRandom(products);
-
-        // Winner will be placed in set index 8 (out of 12 total sets)
-        var targetSet = 8;
-
-        // Build strip with winner placed precisely in targetSet
-        buildStrip(products, winnerProductIndex, targetSet);
+        // Build strip with winner planted
+        buildSpinStrip(products, winnerIdx);
 
         var strip = document.getElementById('wheel-strip');
-        var wrapperWidth = (document.querySelector('.wheel-track-wrapper') || {offsetWidth:400}).offsetWidth;
-        var centerOffset = wrapperWidth / 2 - cardUnit / 2;
+        var ww = (document.querySelector('.wheel-track-wrapper') || {}).offsetWidth || 400;
+        var centerOffset = ww / 2 - cardUnit / 2;
 
-        // Starting position is at set 2
-        var startPos = products.length * 2 * cardUnit - centerOffset;
+        // Start position (from set 1)
+        var startPos = products.length * 1 * cardUnit - centerOffset;
         startPos = Math.max(0, startPos);
 
-        // Target: center the winner card in viewport
+        // Target: center the winner card
         var targetPos = winnerDomIndex * cardUnit - centerOffset;
         targetPos = Math.max(0, targetPos);
 
-        // Set strip at start
+        // Total travel distance
+        var totalDistance = targetPos - startPos;
+        if (totalDistance < 0) totalDistance += products.length * 14 * cardUnit;
+
+        // Physics parameters
+        var currentPos = startPos;
+        var velocity = 45 + Math.random() * 10;   // initial speed (px per frame ~60fps)
+        var friction = 0.985;                       // gradual slowdown
+        var minVelocity = 0.3;                      // when to stop
+
+        // Track ticks for sound
+        var lastCardIndex = Math.floor(currentPos / cardUnit);
+
+        // Start animation
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-' + startPos + 'px)';
-        void strip.offsetHeight;
+        strip.style.transform = 'translateX(-' + currentPos + 'px)';
 
-        // --- Two-phase animation ---
-        // Phase 1: fast burst (linear, 1.5s) - feel the acceleration
-        var phase1Distance = products.length * 3 * cardUnit; // travel 3 sets fast
-        var phase1Target = startPos + phase1Distance;
-        strip.style.transition = 'transform 1400ms cubic-bezier(0.4, 0, 1, 1)';
-        strip.style.transform = 'translateX(-' + phase1Target + 'px)';
+        var distanceTraveled = 0;
+        var targetReached = false;
 
-        // Phase 2: decelerate to winner (after 1.3s)
-        setTimeout(function() {
-            // Make sure targetPos accounts for phase1 travel
-            var finalTarget = phase1Target + (targetPos - startPos);
-            // Clamp: winner must be ahead of phase1 position
-            if (finalTarget < phase1Target) finalTarget = phase1Target + (products.length * 2 * cardUnit) + (winnerDomIndex % products.length) * cardUnit;
+        function animate() {
+            if (targetReached) return;
 
-            var slowDuration = 5000 + Math.random() * 1500; // 5 - 6.5 seconds slowdown
-            strip.style.transition = 'transform ' + slowDuration + 'ms cubic-bezier(0.05, 0.7, 0.1, 1)';
-            strip.style.transform = 'translateX(-' + targetPos + 'px)';
+            // Move
+            currentPos += velocity;
+            distanceTraveled += velocity;
 
-            // After deceleration ends
-            setTimeout(function() {
-                // Highlight winner
-                var allCards = strip.querySelectorAll('.wheel-card');
-                if (winnerDomIndex >= 0 && allCards[winnerDomIndex]) {
-                    allCards[winnerDomIndex].classList.add('winner');
-                }
+            // Apply friction - start slowing down after traveling 60% of total distance
+            if (distanceTraveled > totalDistance * 0.55) {
+                friction = 0.978; // stronger friction
+            }
+            if (distanceTraveled > totalDistance * 0.80) {
+                friction = 0.965; // even stronger near the end
+            }
+            if (distanceTraveled > totalDistance * 0.92) {
+                friction = 0.950; // dramatic final slowdown
+            }
 
-                // Show popup after a beat
+            velocity *= friction;
+
+            // Tick sound when passing card boundaries
+            var currentCardIdx = Math.floor(currentPos / cardUnit);
+            if (currentCardIdx !== lastCardIndex) {
+                lastCardIndex = currentCardIdx;
+                var vol = Math.min(velocity / 30, 0.25);
+                playTick(vol);
+            }
+
+            // Apply position
+            strip.style.transform = 'translateX(-' + currentPos + 'px)';
+
+            // Check if we should stop
+            if (velocity < minVelocity && distanceTraveled >= totalDistance * 0.9) {
+                // Snap exactly to winner
+                targetReached = true;
+                var snapDist = targetPos - currentPos;
+
+                // Smooth final snap
+                strip.style.transition = 'transform 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                strip.style.transform = 'translateX(-' + targetPos + 'px)';
+
                 setTimeout(function() {
-                    showWinPopup(products[winnerProductIndex]);
-                    isSpinning = false;
-                    updateSpinsUI();
-                }, 700);
+                    strip.style.transition = 'none';
+                    // Highlight winner
+                    var allCards = strip.querySelectorAll('.wheel-card');
+                    if (winnerDomIndex >= 0 && allCards[winnerDomIndex]) {
+                        allCards[winnerDomIndex].classList.add('winner');
+                    }
+                    playWinSound();
+                    setTimeout(function() {
+                        showWinPopup(products[winnerIdx]);
+                        isSpinning = false;
+                        updateSpinsUI();
+                    }, 800);
+                }, 650);
 
-            }, slowDuration + 100);
+                return;
+            }
 
-        }, 1300);
+            // Safety: if traveled way too far, force stop
+            if (distanceTraveled > totalDistance * 1.5) {
+                velocity = minVelocity * 0.5;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
     }
 
-    // --- Generate unique deal code ---
+    // ==========================================
+    //  DEAL CODE
+    // ==========================================
     function generateDealCode() {
         var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         var code = 'KAEL-';
-        for (var i = 0; i < 6; i++) {
-            code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+        for (var i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
         return code;
     }
 
-    // --- Show Win Popup ---
+    // ==========================================
+    //  WIN POPUP
+    // ==========================================
     function showWinPopup(product) {
         var overlay = document.getElementById('wheel-win-overlay');
         if (!overlay) return;
 
-        // Use admin-defined promo code from Reflow, or generate fallback
         var dealCode = (product.promoCode && product.promoCode.trim()) ? product.promoCode.trim() : generateDealCode();
 
         var popupImg = overlay.querySelector('.wwp-img');
@@ -324,7 +392,6 @@
         if (popupDeal) popupDeal.textContent = product.wheelPrice + ' ' + CURRENCY;
         if (popupCode) popupCode.textContent = dealCode;
 
-        // Show correct hint based on whether promo code is from Reflow
         if (popupHint) {
             if (product.promoCode && product.promoCode.trim()) {
                 popupHint.textContent = 'استخدم هذا الكود عند إتمام الشراء للحصول على الخصم!';
@@ -333,14 +400,9 @@
             }
         }
 
-        // WhatsApp message
         if (popupWhatsapp) {
-            var waNumber = '201234567890'; // Default, can be changed
-            try {
-                if (window.LylixConfig && window.LylixConfig.whatsapp) {
-                    waNumber = window.LylixConfig.whatsapp.replace(/[^0-9]/g, '');
-                }
-            } catch(e) {}
+            var waNumber = '201234567890';
+            try { if (window.LylixConfig && window.LylixConfig.whatsapp) waNumber = window.LylixConfig.whatsapp.replace(/[^0-9]/g, ''); } catch(e) {}
             var msg = '🎰 مرحباً! ربحت عرض عجلة الحظ!\n\n' +
                       '📦 المنتج: ' + product.name + '\n' +
                       '💰 السعر الأصلي: ' + product.originalPrice + ' ' + CURRENCY + '\n' +
@@ -351,80 +413,55 @@
         }
 
         overlay.classList.add('active');
-
-        // Mini confetti effect
         spawnConfetti(overlay.querySelector('.wheel-win-popup'));
     }
 
-    // --- Close popup ---
     function closeWinPopup() {
         var overlay = document.getElementById('wheel-win-overlay');
         if (overlay) overlay.classList.remove('active');
     }
 
-    // --- Copy deal code ---
     window.copyDealCode = function() {
         var codeEl = document.querySelector('.wwp-code-value');
         if (!codeEl) return;
         var code = codeEl.textContent;
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(code);
-        } else {
-            var ta = document.createElement('textarea');
-            ta.value = code;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-        }
+        if (navigator.clipboard) navigator.clipboard.writeText(code);
+        else { var ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
         var copyBtn = document.querySelector('.wwp-copy-btn');
-        if (copyBtn) {
-            copyBtn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!';
-            setTimeout(function() {
-                copyBtn.innerHTML = '<i class="fas fa-copy"></i> نسخ الكود';
-            }, 2000);
-        }
+        if (copyBtn) { copyBtn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!'; setTimeout(function() { copyBtn.innerHTML = '<i class="fas fa-copy"></i> نسخ الكود'; }, 2000); }
     };
 
-    // --- Mini confetti ---
     function spawnConfetti(container) {
         if (!container) return;
         var colors = ['#C5A059', '#FFD700', '#fff', '#d4af61', '#103C2B'];
         for (var i = 0; i < 30; i++) {
-            var particle = document.createElement('div');
-            particle.className = 'wheel-confetti';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 30 + '%';
-            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            particle.style.animationDelay = (Math.random() * 0.5) + 's';
-            particle.style.animationDuration = (1 + Math.random()) + 's';
-            container.appendChild(particle);
-            setTimeout(function(el) { if (el.parentNode) el.parentNode.removeChild(el); }, 2500, particle);
+            var p = document.createElement('div');
+            p.className = 'wheel-confetti';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 30 + '%';
+            p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            p.style.animationDelay = (Math.random() * 0.5) + 's';
+            p.style.animationDuration = (1 + Math.random()) + 's';
+            container.appendChild(p);
+            setTimeout(function(el) { if (el.parentNode) el.parentNode.removeChild(el); }, 2500, p);
         }
     }
 
-    // --- Load from Firebase ---
+    // ==========================================
+    //  FIREBASE LOAD
+    // ==========================================
     function loadFromFirebase() {
         import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js').then(function(firebaseApp) {
             import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js').then(function(firebaseDB) {
-                var config = {
-                    apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE",
-                    databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com",
-                    projectId: "kael-85f70"
-                };
+                var config = { apiKey: "AIzaSyDuynSBIWoQYcuyRYEjXEZ8qhnbMMU0pfE", databaseURL: "https://kael-85f70-default-rtdb.firebaseio.com", projectId: "kael-85f70" };
                 var app;
                 try { app = firebaseApp.initializeApp(config, 'wheel-reader'); }
                 catch(e) { app = firebaseApp.getApp('wheel-reader'); }
                 var db = firebaseDB.getDatabase(app);
                 var wheelRef = firebaseDB.ref(db, 'lucky_wheel');
-
                 firebaseDB.onValue(wheelRef, function(snapshot) {
                     var data = snapshot.val();
-                    if (data && data.length > 0) {
-                        wheelProducts = data;
-                    } else {
-                        wheelProducts = defaultProducts;
-                    }
+                    wheelProducts = (data && data.length > 0) ? data : defaultProducts;
                     buildIdleStrip(wheelProducts);
                     updateSpinsUI();
                 });
@@ -436,7 +473,9 @@
         });
     }
 
-    // --- Init ---
+    // ==========================================
+    //  INIT
+    // ==========================================
     function init() {
         var btn = document.getElementById('wheel-spin-btn');
         if (btn) btn.addEventListener('click', spin);
@@ -445,18 +484,11 @@
         if (closeBtn) closeBtn.addEventListener('click', closeWinPopup);
 
         var overlay = document.getElementById('wheel-win-overlay');
-        if (overlay) {
-            overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) closeWinPopup();
-            });
-        }
+        if (overlay) overlay.addEventListener('click', function(e) { if (e.target === overlay) closeWinPopup(); });
 
         loadFromFirebase();
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
 })();
