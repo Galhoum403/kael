@@ -1,6 +1,7 @@
 /* ==========================================
-   🎰 Lucky Wheel v8 - LTR FORCED & SYNCHRONOUS
-   Forces LTR layout to prevent RTL mismatch
+   🎰 Lucky Wheel v9 - THE ULTIMATE FIX
+   Web Animations API with End-State Pre-assignment
+   Zero CSS transition bugs, no hanging on 2nd spin
    ========================================== */
 (function() {
     'use strict';
@@ -29,7 +30,7 @@
         } catch(e) {}
     }
     
-    // The good tick sound from V4
+    // The good tick sound
     function tick() {
         if (!audioCtx) return;
         try {
@@ -45,7 +46,6 @@
         } catch(e) {}
     }
 
-    // Win jingle
     function winSound() {
         if (!audioCtx) return;
         try {
@@ -108,7 +108,6 @@
         if (!strip) return 172; 
         var cards = strip.querySelectorAll('.wheel-card');
         if (cards.length < 2) return 172;
-        // MUST use absolute Math.abs because in RTL, left of 2nd card might be smaller than 1st
         var unit = Math.abs(cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left);
         if (unit <= 0 || unit > 500) {
             var gap = parseFloat(window.getComputedStyle(strip).gap) || 12;
@@ -133,10 +132,14 @@
     function buildStrip(products, reps) {
         var strip = document.getElementById('wheel-strip');
         if (!strip) return;
+        
+        // Remove old animation if exists to avoid conflicts
+        if (strip.wheelAnim) { strip.wheelAnim.cancel(); strip.wheelAnim = null; }
+        
         strip.innerHTML = '';
         strip.style.transition = 'none';
         
-        // CRITICAL: Force LTR so array index matches visual left-to-right order
+        // Force LTR to prevent matching bugs
         strip.dir = 'ltr';
         strip.style.direction = 'ltr';
         
@@ -178,7 +181,7 @@
 
         var strip = document.getElementById('wheel-strip');
         
-        // Sync timeout to allow DOM to render the strip before measuring
+        // Wait 50ms for DOM to render the new cards so we can measure accurately
         setTimeout(function() {
             var cu = getExactCardUnit();
             var first = strip.querySelector('.wheel-card');
@@ -190,36 +193,40 @@
             var winDomIdx = (11 * n) + winIdx;
             var endX = (winDomIdx * cu) - centerOffset;
 
-            // Instantly snap to start
+            // THE PRO TRICK:
+            // Set the FINAL state permanently on the DOM so when animation ends, it naturally stays there without flickering
             strip.style.transition = 'none';
-            strip.style.transform = 'translateX(-' + startX + 'px)';
+            strip.style.transform = 'translateX(-' + endX + 'px)';
 
-            // Wait a tiny bit to guarantee the start position is painted
-            setTimeout(function() {
-                var DURATION = 6500;
-                var cardsTravel = winDomIdx - (n * 1);
-                scheduleTicks(cardsTravel, DURATION);
+            var DURATION = 6500;
+            var cardsTravel = winDomIdx - (n * 1);
+            scheduleTicks(cardsTravel, DURATION);
 
-                // GO!
-                strip.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.12, 0.8, 0.08, 1)';
-                strip.style.transform = 'translateX(-' + endX + 'px)';
+            // Run native animation which overrides the DOM style while playing
+            var anim = strip.animate([
+                { transform: 'translateX(-' + startX + 'px)' },
+                { transform: 'translateX(-' + endX + 'px)' }
+            ], {
+                duration: DURATION,
+                easing: 'cubic-bezier(0.12, 0.8, 0.08, 1)',
+                fill: 'none' // Don't hold the animation forever (prevents hanging on 2nd spin)
+            });
+            
+            strip.wheelAnim = anim;
 
-                // Finish
+            anim.onfinish = function() {
+                var cards = strip.querySelectorAll('.wheel-card');
+                if (cards[winDomIdx]) cards[winDomIdx].classList.add('winner');
+                winSound();
+
                 setTimeout(function() {
-                    strip.style.transition = 'none';
-                    var cards = strip.querySelectorAll('.wheel-card');
-                    if (cards[winDomIdx]) cards[winDomIdx].classList.add('winner');
-                    winSound();
-
-                    setTimeout(function() {
-                        useSpin(); // Save spin logic
-                        showWinPopup(products[winIdx]);
-                        isSpinning = false;
-                        updateSpinsUI();
-                    }, 800);
-                    
-                }, DURATION + 100);
-            }, 50);
+                    useSpin(); // Deduct spin
+                    showWinPopup(products[winIdx]);
+                    isSpinning = false;
+                    updateSpinsUI();
+                }, 800);
+            };
+            
         }, 50);
     }
 
